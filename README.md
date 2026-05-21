@@ -1,1 +1,3 @@
-DrakesItems shop more to come
+﻿# DrakesItemShop
+
+Item shop and economy (stub).

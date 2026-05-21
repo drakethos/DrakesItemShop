@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <ThunderstoreName>DrakesItemShop</ThunderstoreName>
+    <ThunderstoreAuthor>DrakeMods</ThunderstoreAuthor>
+    <RootNamespace>DrakesItemShop</RootNamespace>
+    <AssemblyName>DrakesItemShop</AssemblyName>
+    <Version>0.1.0</Version>
+    <BepInPluginName>DrakesItemShop</BepInPluginName>
+    <BepInGuid>com.drakesworkshop.itemshop</BepInGuid>
+    <ModInfoClass>ItemShopPlugin</ModInfoClass>
+    <Description>DrakesWorkshop — Item shop and economy (stub).</Description>
+    <WebsiteUrl>https://github.com/drakethos/DrakesItemShop</WebsiteUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <ThunderstoreDependency Include="denikson-BepInExPack_Valheim-5.4.2333" />
+    <ThunderstoreDependency Include="ValheimModding-Jotunn-2.29.0" />
+    <ThunderstoreDependency Include="DrakeMods-DrakesCustomizeLibs-0.3.0" />
+  </ItemGroup>
+</Project>
