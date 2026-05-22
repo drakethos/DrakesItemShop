@@ -11,6 +11,7 @@
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <NewtonsoftJsonDll>$(MSBuildProjectDirectory)\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</NewtonsoftJsonDll>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "><OutputPath>bin\Debug\</OutputPath><DefineConstants>DEBUG;TRACE</DefineConstants></PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "><OutputPath>bin\Release\</OutputPath><DefineConstants>TRACE</DefineConstants></PropertyGroup>
@@ -21,35 +22,71 @@
     <Reference Include="assembly_valheim"><HintPath>$(PublicizedAssembliesPath)\assembly_valheim_publicized.dll</HintPath></Reference>
     <Reference Include="assembly_utils"><HintPath>$(PublicizedAssembliesPath)\assembly_utils_publicized.dll</HintPath></Reference>
     <Reference Include="Jotunn"><HintPath>packages\JotunnLib.2.26.1\lib\net462\Jotunn.dll</HintPath></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath><Private>True</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(CorlibPath)\UnityEngine.CoreModule.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.TextMeshPro"><HintPath>$(CorlibPath)\Unity.TextMeshPro.dll</HintPath></Reference>
     <Reference Include="System" /><Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ShopCommands.cs" />
+    <Compile Include="Config\ItemShopConfig.cs" />
+    <Compile Include="Data\ShopDataKeys.cs" />
+    <Compile Include="Integration\BetterWardsAdapter.cs" />
+    <Compile Include="Integration\ShopDisplayLayer.cs" />
+    <Compile Include="Integration\ShopPriceTagger.cs" />
+    <Compile Include="Integration\VanillaWardAdapter.cs" />
+    <Compile Include="Integration\WardAccessRouter.cs" />
+    <Compile Include="Integration\WardIsLoveAdapter.cs" />
+    <Compile Include="Items\LedgerItem.cs" />
     <Compile Include="ItemShopPlugin.cs" />
+    <Compile Include="Localization\ItemShopLocalization.cs" />
+    <Compile Include="Networking\ShopRpc.cs" />
+    <Compile Include="Npc\NpcTraderSpawner.cs" />
+    <Compile Include="Npc\SilentShopTrader.cs" />
+    <Compile Include="Npc\TraderCatalogBuilder.cs" />
+    <Compile Include="Patches\LedgerUsePatch.cs" />
+    <Compile Include="Patches\MerchantBoxInteractPatch.cs" />
+    <Compile Include="Patches\SilentTraderInteractPatch.cs" />
+    <Compile Include="Pieces\MerchantBoxBehaviour.cs" />
+    <Compile Include="Pieces\MerchantBoxPiece.cs" />
+    <Compile Include="Pieces\ShopSignBehaviour.cs" />
+    <Compile Include="Pieces\ShopSignPiece.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DrakesWorkshopLibs\DrakesWorkshopLibs.csproj">
-      <Project>{A1111111-1111-4111-8111-111111111101}</Project>
-      <Name>DrakesWorkshopLibs</Name>
-    </ProjectReference>
+    <Compile Include="Runtime\FailureLogWriter.cs" />
+    <Compile Include="Runtime\ItemResolver.cs" />
+    <Compile Include="Runtime\ItemShopPaths.cs" />
+    <Compile Include="Runtime\ItemShopRuntime.cs" />
+    <Compile Include="Runtime\LedgerContainerHost.cs" />
+    <Compile Include="Runtime\ShopLinkService.cs" />
+    <Compile Include="Runtime\ShopLoader.cs" />
+    <Compile Include="Runtime\ShopOpener.cs" />
+    <Compile Include="Runtime\ShopPermissions.cs" />
+    <Compile Include="Runtime\ShopRegistry.cs" />
+    <Compile Include="Runtime\ShopSession.cs" />
+    <Compile Include="Runtime\ShopTransactionService.cs" />
+    <Compile Include="Runtime\ShopValidator.cs" />
+    <Compile Include="Runtime\SignCatalogRenderer.cs" />
+    <Compile Include="Runtime\ValidationFailure.cs" />
+    <Compile Include="Schema\CatalogDto.cs" />
+    <Compile Include="Schema\NpcDefinitionDto.cs" />
+    <Compile Include="Schema\PriceDto.cs" />
+    <Compile Include="Schema\ShopDefinitionDto.cs" />
+    <Compile Include="UI\ShopPanel.cs" />
   </ItemGroup>
   <ItemGroup><None Include="App.config" /><None Include="packages.config" /></ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="CopyNewtonsoftJsonToOutput" AfterTargets="Build">
+    <Copy SourceFiles="$(NewtonsoftJsonDll)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" Condition="Exists('$(NewtonsoftJsonDll)')" />
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Error Condition="!Exists('packages\JotunnLib.2.26.1\build\JotunnLib.props')" Text="Restore NuGet packages." />
+    <Error Condition="!Exists('packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll')" Text="Restore NuGet packages (Newtonsoft.Json)." />
   </Target>
-  <Target Name="CopyOutput" AfterTargets="Build" Condition="'$(R2ModPath)' != ''">
-    <PropertyGroup><TargetFolder>$(CompanyName)-$(AssemblyName)</TargetFolder><FullDestinationPath>$(R2ModPath)\$(ProfileName)\BepInEx\plugins\$(TargetFolder)</FullDestinationPath></PropertyGroup>
-    <MakeDir Directories="$(FullDestinationPath)" />
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(FullDestinationPath)\" />
-    <Copy SourceFiles="$(TargetDir)README.md" DestinationFiles="$(FullDestinationPath)\README.md" />
-    <Copy SourceFiles="$(TargetDir)icon.png" DestinationFiles="$(FullDestinationPath)\icon.png" />
-    <Copy SourceFiles="$(TargetDir)CHANGELOG.md" DestinationFiles="$(FullDestinationPath)\CHANGELOG.md" />
-  </Target>
-  <Target Name="PackageMod" AfterTargets="Build" DependsOnTargets="WriteThunderstoreManifest">
+  <Target Name="PackageMod" AfterTargets="Build;CopyNewtonsoftJsonToOutput" DependsOnTargets="WriteThunderstoreManifest">
     <MakeDir Directories="$(ThunderstoreFolder)" />
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(ThunderstoreFolder)" />
+    <Copy SourceFiles="$(NewtonsoftJsonDll)" DestinationFolder="$(ThunderstoreFolder)" Condition="Exists('$(NewtonsoftJsonDll)')" />
     <Copy SourceFiles="$(TargetDir)README.md" DestinationFiles="$(ThunderstoreFolder)\README.md" />
     <Copy SourceFiles="$(TargetDir)icon.png" DestinationFiles="$(ThunderstoreFolder)\icon.png" />
     <Copy SourceFiles="$(TargetDir)CHANGELOG.md" DestinationFiles="$(ThunderstoreFolder)\CHANGELOG.md" />
@@ -61,4 +98,3 @@
     <Content Include="README.md"><CopyToOutputDirectory>Always</CopyToOutputDirectory></Content>
   </ItemGroup>
 </Project>
-
