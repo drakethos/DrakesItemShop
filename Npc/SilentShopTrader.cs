@@ -14,7 +14,7 @@ public class SilentShopTrader : Trader
 
     public new void Start()
     {
-        base.Start();
+        GameAccess.StartTrader(this);
         ApplyCatalogFromRegistry();
     }
 

@@ -40,4 +40,10 @@ internal static class ItemResolver
 
         return global::Localization.instance.Localize(drop.m_itemData.m_shared.m_name);
     }
+
+    public static Sprite? GetItemIcon(string itemId)
+    {
+        var drop = GetItemDrop(itemId);
+        return drop?.m_itemData?.GetIcon();
+    }
 }

@@ -47,31 +47,51 @@
     <Compile Include="Npc\TraderCatalogBuilder.cs" />
     <Compile Include="Patches\LedgerUsePatch.cs" />
     <Compile Include="Patches\MerchantBoxInteractPatch.cs" />
+    <Compile Include="Patches\ShopInventoryFacadePatch.cs" />
+    <Compile Include="Patches\ShopSignInteractPatch.cs" />
     <Compile Include="Patches\SilentTraderInteractPatch.cs" />
+    <Compile Include="Data\ShopPieceCategories.cs" />
+    <Compile Include="Patches\NpcSpawnerInteractPatch.cs" />
+    <Compile Include="Patches\PieceBuildGatePatch.cs" />
+    <Compile Include="DisplayCase\Generated\Items\*.g.cs" />
+    <Compile Include="Patches\DisplayCasePatches.cs" />
+    <Compile Include="Pieces\DisplayCaseBehaviour.cs" />
+    <Compile Include="Pieces\DisplayCasePiece.cs" />
     <Compile Include="Pieces\MerchantBoxBehaviour.cs" />
     <Compile Include="Pieces\MerchantBoxPiece.cs" />
+    <Compile Include="Pieces\NpcSpawnerPiece.cs" />
+    <Compile Include="Pieces\ShopInventoryFacade.cs" />
+    <Compile Include="Pieces\ShopNpcSpawnerBehaviour.cs" />
+    <Compile Include="Pieces\ShopPieceRegistrar.cs" />
     <Compile Include="Pieces\ShopSignBehaviour.cs" />
     <Compile Include="Pieces\ShopSignPiece.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\FailureLogWriter.cs" />
+    <Compile Include="Runtime\GameAccess.cs" />
     <Compile Include="Runtime\ItemResolver.cs" />
     <Compile Include="Runtime\ItemShopPaths.cs" />
     <Compile Include="Runtime\ItemShopRuntime.cs" />
     <Compile Include="Runtime\LedgerContainerHost.cs" />
     <Compile Include="Runtime\ShopLinkService.cs" />
+    <Compile Include="Runtime\ShopManageAnchor.cs" />
+    <Compile Include="Runtime\ShopManageService.cs" />
     <Compile Include="Runtime\ShopLoader.cs" />
     <Compile Include="Runtime\ShopOpener.cs" />
     <Compile Include="Runtime\ShopPermissions.cs" />
     <Compile Include="Runtime\ShopRegistry.cs" />
     <Compile Include="Runtime\ShopSession.cs" />
     <Compile Include="Runtime\ShopTransactionService.cs" />
+    <Compile Include="Runtime\ShopVanillaPrefabResolver.cs" />
     <Compile Include="Runtime\ShopValidator.cs" />
     <Compile Include="Runtime\SignCatalogRenderer.cs" />
+    <Compile Include="Runtime\VendingInventoryHelper.cs" />
+    <Compile Include="Runtime\VendingInventoryStore.cs" />
     <Compile Include="Runtime\ValidationFailure.cs" />
     <Compile Include="Schema\CatalogDto.cs" />
     <Compile Include="Schema\NpcDefinitionDto.cs" />
     <Compile Include="Schema\PriceDto.cs" />
     <Compile Include="Schema\ShopDefinitionDto.cs" />
+    <Compile Include="UI\ShopManagePanel.cs" />
     <Compile Include="UI\ShopPanel.cs" />
   </ItemGroup>
   <ItemGroup><None Include="App.config" /><None Include="packages.config" /></ItemGroup>
@@ -96,5 +116,9 @@
     <Content Include="CHANGELOG.md"><CopyToOutputDirectory>Always</CopyToOutputDirectory></Content>
     <Content Include="icon.png"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></Content>
     <Content Include="README.md"><CopyToOutputDirectory>Always</CopyToOutputDirectory></Content>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Display case model (Forge pack in Forge/DisplayCase), inside the DLL so mod managers can't lose it. -->
+    <EmbeddedResource Include="DisplayCase\Generated\Assets\**\*.glb" />
   </ItemGroup>
 </Project>

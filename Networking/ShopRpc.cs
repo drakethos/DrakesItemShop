@@ -1,5 +1,7 @@
+using DrakeModsLibs.API;
 using DrakesItemShop.Config;
 using DrakesItemShop.Runtime;
+using DrakesItemShop.UI;
 using UnityEngine;
 
 namespace DrakesItemShop.Networking;
@@ -78,7 +80,8 @@ internal static class ShopRpc
 
         if (Vector3.Distance(player.transform.position, session.AnchorPosition) > ItemShopConfig.MaxInteractDistance)
         {
-            Message(player, "Too far from shop.");
+            if (!ShopPanel.TryShowStatus("Too far from shop."))
+                Message(player, "Too far from shop.");
             return;
         }
 
@@ -86,7 +89,7 @@ internal static class ShopRpc
             ? ShopTransactionService.TryBuy(player, session, itemId, quantity)
             : ShopTransactionService.TrySell(player, session, itemId, quantity);
 
-        Message(player, ResultMessage(result));
+        NotifyPlayer(player, result, itemId, buy);
     }
 
     private static Player? FindPlayer(long sender) => Player.GetPlayer(sender);
@@ -99,7 +102,7 @@ internal static class ShopRpc
             return;
 
         var result = ShopTransactionService.TryBuy(player, session, itemId, quantity);
-        Message(player, ResultMessage(result));
+        NotifyPlayer(player, result, itemId, buy: true);
     }
 
     private static void RunLocalSell(string itemId, int quantity)
@@ -110,13 +113,27 @@ internal static class ShopRpc
             return;
 
         var result = ShopTransactionService.TrySell(player, session, itemId, quantity);
+        NotifyPlayer(player, result, itemId, buy: false);
+    }
+
+    private static void NotifyPlayer(Player player, TransactionResult result, string itemId, bool buy)
+    {
+        if (ShopPanel.TryShowTransactionResult(result, itemId, buy))
+            return;
+
+        if (result == TransactionResult.Ok && buy && ShopSessionState.Current?.UsesVendingMachine == true)
+        {
+            Message(player, "Purchase dispensed — press E to collect from slot.");
+            return;
+        }
+
         Message(player, ResultMessage(result));
     }
 
     private static void Message(Player player, string text) =>
-        player.Message(MessageHud.MessageType.Center, text);
+        CustomizeLibsAPI.ShowHudMessage(player, MessageHud.MessageType.Center, text);
 
-    private static string ResultMessage(TransactionResult r) => r switch
+    internal static string ResultMessage(TransactionResult r) => r switch
     {
         TransactionResult.Ok => "Transaction complete.",
         TransactionResult.Denied => "Access denied.",
@@ -126,6 +143,8 @@ internal static class ShopRpc
         TransactionResult.InventoryFull => "Inventory full.",
         TransactionResult.SellDisabled => "Selling disabled.",
         TransactionResult.NoSellPrice => "Cannot sell this item here.",
+        TransactionResult.DispenseFull => "Dispense slot full — collect your purchase first (E).",
+        TransactionResult.TreasuryEmpty => "Shop cannot pay — treasury is empty.",
         _ => "Transaction failed.",
     };
 }

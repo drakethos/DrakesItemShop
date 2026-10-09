@@ -1,0 +1,106 @@
+{
+  "id": "Drake_DisplayCase",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Display Case",
+  "look": {
+    "mesh": {
+      "file": "models/display_case.glb"
+    },
+    "materials": [
+      {
+        "target": "Wood",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      },
+      {
+        "target": "Fabric",
+        "from": {
+          "prefab": "jute_carpet",
+          "material": "jute_carpet"
+        }
+      },
+      {
+        "target": "Glass",
+        "from": {
+          "prefab": "crystal_wall_1x1",
+          "material": "crystal_window"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0.3595,
+        0.86,
+        -0.2015
+      ],
+      "size": [
+        1.473,
+        1.72,
+        4.255
+      ]
+    }
+  },
+  "fields": {
+    "Container": {
+      "m_width": 6,
+      "m_height": 1
+    },
+    "Piece": {
+      "m_allowRotatedOverlap": true
+    },
+    "WearNTear": {
+      "m_burnable": false,
+      "m_supports": true,
+      "m_health": 500
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.369,
+        0.0,
+        -2.323
+      ],
+      [
+        1.069,
+        0.0,
+        -2.323
+      ],
+      [
+        1.069,
+        0.0,
+        1.92
+      ],
+      [
+        -0.369,
+        0.0,
+        1.92
+      ],
+      [
+        -0.369,
+        1.72,
+        -2.323
+      ],
+      [
+        1.069,
+        1.72,
+        -2.323
+      ],
+      [
+        1.069,
+        1.72,
+        1.92
+      ],
+      [
+        -0.369,
+        1.72,
+        1.92
+      ]
+    ]
+  }
+}

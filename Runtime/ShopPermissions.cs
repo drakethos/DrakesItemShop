@@ -31,6 +31,8 @@ internal static class ShopPermissions
         };
     }
 
+    public static bool IsElevated(Player player) => IsAdmin(player);
+
     private static bool IsAdmin(Player player)
     {
         if (player == null)

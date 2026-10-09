@@ -17,8 +17,23 @@ internal static class LedgerItem
             StackSize = 1,
         };
 
-        var item = new CustomItem(ShopItemNames.Ledger, "Scroll", config);
+        var item = new CustomItem(ShopItemNames.Ledger, ShopVanillaPrefabs.Ledger, config);
+        if (!item.IsValid())
+        {
+            ItemShopPlugin.LogSource?.LogError(
+                $"Failed to register {ShopItemNames.Ledger} — clone '{ShopVanillaPrefabs.Ledger}' invalid (no Scroll in Valheim; resolver uses LeatherScraps/Coins).");
+            return;
+        }
+
         ItemManager.Instance.AddItem(item);
-        ItemShopPlugin.LogSource?.LogInfo($"Registered item {ShopItemNames.Ledger}");
+
+        var drop = item.ItemDrop;
+        if (drop != null)
+        {
+            drop.m_itemData.m_shared.m_itemType = ItemDrop.ItemData.ItemType.Consumable;
+            drop.m_itemData.m_shared.m_consumeStatusEffect = null;
+        }
+
+        ItemShopPlugin.LogSource?.LogInfo($"Registered item {ShopItemNames.Ledger} (clone: {ShopVanillaPrefabs.Ledger})");
     }
 }

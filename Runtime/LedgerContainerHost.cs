@@ -20,7 +20,7 @@ internal static class LedgerContainerHost
         var go = new GameObject("Drake_LedgerContainerHost");
         Object.DontDestroyOnLoad(go);
         var container = go.AddComponent<Container>();
-        container.m_inventory = inv;
+        GameAccess.SetInventory(container, inv);
         return container;
     }
 

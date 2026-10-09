@@ -13,7 +13,7 @@ internal static class VanillaWardAdapter
         if (area == null)
             return true;
 
-        return area.IsPermitted(player.GetPlayerID());
+        return Runtime.GameAccess.IsPermitted(area, player.GetPlayerID());
     }
 
     private static PrivateArea? FindPrivateArea(Vector3 pos)

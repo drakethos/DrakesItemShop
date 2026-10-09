@@ -24,6 +24,13 @@ public class ShopSignBehaviour : MonoBehaviour
     public string GetShopId() =>
         m_nview?.GetZDO()?.GetString(ShopZdoKeys.ShopId) ?? "";
 
+    public void SetShopId(string shopId)
+    {
+        if (m_nview?.GetZDO() == null || !m_nview.IsOwner())
+            return;
+        m_nview.GetZDO().Set(ShopZdoKeys.ShopId, shopId);
+    }
+
     public void RefreshFromCatalog()
     {
         string shopId = GetShopId();

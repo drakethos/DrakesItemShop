@@ -5,9 +5,10 @@ using DrakesItemShop.Config;
 using DrakesItemShop.Networking;
 using DrakesItemShop.Patches;
 using DrakesItemShop.Runtime;
-using DrakesWorkshopLibs;
+using DrakeModsLibs;
 using HarmonyLib;
 using Jotunn;
+using Jotunn.Managers;
 
 namespace DrakesItemShop;
 
@@ -29,13 +30,20 @@ public partial class ItemShopPlugin : BaseUnityPlugin
         ItemShopRuntime.Initialize(Logger);
         _harmony.PatchAll();
         LedgerUsePatch.TryApply(_harmony, Logger);
+        PieceBuildGatePatch.TryApply(_harmony, Logger);
+        PrefabManager.OnVanillaPrefabsAvailable += RegisterWhenPrefabsReady;
         Logger.LogInfo($"{ModName} {Version} loaded.");
     }
 
     private void Start()
     {
-        ItemShopRuntime.RegisterAssets();
         StartCoroutine(RegisterShopRpcWhenReady());
+    }
+
+    private static void RegisterWhenPrefabsReady()
+    {
+        PrefabManager.OnVanillaPrefabsAvailable -= RegisterWhenPrefabsReady;
+        ItemShopRuntime.RegisterAssets();
     }
 
     private static IEnumerator RegisterShopRpcWhenReady()

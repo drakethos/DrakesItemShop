@@ -1,5 +1,5 @@
-using DrakesWorkshopLibs.API;
-using DrakesWorkshopLibs.Data;
+using DrakeModsLibs.API;
+using DrakeModsLibs.Data;
 
 namespace DrakesItemShop.Integration;
 

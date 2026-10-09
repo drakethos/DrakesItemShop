@@ -1,3 +1,5 @@
+using DrakeModsLibs.API;
+using DrakesItemShop;
 using DrakesItemShop.Data;
 using DrakesItemShop.Npc;
 using DrakesItemShop.Runtime;
@@ -14,6 +16,7 @@ internal static class ShopCommands
         CommandManager.Instance.AddConsoleCommand(new ReloadCommand());
         CommandManager.Instance.AddConsoleCommand(new SpawnNpcCommand());
         CommandManager.Instance.AddConsoleCommand(new GiveLedgerCommand());
+        CommandManager.Instance.AddConsoleCommand(new LinkLedgerCommand());
     }
 
     private sealed class ReloadCommand : ConsoleCommand
@@ -70,6 +73,57 @@ internal static class ShopCommands
             var item = drop.m_itemData.Clone();
             ShopLinkService.SetPortableLedger(item, shopId);
             player.GetInventory().AddItem(item);
+        }
+    }
+
+    private sealed class LinkLedgerCommand : ConsoleCommand
+    {
+        public override string Name => "shop_link_ledger";
+        public override string Help => "Link inventory ledger to targeted merchant box — shop_link_ledger";
+        public override bool IsCheat => true;
+
+        public override void Run(string[] args)
+        {
+            var player = Player.m_localPlayer;
+            if (player == null)
+                return;
+
+            var box = FindTargetMerchantBox(player);
+            if (box == null)
+            {
+                ItemShopPlugin.LogSource?.LogWarning("Look at a Merchant Box within range.");
+                CustomizeLibsAPI.ShowHudMessage(player, MessageHud.MessageType.Center, "Look at a Merchant Box.");
+                return;
+            }
+
+            ShopManageService.TryLinkLedger(player, box);
+        }
+
+        private static MerchantBoxBehaviour? FindTargetMerchantBox(Player player)
+        {
+            const float maxDist = 6f;
+            MerchantBoxBehaviour? best = null;
+            float bestDot = 0.55f;
+
+            Vector3 eye = player.GetEyePoint();
+            Vector3 look = player.GetLookDir();
+
+            foreach (var box in Object.FindObjectsOfType<MerchantBoxBehaviour>())
+            {
+                Vector3 to = box.transform.position - eye;
+                float dist = to.magnitude;
+                if (dist > maxDist || dist < 0.01f)
+                    continue;
+
+                float dot = Vector3.Dot(look, to / dist);
+                if (dot <= bestDot)
+                    continue;
+
+                best = box;
+                bestDot = dot;
+            }
+
+            return best;
         }
     }
 }

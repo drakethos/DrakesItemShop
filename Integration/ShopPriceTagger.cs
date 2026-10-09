@@ -1,4 +1,4 @@
-using DrakesWorkshopLibs.Data;
+using DrakeModsLibs.Data;
 
 namespace DrakesItemShop.Integration;
 

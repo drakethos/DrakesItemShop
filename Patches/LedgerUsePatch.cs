@@ -33,37 +33,36 @@ internal static class LedgerUsePatch
             return;
         }
 
-        var prefix = target.GetParameters().Length >= 3
-            ? new HarmonyMethod(typeof(LedgerUsePatch), nameof(PrefixWithInventory))
-            : new HarmonyMethod(typeof(LedgerUsePatch), nameof(PrefixItemOnly));
+        var prefix = target.ReturnType == typeof(bool)
+            ? new HarmonyMethod(typeof(LedgerUsePatch), nameof(PrefixBoolReturn))
+            : new HarmonyMethod(typeof(LedgerUsePatch), nameof(PrefixVoidReturn));
 
         harmony.Patch(target, prefix: prefix);
 
         log.LogInfo($"Ledger use patched: {target.DeclaringType?.Name}.{target.Name}({FormatParams(target)})");
     }
 
-    public static bool PrefixWithInventory(
-        Humanoid __instance,
-        Inventory inventory,
-        ItemDrop.ItemData item,
-        bool showMessage,
-        ref bool __result) =>
-        Handle(__instance, item, ref __result);
+    public static bool PrefixVoidReturn(Humanoid __instance, ItemDrop.ItemData item) =>
+        Handle(__instance, item);
 
-    public static bool PrefixItemOnly(
+    public static bool PrefixBoolReturn(
         Humanoid __instance,
         ItemDrop.ItemData item,
-        bool showMessage,
-        ref bool __result) =>
-        Handle(__instance, item, ref __result);
+        ref bool __result)
+    {
+        if (Handle(__instance, item))
+            return true;
 
-    private static bool Handle(Humanoid __instance, ItemDrop.ItemData item, ref bool __result)
+        __result = true;
+        return false;
+    }
+
+    private static bool Handle(Humanoid __instance, ItemDrop.ItemData item)
     {
         if (__instance is not Player player || !IsLedgerItem(item))
             return true;
 
         ShopOpener.TryOpenFromLedger(player, item);
-        __result = true;
         return false;
     }
 

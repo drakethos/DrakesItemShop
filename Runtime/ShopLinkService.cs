@@ -1,3 +1,4 @@
+using DrakeModsLibs.API;
 using DrakesItemShop.Data;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ internal static class ShopLinkService
         ledger.m_customData[ShopItemKeys.LinkBox] = $"{zdoId.UserID},{zdoId.ID}";
 
         box.LinkLedger(player.GetComponent<ZNetView>());
-        player.Message(MessageHud.MessageType.Center, $"Ledger linked to shop '{shopId}'.");
+        CustomizeLibsAPI.ShowHudMessage(player, MessageHud.MessageType.Center, $"Ledger linked to shop '{shopId}'.");
     }
 
     public static void SetPortableLedger(ItemDrop.ItemData ledger, string shopId)

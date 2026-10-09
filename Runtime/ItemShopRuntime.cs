@@ -5,8 +5,8 @@ using DrakesItemShop.Items;
 using DrakesItemShop.Localization;
 using DrakesItemShop.Networking;
 using DrakesItemShop.Pieces;
-using DrakesWorkshopLibs.API;
-using DrakesWorkshopLibs.Data;
+using DrakeModsLibs.API;
+using DrakeModsLibs.Data;
 using Jotunn;
 using Jotunn.Managers;
 
@@ -37,8 +37,7 @@ internal static class ItemShopRuntime
 
     public static void RegisterAssets()
     {
-        MerchantBoxPiece.Register();
-        ShopSignPiece.Register();
+        ShopPieceRegistrar.RegisterAll();
         LedgerItem.Register();
         SignCatalogRenderer.RefreshAllSigns();
     }
