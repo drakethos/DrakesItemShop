@@ -1,7 +1,7 @@
 ﻿# Changelog
 
 ## 0.2.0-beta.1
-- Beta. Requires DrakeModsLibs 0.11.0+.
+- Beta. Requires **DrakeModsLibs 1.0.0-beta.1** (the trade window uses its new UI kit).
 - **Armor, weapon and wall racks** (Drake Shop hammer tab): finewood racks with iron hooks and pegs: free-standing armor racks and weapon racks (6 or 4 slots), which take only armor or only weapons and shields, and wall racks (5 or 3 slots) that take both. What's inside hangs on the rack; weapons and shields are posed like on an item stand. Costs are FineWood plus one BronzeNails per slot, configurable (`03 Pieces`, synced).
 - Display cases and racks have their own hammer icons, rendered from the piece, instead of the wood chest's.
 - Display cases now have real default costs: big FineWood 10, Red jute 2, Crystal 2; small FineWood 5, Red jute 1, Crystal 1. Configs still on the old placeholder wood costs are moved over automatically; custom costs are kept.
