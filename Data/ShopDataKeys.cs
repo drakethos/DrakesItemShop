@@ -25,6 +25,12 @@ internal static class ShopPieceNames
     public const string NpcSpawner = "Drake_ShopNpcSpawner";
     public const string DisplayCase = "Drake_DisplayCase";
     public const string DisplayCaseSmall = "Drake_DisplayCaseSmall";
+    public const string ArmorRack = "Drake_ArmorRack";
+    public const string ArmorRackSmall = "Drake_ArmorRackSmall";
+    public const string WeaponRack = "Drake_WeaponRack";
+    public const string WeaponRackSmall = "Drake_WeaponRackSmall";
+    public const string WallRack = "Drake_WallRack";
+    public const string WallRackSmall = "Drake_WallRackSmall";
 }
 
 internal static class ShopItemNames

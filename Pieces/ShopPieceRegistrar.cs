@@ -26,6 +26,8 @@ internal static class ShopPieceRegistrar
         ShopSignPiece.Register();
         NpcSpawnerPiece.Register();
         DisplayCasePiece.RegisterAll();
+        ItemRackPiece.RegisterAll();
+        Trade.TradeDummyPiece.Register();
     }
 
     public static bool IsDrakeShopPiece(string? prefabName)
@@ -37,6 +39,8 @@ internal static class ShopPieceRegistrar
                prefabName == ShopPieceNames.ShopSign ||
                prefabName == ShopPieceNames.NpcSpawner ||
                prefabName == ShopPieceNames.DisplayCase ||
-               prefabName == ShopPieceNames.DisplayCaseSmall;
+               prefabName == ShopPieceNames.DisplayCaseSmall ||
+               prefabName == Trade.TradeDummyPiece.PieceName ||
+               System.Array.Exists(ItemRackPiece.Variants, v => v.Name == prefabName);
     }
 }

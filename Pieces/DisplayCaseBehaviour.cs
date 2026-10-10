@@ -108,7 +108,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
                 continue;
             // Slot 0 is the stocker's left (they stand at the door, facing +X): the +Z end.
             var z = m_floorZ1 - (item.m_gridPos.x + 0.5f) * slotLength;
-            Show(item.m_dropPrefab, new Vector3(FloorX, FloorY, z), slotLength * SlotFill);
+            Show(item, new Vector3(FloorX, FloorY, z), slotLength * SlotFill);
         }
     }
 
@@ -122,9 +122,9 @@ public class DisplayCaseBehaviour : MonoBehaviour
     }
 
     /// <summary>A still copy of the item's dropped model, lying flat (thinnest side down, longest across the case), shrunk to fit its slot.</summary>
-    private void Show(GameObject prefab, Vector3 slotCentre, float slotLength)
+    private void Show(ItemDrop.ItemData item, Vector3 slotCentre, float slotLength)
     {
-        var model = StillCopy(prefab);
+        var model = StillCopy(item.m_dropPrefab);
         if (model == null)
             return;
 
@@ -150,6 +150,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
         // Centre the model's bounds on the slot, resting on the cloth.
         var centre = lay * (bounds.center * scale);
         t.localPosition = slotCentre - centre + Vector3.up * (height * scale / 2f + 0.003f);
+        model.AddComponent<DisplayedItemTag>().Item = item;
         model.SetActive(true);
     }
 
@@ -178,6 +179,16 @@ public class DisplayCaseBehaviour : MonoBehaviour
                 DestroyImmediate(behaviours[i]);
         foreach (var nview in copy.GetComponentsInChildren<ZNetView>(true))
             DestroyImmediate(nview);
+        // Small items would be culled by their LOD group once shrunk onto the shelf: keep only the nearest LOD's meshes.
+        foreach (var lods in copy.GetComponentsInChildren<LODGroup>(true))
+        {
+            var levels = lods.GetLODs();
+            for (var level = 1; level < levels.Length; level++)
+                foreach (var lodRenderer in levels[level].renderers)
+                    if (lodRenderer != null)
+                        lodRenderer.enabled = false;
+            DestroyImmediate(lods);
+        }
         foreach (var joint in copy.GetComponentsInChildren<Joint>(true))
             DestroyImmediate(joint);
         foreach (var body in copy.GetComponentsInChildren<Rigidbody>(true))
@@ -196,6 +207,21 @@ public class DisplayCaseBehaviour : MonoBehaviour
         return copy;
     }
 
+    /// <summary>
+    /// True when <paramref name="renderer"/> will draw once the copy under <paramref name="root"/> is switched on: enabled,
+    /// and every object between it and the root active. Food also carries its inactive "placed on a table" model, which
+    /// must not count, or the item is sized and centred on both and the visible one ends up buried or off its spot.
+    /// </summary>
+    private static bool WillShow(Renderer renderer, Transform root)
+    {
+        if (!renderer.enabled)
+            return false;
+        for (var t = renderer.transform; t != null && t != root; t = t.parent)
+            if (!t.gameObject.activeSelf)
+                return false;
+        return true;
+    }
+
     /// <summary>Bounds of the copy's meshes in its own root space (renderer bounds are empty while it's inactive).</summary>
     private static bool LocalBounds(Transform root, out Bounds bounds)
     {
@@ -204,6 +230,8 @@ public class DisplayCaseBehaviour : MonoBehaviour
         var toRoot = root.worldToLocalMatrix;
         foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
         {
+            if (!WillShow(renderer, root))
+                continue;
             Mesh? mesh = renderer switch
             {
                 SkinnedMeshRenderer skinned => skinned.sharedMesh,

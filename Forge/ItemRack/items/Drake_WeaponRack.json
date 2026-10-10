@@ -1,0 +1,79 @@
+{
+  "id": "Drake_WeaponRack",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Weapon Rack",
+  "look": {
+    "mesh": {
+      "file": "models/rack_weapon_stand_big.glb"
+    },
+    "materials": [
+      {
+        "target": "Wood",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      },
+      {
+        "target": "Metal",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0.0,
+        0.725,
+        0.0
+      ],
+      "size": [
+        2.34,
+        1.45,
+        0.62
+      ]
+    }
+  },
+  "fields": {
+    "Container": {
+      "m_width": 6,
+      "m_height": 2
+    },
+    "Piece": {
+      "m_allowRotatedOverlap": true
+    },
+    "WearNTear": {
+      "m_burnable": true,
+      "m_supports": true,
+      "m_health": 400
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -1.17,
+        0.0,
+        -0.31
+      ],
+      [
+        -1.17,
+        0.0,
+        0.31
+      ],
+      [
+        1.17,
+        0.0,
+        -0.31
+      ],
+      [
+        1.17,
+        0.0,
+        0.31
+      ]
+    ]
+  }
+}

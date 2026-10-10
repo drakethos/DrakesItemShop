@@ -11,7 +11,7 @@ using UnityEngine;
 namespace DrakesItemShop.Pieces;
 
 /// <summary>
-/// Glass display cases (big 6x1, small 3x1): chests dressed from the Forge pack in Forge/DisplayCase
+/// Glass display cases (big 7x1, small 3x1): chests dressed from the Forge pack in Forge/DisplayCase
 /// (code generated into DisplayCase/Generated). Costs come from config and follow it live.
 /// </summary>
 internal static class DisplayCasePiece
@@ -68,6 +68,7 @@ internal static class DisplayCasePiece
         behaviour.m_floorZ1 = variant.FloorZ1;
 
         PieceManager.Instance.AddPiece(customPiece);
+        PieceIcons.Render(customPiece.Piece, -60f);
         ItemShopPlugin.LogSource?.LogInfo($"Registered piece {variant.Name} (clone: {ShopVanillaPrefabs.DisplayCase})");
     }
 

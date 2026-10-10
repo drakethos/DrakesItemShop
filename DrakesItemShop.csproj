@@ -57,6 +57,19 @@
     <Compile Include="Patches\DisplayCasePatches.cs" />
     <Compile Include="Pieces\DisplayCaseBehaviour.cs" />
     <Compile Include="Pieces\DisplayCasePiece.cs" />
+    <Compile Include="Pieces\DisplayedItemTag.cs" />
+    <Compile Include="Trade\TradeSession.cs" />
+    <Compile Include="Trade\TradeWindow.cs" />
+    <Compile Include="Trade\TradePrompt.cs" />
+    <Compile Include="Trade\TradeDummy.cs" />
+    <Compile Include="Pieces\RackPoseSettings.cs" />
+    <Compile Include="Pieces\RackPoseDebug.cs" />
+    <Compile Include="ItemRack\Generated\Items\*.g.cs" />
+    <Compile Include="Patches\ItemRackPatches.cs" />
+    <Compile Include="Pieces\ItemRackBehaviour.cs" />
+    <Compile Include="Pieces\ItemRackPiece.cs" />
+    <Compile Include="Pieces\PieceIcons.cs" />
+    <Compile Include="Pieces\WornArmor.cs" />
     <Compile Include="Pieces\MerchantBoxBehaviour.cs" />
     <Compile Include="Pieces\MerchantBoxPiece.cs" />
     <Compile Include="Pieces\NpcSpawnerPiece.cs" />
@@ -120,5 +133,7 @@
   <ItemGroup>
     <!-- Display case model (Forge pack in Forge/DisplayCase), inside the DLL so mod managers can't lose it. -->
     <EmbeddedResource Include="DisplayCase\Generated\Assets\**\*.glb" />
+    <!-- Item rack models (Forge pack in Forge/ItemRack). -->
+    <EmbeddedResource Include="ItemRack\Generated\Assets\**\*.glb" />
   </ItemGroup>
 </Project>

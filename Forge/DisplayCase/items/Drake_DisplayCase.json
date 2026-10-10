@@ -46,7 +46,7 @@
   },
   "fields": {
     "Container": {
-      "m_width": 6,
+      "m_width": 7,
       "m_height": 1
     },
     "Piece": {

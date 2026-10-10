@@ -1,6 +1,6 @@
 # Display cases (Forge pack)
 
-Source of the display cases' looks: `Drake_DisplayCase` (6x1 slots) and `Drake_DisplayCaseSmall` (3x1, half length).
+Source of the display cases' looks: `Drake_DisplayCase` (7x1 slots) and `Drake_DisplayCaseSmall` (3x1, half length).
 Edit the recipes in Drakes Asset Forge (open this folder as a pack), then regenerate the code:
 
 ```

@@ -4,8 +4,9 @@
 
 ## Features
 
-- **Drake Shop** hammer tab — Display Case, Small Display Case, Merchant Box, Shop Sign, NPC Spawner
+- **Drake Shop** hammer tab — Display Case, Small Display Case, armor, weapon and wall racks, Merchant Box, Shop Sign, NPC Spawner
 - **Display cases** — glass and wood cases (6 or 3 slots) that show what's inside lying on jute. Stock them from the door side: the glass door slides open while you do. From the glass side they're just looked at.
+- **Armor, weapon and wall racks** — finewood racks with iron hooks and pegs. Free-standing armor racks and weapon racks (6 or 4 slots) take only armor or only weapons and shields; wall racks (5 or 3 slots) take both. What's inside hangs on the rack: weapons and shields the way an item stand shows them, armor upright on its hook.
 - **Merchant Box** — vending machine: owner **E** stock, **Shift+E** shop, **Alt+E** manage/restock; customer **E** dispense pickup, **Shift+E** buy/sell
 - **Shop Ledger** — use from inventory; link at merchant box via **Alt+E** manage, or `shop_give_ledger`
 - **Shop Sign** — catalog prices; **Shift+E** to set `shopId`
@@ -13,7 +14,7 @@
 - **Coins** buy/sell with optional item currencies in catalog JSON
 - **Ward rules** per shop: `none`, `vanilla`, `betterwards`, `wardislove`
 - **Server-authoritative** buy/sell via ZNet RPC
-- **Price tags** on purchased items via `Drake_MarketPrice` and WorkshopLibs `ShopOverlay` display layer
+- **Price tags** on purchased items via `Drake_MarketPrice` and DrakeModsLibs `ShopOverlay` display layer
 
 ## Config layout
 
@@ -32,8 +33,11 @@ Example files are created on first run if missing.
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `AdminOnlyBuildPieces` | `false` | When `true`, only server admins can place Drake Shop hammer pieces. |
-| `DisplayCaseCost` | `Wood:10` | Display Case build cost: `Item:amount` pairs, comma separated (prefab names). |
-| `SmallDisplayCaseCost` | `Wood:5` | Small Display Case build cost. |
+| `DisplayCaseCost` | `FineWood:10,JuteRed:2,Crystal:2` | Display Case build cost: `Item:amount` pairs, comma separated (prefab names). |
+| `SmallDisplayCaseCost` | `FineWood:5,JuteRed:1,Crystal:1` | Small Display Case build cost. |
+| `ArmorRackCost` / `SmallArmorRackCost` | `FineWood:12,BronzeNails:6` / `FineWood:8,BronzeNails:4` | Free-standing armor racks. |
+| `WallRackCost` / `SmallWallRackCost` | `FineWood:8,BronzeNails:5` / `FineWood:5,BronzeNails:3` | Wall racks (armor and weapons). |
+| `WeaponRackCost` / `SmallWeaponRackCost` | `FineWood:10,BronzeNails:6` / `FineWood:7,BronzeNails:4` | Free-standing weapon racks. |
 
 ## Console commands
 
@@ -73,7 +77,7 @@ Owner restock shortcuts (**Alt+E** manage panel): Stock chest, Treasury, Sell ho
 
 Open `DrakesItemShop.csproj`, restore NuGet, build. Requires `environment.props` with Valheim paths (see `environment.props.example`).
 
-The display cases' look is a Drakes Asset Forge pack in `Forge/DisplayCase` (models, recipes, the Blender script that makes them); see its README to change them.
+The display cases' look is a Drakes Asset Forge pack in `Forge/DisplayCase` (models, recipes, the Blender script that makes them); see its README to change them. The racks' look is the pack in `Forge/ItemRack`, the same way.
 
 ## Releases
 

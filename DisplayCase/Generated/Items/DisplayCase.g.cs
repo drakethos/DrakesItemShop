@@ -37,7 +37,7 @@ internal static class DisplayCase
         // Settings
         if (prefab.GetComponent<global::Container>() is { } c0)
         {
-            c0.m_width = 6;
+            c0.m_width = 7;
             c0.m_height = 1;
         }
         if (prefab.GetComponent<global::Piece>() is { } c1)
