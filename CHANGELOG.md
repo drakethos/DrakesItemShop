@@ -1,5 +1,15 @@
 ﻿# Changelog
 
+## 0.3.0
+- Requires **DrakeModsLibs 1.0.0-beta.2** (the new windows use its UI kit and `DockRight`).
+- **Trading menu (beta)**: Shift+T near another player to ask them to trade. WoW-style trade window, both sides confirm, ends if you drift too far apart.
+- **Mailbox and Drop Box** (Drake Shop tab): anyone can send up to 3 stacks and a note through the front slot; the back is a 10-slot chest for the owner. Opening flap and door animate, and the cavity is black inside. The send window sits to the right so you can watch the box open. Allow list, item filter and open/closed switch in the Mail settings (Shift+E, or the Lock menu with LockSmith).
+- **PO boxes and Post Hall**: PO boxes snap into a post hall. One door per box: the assigned owner and their delegates open it, everyone else sends mail. Name plate, mail flag, postmaster access for the builder.
+- **Item rack poses**: weapon poses are tunable per weapon type and per item; common tuned items are built in.
+- Display cases and racks no longer reuse the wood chest's icon.
+- **Removed the old shop system**: Merchant Box, Shop Sign, Shop Ledger, NPC Spawner and the silent trader, the JSON catalogs/shops/npcs, ward modes, price tags, the `shop_*` console commands and the shop buy/sell windows are gone. Pieces already placed from them disappear. Old files in `BepInEx/config/com.drakesworkshop.itemshop/ItemShop/` are no longer read and can be deleted. Racks, display cases, trading and mail are unchanged.
+- README and description rewritten to cover only what the mod offers now (racks, display cases, trading, mail).
+
 ## 0.2.0-beta.1
 - Beta. Requires **DrakeModsLibs 1.0.0-beta.1** (the trade window uses its new UI kit).
 - **Armor, weapon and wall racks** (Drake Shop hammer tab): finewood racks with iron hooks and pegs: free-standing armor racks and weapon racks (6 or 4 slots), which take only armor or only weapons and shields, and wall racks (5 or 3 slots) that take both. What's inside hangs on the rack; weapons and shields are posed like on an item stand. Costs are FineWood plus one BronzeNails per slot, configurable (`03 Pieces`, synced).

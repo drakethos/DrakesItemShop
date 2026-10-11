@@ -1,0 +1,87 @@
+{
+  "id": "Drake_DisplayMat",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Display Mat",
+  "look": {
+    "mesh": {
+      "file": "models/display_mat.glb"
+    },
+    "materials": [
+      {
+        "target": "Wood",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      },
+      {
+        "target": "Fabric",
+        "from": {
+          "prefab": "jute_carpet",
+          "material": "jute_carpet"
+        }
+      },
+      {
+        "target": "Metal",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0.0,
+        0.0225,
+        0.0
+      ],
+      "size": [
+        0.62,
+        0.045,
+        1.8
+      ]
+    }
+  },
+  "fields": {
+    "Container": {
+      "m_width": 6,
+      "m_height": 1
+    },
+    "Piece": {
+      "m_allowRotatedOverlap": true,
+      "m_notOnTiltingSurface": false
+    },
+    "WearNTear": {
+      "m_burnable": true,
+      "m_supports": false,
+      "m_health": 200
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.31,
+        0,
+        -0.9
+      ],
+      [
+        -0.31,
+        0,
+        0.9
+      ],
+      [
+        0.31,
+        0,
+        -0.9
+      ],
+      [
+        0.31,
+        0,
+        0.9
+      ]
+    ]
+  }
+}

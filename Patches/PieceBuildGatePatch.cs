@@ -4,7 +4,6 @@ using BepInEx.Logging;
 using UnityEngine;
 using DrakesItemShop.Config;
 using DrakesItemShop.Pieces;
-using DrakesItemShop.Runtime;
 using HarmonyLib;
 
 namespace DrakesItemShop.Patches;
@@ -28,6 +27,13 @@ internal static class PieceBuildGatePatch
         log.LogInfo($"Piece build gate patched: {target.DeclaringType?.Name}.{target.Name}");
     }
 
+    private static bool IsAdmin(Player player)
+    {
+        if (ZNet.instance != null && ZNet.instance.IsServer() && player == Player.m_localPlayer)
+            return true;
+        return Jotunn.Managers.SynchronizationManager.Instance?.PlayerIsAdmin == true && player == Player.m_localPlayer;
+    }
+
     public static bool Prefix(Player __instance, ref bool __result)
     {
         if (!ItemShopConfig.AdminOnlyBuildPieces)
@@ -39,7 +45,7 @@ internal static class PieceBuildGatePatch
         if (!ShopPieceRegistrar.IsDrakeShopPiece(pieceName))
             return true;
 
-        if (ShopPermissions.IsElevated(__instance))
+        if (IsAdmin(__instance))
             return true;
 
         CustomizeLibsAPI.ShowHudMessage(__instance, MessageHud.MessageType.Center, "Only admins can build Drake Shop pieces.");

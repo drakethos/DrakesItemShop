@@ -1,0 +1,143 @@
+{
+  "id": "Drake_PostSection1x3",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Post Wall 1x3",
+  "look": {
+    "mesh": {
+      "file": "models/post_section_1x3.glb"
+    },
+    "materials": [
+      {
+        "target": "Wood",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      },
+      {
+        "target": "Metal",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        }
+      },
+      {
+        "target": "Cloth",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0,
+        0.54,
+        -0.175
+      ],
+      "size": [
+        0.38,
+        1.08,
+        0.03
+      ]
+    }
+  },
+  "fields": {
+    "Piece": {
+      "m_allowRotatedOverlap": true,
+      "m_notOnTiltingSurface": false
+    },
+    "WearNTear": {
+      "m_burnable": true,
+      "m_supports": true,
+      "m_health": 400
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.19,
+        0.0,
+        -0.19
+      ],
+      [
+        -0.19,
+        0.0,
+        0.19
+      ],
+      [
+        -0.19,
+        0.36,
+        -0.19
+      ],
+      [
+        -0.19,
+        0.36,
+        0.19
+      ],
+      [
+        -0.19,
+        0.72,
+        -0.19
+      ],
+      [
+        -0.19,
+        0.72,
+        0.19
+      ],
+      [
+        -0.19,
+        1.08,
+        -0.19
+      ],
+      [
+        -0.19,
+        1.08,
+        0.19
+      ],
+      [
+        0.19,
+        0.0,
+        -0.19
+      ],
+      [
+        0.19,
+        0.0,
+        0.19
+      ],
+      [
+        0.19,
+        0.36,
+        -0.19
+      ],
+      [
+        0.19,
+        0.36,
+        0.19
+      ],
+      [
+        0.19,
+        0.72,
+        -0.19
+      ],
+      [
+        0.19,
+        0.72,
+        0.19
+      ],
+      [
+        0.19,
+        1.08,
+        -0.19
+      ],
+      [
+        0.19,
+        1.08,
+        0.19
+      ]
+    ]
+  }
+}

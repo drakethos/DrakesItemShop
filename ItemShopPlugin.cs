@@ -1,10 +1,9 @@
-using System.Collections;
 using BepInEx;
 using BepInEx.Logging;
 using DrakesItemShop.Config;
-using DrakesItemShop.Networking;
+using DrakesItemShop.Localization;
 using DrakesItemShop.Patches;
-using DrakesItemShop.Runtime;
+using DrakesItemShop.Pieces;
 using DrakeModsLibs;
 using HarmonyLib;
 using Jotunn;
@@ -27,30 +26,19 @@ public partial class ItemShopPlugin : BaseUnityPlugin
         Instance = this;
         LogSource = Logger;
         ItemShopConfig.Bind(Config, Logger);
-        ItemShopRuntime.Initialize(Logger);
+        ItemShopLocalization.Init();
         _harmony.PatchAll();
-        LedgerUsePatch.TryApply(_harmony, Logger);
         PieceBuildGatePatch.TryApply(_harmony, Logger);
         PrefabManager.OnVanillaPrefabsAvailable += RegisterWhenPrefabsReady;
+        Mail.MailboxMenuTab.Register();
         Logger.LogInfo($"{ModName} {Version} loaded.");
     }
 
-    private void Start()
-    {
-        StartCoroutine(RegisterShopRpcWhenReady());
-    }
+    private void Update() => Trade.TradeKey.Update();
 
     private static void RegisterWhenPrefabsReady()
     {
         PrefabManager.OnVanillaPrefabsAvailable -= RegisterWhenPrefabsReady;
-        ItemShopRuntime.RegisterAssets();
-    }
-
-    private static IEnumerator RegisterShopRpcWhenReady()
-    {
-        for (int i = 0; i < 600 && ZRoutedRpc.instance == null; i++)
-            yield return null;
-
-        ShopRpc.EnsureRegistered();
+        ShopPieceRegistrar.RegisterAll();
     }
 }

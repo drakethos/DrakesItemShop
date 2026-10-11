@@ -1,5 +1,4 @@
 using DrakesItemShop.Data;
-using DrakesItemShop.Runtime;
 using Jotunn.Managers;
 
 namespace DrakesItemShop.Pieces;
@@ -20,13 +19,11 @@ internal static class ShopPieceRegistrar
 
     public static void RegisterAll()
     {
-        ShopVanillaPrefabResolver.ResolveAll(ItemShopPlugin.LogSource!);
         EnsureHammerCategory();
-        MerchantBoxPiece.Register();
-        ShopSignPiece.Register();
-        NpcSpawnerPiece.Register();
         DisplayCasePiece.RegisterAll();
         ItemRackPiece.RegisterAll();
+        Mail.MailboxPiece.RegisterAll();
+        Mail.PostWallPiece.RegisterAll();
         Trade.TradeDummyPiece.Register();
     }
 
@@ -35,12 +32,13 @@ internal static class ShopPieceRegistrar
         if (string.IsNullOrEmpty(prefabName))
             return false;
 
-        return prefabName == ShopPieceNames.MerchantBox ||
-               prefabName == ShopPieceNames.ShopSign ||
-               prefabName == ShopPieceNames.NpcSpawner ||
-               prefabName == ShopPieceNames.DisplayCase ||
+        return prefabName == ShopPieceNames.DisplayCase ||
                prefabName == ShopPieceNames.DisplayCaseSmall ||
+               prefabName == ShopPieceNames.DisplayMat ||
+               prefabName == ShopPieceNames.DisplayMatSmall ||
                prefabName == Trade.TradeDummyPiece.PieceName ||
+               Mail.MailboxPiece.IsMailbox(prefabName) ||
+               Mail.PostWallPiece.IsPostWall(prefabName) ||
                System.Array.Exists(ItemRackPiece.Variants, v => v.Name == prefabName);
     }
 }

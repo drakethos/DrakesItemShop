@@ -17,19 +17,27 @@ internal sealed class TradeEntry
     }
 }
 
-/// <summary>The other side of a trade. A test dummy today; a real player once trade is networked.</summary>
+/// <summary>The other side of a trade: the test dummy, or another player over the network.</summary>
 internal interface ITradePartner
 {
     string Name { get; }
 
-    /// <summary>The partner takes what you gave (the test dummy just keeps a list).</summary>
+    /// <summary>You changed your offer (version counts your changes).</summary>
+    void SendOffer(IReadOnlyList<TradeEntry> mine, int version);
+
+    /// <summary>You accepted, seeing your offer at <paramref name="mineVersion"/> and theirs at <paramref name="theirsVersion"/>.</summary>
+    void SendAccept(int mineVersion, int theirsVersion);
+
+    void SendCancel();
+
+    /// <summary>The trade went through: the partner takes what you gave (the dummy keeps a list; a player's own client does its own swap).</summary>
     void Receive(IReadOnlyList<TradeEntry> items);
 }
 
 /// <summary>
 /// One trade between the local player and a partner: what each side offers, who has accepted, and the swap itself.
 /// Rules (WoW style): up to <see cref="MaxSlots"/> stacks per side; any change to either offer clears both Accepts;
-/// when both have accepted the swap runs in one step, or not at all. UI-free, so a networked trade can drive the same object.
+/// when both have accepted, each client runs the swap in one step. UI-free; the partner object carries the messages.
 /// </summary>
 internal sealed class TradeSession
 {
@@ -44,11 +52,15 @@ internal sealed class TradeSession
     public bool Done { get; private set; }
     public bool Cancelled { get; private set; }
     public string Message { get; private set; } = "";
+    public int MineVersion { get; private set; }
+    public int TheirsVersion { get; private set; }
 
     /// <summary>Anything on screen may need redrawing.</summary>
     public event Action? Changed;
 
     public TradeSession(ITradePartner partner) => Partner = partner;
+
+    public bool Locked => Done || Cancelled;
 
     // ---- your side ----
 
@@ -68,14 +80,14 @@ internal sealed class TradeSession
             Changed?.Invoke();
             return;
         }
-        Edited();
+        EditedMine();
     }
 
     public void RemoveMine(TradeEntry entry)
     {
         if (Locked || !Mine.Remove(entry))
             return;
-        Edited();
+        EditedMine();
     }
 
     public void ChangeAmount(TradeEntry entry, int delta)
@@ -86,18 +98,27 @@ internal sealed class TradeSession
         if (amount == entry.Amount)
             return;
         entry.Amount = amount;
-        Edited();
+        EditedMine();
     }
 
-    // ---- their side (the partner drives these) ----
+    private void EditedMine()
+    {
+        MineVersion++;
+        ClearAccepts("Offer changed. Both need to accept again.");
+        Partner.SendOffer(Mine, MineVersion);
+    }
 
-    public void SetTheirs(IEnumerable<TradeEntry> items)
+    // ---- their side ----
+
+    /// <summary>The partner's offer changed (the test dummy calls this directly; a player's arrives with its version).</summary>
+    public void SetTheirs(IEnumerable<TradeEntry> items, int? version = null)
     {
         if (Locked)
             return;
         Theirs.Clear();
         Theirs.AddRange(items.Take(MaxSlots));
-        Edited();
+        TheirsVersion = version ?? TheirsVersion + 1;
+        ClearAccepts("Offer changed. Both need to accept again.");
     }
 
     public void PartnerAccepts()
@@ -108,6 +129,14 @@ internal sealed class TradeSession
         Message = $"{Partner.Name} accepted.";
         Changed?.Invoke();
         TryComplete();
+    }
+
+    /// <summary>A player's Accept: only counts if they were looking at the same two offers we are.</summary>
+    public void ReceiveAccept(int theirMineVersion, int theirTheirsVersion)
+    {
+        if (theirMineVersion != TheirsVersion || theirTheirsVersion != MineVersion)
+            return;
+        PartnerAccepts();
     }
 
     public void PartnerCancels()
@@ -127,8 +156,15 @@ internal sealed class TradeSession
     {
         if (!CanAccept)
             return;
+        if (Problem() is { } problem)
+        {
+            Message = problem;
+            Changed?.Invoke();
+            return;
+        }
         MineAccepted = true;
         Message = TheirsAccepted ? "" : $"Waiting for {Partner.Name}.";
+        Partner.SendAccept(MineVersion, TheirsVersion);
         Changed?.Invoke();
         TryComplete();
     }
@@ -139,49 +175,53 @@ internal sealed class TradeSession
             return;
         Cancelled = true;
         Message = "Trade cancelled.";
+        Partner.SendCancel();
         Changed?.Invoke();
     }
 
-    public bool Locked => Done || Cancelled;
-
-    private void Edited()
+    private void ClearAccepts(string message)
     {
         MineAccepted = false;
         TheirsAccepted = false;
-        Message = "Offer changed. Both need to accept again.";
+        Message = message;
         Changed?.Invoke();
     }
 
     // ---- the swap ----
+
+    /// <summary>Why the swap can't run right now (null = it can).</summary>
+    private string? Problem()
+    {
+        var inventory = Player.m_localPlayer != null ? Player.m_localPlayer.GetInventory() : null;
+        if (inventory == null)
+            return "No inventory.";
+
+        // Everything you offered must still be there, in full.
+        foreach (var entry in Mine)
+            if (!inventory.ContainsItem(entry.Item) || entry.Item.m_stack < entry.Amount)
+                return "An item you offered is no longer in your inventory.";
+
+        // Room for what you get, counting the slots you free.
+        var freed = Mine.Count(e => e.Amount >= e.Item.m_stack);
+        if (inventory.GetEmptySlots() + freed < Theirs.Count)
+            return "Not enough room in your inventory.";
+        return null;
+    }
 
     private void TryComplete()
     {
         if (!MineAccepted || !TheirsAccepted || Locked)
             return;
 
-        var player = Player.m_localPlayer;
-        var inventory = player != null ? player.GetInventory() : null;
-        if (inventory == null)
-            return;
-
-        // Everything you offered must still be there, in full.
-        foreach (var entry in Mine)
+        if (Problem() is { } problem)
         {
-            if (!inventory.ContainsItem(entry.Item) || entry.Item.m_stack < entry.Amount)
-            {
-                Fail("An item you offered is no longer in your inventory.");
-                return;
-            }
-        }
-
-        // Room for what you get, counting the slots you free.
-        var freed = Mine.Count(e => e.Amount >= e.Item.m_stack);
-        if (inventory.GetEmptySlots() + freed < Theirs.Count)
-        {
-            Fail("Not enough room in your inventory.");
+            // Our accept was fine a moment ago: tell them it's off so neither side swaps alone.
+            ClearAccepts(problem);
+            Partner.SendOffer(Mine, ++MineVersion);
             return;
         }
 
+        var inventory = Player.m_localPlayer.GetInventory();
         var given = new List<TradeEntry>();
         foreach (var entry in Mine)
         {
@@ -200,14 +240,6 @@ internal sealed class TradeSession
 
         Done = true;
         Message = "Trade complete.";
-        Changed?.Invoke();
-    }
-
-    private void Fail(string message)
-    {
-        MineAccepted = false;
-        TheirsAccepted = false;
-        Message = message;
         Changed?.Invoke();
     }
 }

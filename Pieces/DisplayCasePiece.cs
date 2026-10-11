@@ -11,7 +11,7 @@ using UnityEngine;
 namespace DrakesItemShop.Pieces;
 
 /// <summary>
-/// Glass display cases (big 7x1, small 3x1): chests dressed from the Forge pack in Forge/DisplayCase
+/// Glass display cases (big 7x1, small 3x1) and display mats (6x1, 3x1, to lay on a table): chests dressed from the Forge pack in Forge/DisplayCase
 /// (code generated into DisplayCase/Generated). Costs come from config and follow it live.
 /// </summary>
 internal static class DisplayCasePiece
@@ -24,6 +24,10 @@ internal static class DisplayCasePiece
         public float FloorZ0, FloorZ1;
         public Action<GameObject> Dress = _ => { };
         public Func<string> Cost = () => "";
+        // The case's floor by default; the mats lie low and open from any side.
+        public float FloorY = 1.038f, FloorX = 0.365f, MaxAcross = 1.15f, MaxHeight = 0.5f;
+        public bool AnySide;
+        public float IconYaw = -60f;
     }
 
     // As built by Forge/DisplayCase/make_display_case.py: slide = door opening + 4 cm, floor = the jute cloth's length.
@@ -33,6 +37,13 @@ internal static class DisplayCasePiece
                 Dress = DisplayCase.Items.DisplayCase.Dress, Cost = () => ItemShopConfig.DisplayCaseCost },
         new() { Name = ShopPieceNames.DisplayCaseSmall, Token = "drake_display_case_small", Slide = 0.79f, FloorZ0 = -1.1715f, FloorZ1 = 0.7685f,
                 Dress = DisplayCase.Items.SmallDisplayCase.Dress, Cost = () => ItemShopConfig.SmallDisplayCaseCost },
+        // Display mats (Forge/DisplayCase/make_display_mat.py, its MATINFO line): a tray to lay on a table.
+        new() { Name = ShopPieceNames.DisplayMat, Token = "drake_display_mat", FloorZ0 = -0.845f, FloorZ1 = 0.845f,
+                FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
+                Dress = DisplayCase.Items.DisplayMat.Dress, Cost = () => "FineWood:2,JuteRed:2" },
+        new() { Name = ShopPieceNames.DisplayMatSmall, Token = "drake_display_mat_small", FloorZ0 = -0.405f, FloorZ1 = 0.405f,
+                FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
+                Dress = DisplayCase.Items.SmallDisplayMat.Dress, Cost = () => "FineWood:1,JuteRed:1" },
     };
 
     public static void RegisterAll()
@@ -62,13 +73,20 @@ internal static class DisplayCasePiece
 
         var prefab = customPiece.Piece.gameObject;
         variant.Dress(prefab);
+        if (prefab.GetComponent<Container>() is { } container)
+            container.m_name = $"${variant.Token}_name";
         var behaviour = prefab.GetComponent<DisplayCaseBehaviour>() ?? prefab.AddComponent<DisplayCaseBehaviour>();
         behaviour.m_slideDistance = variant.Slide;
         behaviour.m_floorZ0 = variant.FloorZ0;
         behaviour.m_floorZ1 = variant.FloorZ1;
+        behaviour.m_floorY = variant.FloorY;
+        behaviour.m_floorX = variant.FloorX;
+        behaviour.m_maxAcross = variant.MaxAcross;
+        behaviour.m_maxHeight = variant.MaxHeight;
+        behaviour.m_anySide = variant.AnySide;
 
         PieceManager.Instance.AddPiece(customPiece);
-        PieceIcons.Render(customPiece.Piece, -60f);
+        PieceIcons.Render(customPiece.Piece, variant.IconYaw);
         ItemShopPlugin.LogSource?.LogInfo($"Registered piece {variant.Name} (clone: {ShopVanillaPrefabs.DisplayCase})");
     }
 

@@ -29,29 +29,11 @@
     <Reference Include="System" /><Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\ShopCommands.cs" />
     <Compile Include="Config\ItemShopConfig.cs" />
     <Compile Include="Data\ShopDataKeys.cs" />
-    <Compile Include="Integration\BetterWardsAdapter.cs" />
-    <Compile Include="Integration\ShopDisplayLayer.cs" />
-    <Compile Include="Integration\ShopPriceTagger.cs" />
-    <Compile Include="Integration\VanillaWardAdapter.cs" />
-    <Compile Include="Integration\WardAccessRouter.cs" />
-    <Compile Include="Integration\WardIsLoveAdapter.cs" />
-    <Compile Include="Items\LedgerItem.cs" />
     <Compile Include="ItemShopPlugin.cs" />
     <Compile Include="Localization\ItemShopLocalization.cs" />
-    <Compile Include="Networking\ShopRpc.cs" />
-    <Compile Include="Npc\NpcTraderSpawner.cs" />
-    <Compile Include="Npc\SilentShopTrader.cs" />
-    <Compile Include="Npc\TraderCatalogBuilder.cs" />
-    <Compile Include="Patches\LedgerUsePatch.cs" />
-    <Compile Include="Patches\MerchantBoxInteractPatch.cs" />
-    <Compile Include="Patches\ShopInventoryFacadePatch.cs" />
-    <Compile Include="Patches\ShopSignInteractPatch.cs" />
-    <Compile Include="Patches\SilentTraderInteractPatch.cs" />
     <Compile Include="Data\ShopPieceCategories.cs" />
-    <Compile Include="Patches\NpcSpawnerInteractPatch.cs" />
     <Compile Include="Patches\PieceBuildGatePatch.cs" />
     <Compile Include="DisplayCase\Generated\Items\*.g.cs" />
     <Compile Include="Patches\DisplayCasePatches.cs" />
@@ -59,53 +41,32 @@
     <Compile Include="Pieces\DisplayCasePiece.cs" />
     <Compile Include="Pieces\DisplayedItemTag.cs" />
     <Compile Include="Trade\TradeSession.cs" />
+    <Compile Include="Trade\TradeItemCodec.cs" />
+    <Compile Include="Trade\TradeNet.cs" />
     <Compile Include="Trade\TradeWindow.cs" />
     <Compile Include="Trade\TradePrompt.cs" />
     <Compile Include="Trade\TradeDummy.cs" />
+    <Compile Include="Trade\TradeDummyBehaviour.cs" />
+    <Compile Include="Patches\TradeDummyPatches.cs" />
     <Compile Include="Pieces\RackPoseSettings.cs" />
     <Compile Include="Pieces\RackPoseDebug.cs" />
     <Compile Include="ItemRack\Generated\Items\*.g.cs" />
+    <Compile Include="Mailbox\Generated\Items\*.g.cs" />
+    <Compile Include="Mailbox\MailboxPiece.cs" />
+    <Compile Include="Mailbox\MailboxBehaviour.cs" />
+    <Compile Include="Mailbox\MailboxSendWindow.cs" />
+    <Compile Include="Mailbox\MailboxMenuTab.cs" />
+    <Compile Include="Mailbox\MailboxSettingsWindow.cs" />
+    <Compile Include="Mailbox\PostWallPiece.cs" />
+    <Compile Include="Mailbox\PostSectionBehaviour.cs" />
+    <Compile Include="Patches\PostWallRemovePatch.cs" />
     <Compile Include="Patches\ItemRackPatches.cs" />
     <Compile Include="Pieces\ItemRackBehaviour.cs" />
     <Compile Include="Pieces\ItemRackPiece.cs" />
     <Compile Include="Pieces\PieceIcons.cs" />
     <Compile Include="Pieces\WornArmor.cs" />
-    <Compile Include="Pieces\MerchantBoxBehaviour.cs" />
-    <Compile Include="Pieces\MerchantBoxPiece.cs" />
-    <Compile Include="Pieces\NpcSpawnerPiece.cs" />
-    <Compile Include="Pieces\ShopInventoryFacade.cs" />
-    <Compile Include="Pieces\ShopNpcSpawnerBehaviour.cs" />
     <Compile Include="Pieces\ShopPieceRegistrar.cs" />
-    <Compile Include="Pieces\ShopSignBehaviour.cs" />
-    <Compile Include="Pieces\ShopSignPiece.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\FailureLogWriter.cs" />
-    <Compile Include="Runtime\GameAccess.cs" />
-    <Compile Include="Runtime\ItemResolver.cs" />
-    <Compile Include="Runtime\ItemShopPaths.cs" />
-    <Compile Include="Runtime\ItemShopRuntime.cs" />
-    <Compile Include="Runtime\LedgerContainerHost.cs" />
-    <Compile Include="Runtime\ShopLinkService.cs" />
-    <Compile Include="Runtime\ShopManageAnchor.cs" />
-    <Compile Include="Runtime\ShopManageService.cs" />
-    <Compile Include="Runtime\ShopLoader.cs" />
-    <Compile Include="Runtime\ShopOpener.cs" />
-    <Compile Include="Runtime\ShopPermissions.cs" />
-    <Compile Include="Runtime\ShopRegistry.cs" />
-    <Compile Include="Runtime\ShopSession.cs" />
-    <Compile Include="Runtime\ShopTransactionService.cs" />
-    <Compile Include="Runtime\ShopVanillaPrefabResolver.cs" />
-    <Compile Include="Runtime\ShopValidator.cs" />
-    <Compile Include="Runtime\SignCatalogRenderer.cs" />
-    <Compile Include="Runtime\VendingInventoryHelper.cs" />
-    <Compile Include="Runtime\VendingInventoryStore.cs" />
-    <Compile Include="Runtime\ValidationFailure.cs" />
-    <Compile Include="Schema\CatalogDto.cs" />
-    <Compile Include="Schema\NpcDefinitionDto.cs" />
-    <Compile Include="Schema\PriceDto.cs" />
-    <Compile Include="Schema\ShopDefinitionDto.cs" />
-    <Compile Include="UI\ShopManagePanel.cs" />
-    <Compile Include="UI\ShopPanel.cs" />
   </ItemGroup>
   <ItemGroup><None Include="App.config" /><None Include="packages.config" /></ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -135,5 +96,7 @@
     <EmbeddedResource Include="DisplayCase\Generated\Assets\**\*.glb" />
     <!-- Item rack models (Forge pack in Forge/ItemRack). -->
     <EmbeddedResource Include="ItemRack\Generated\Assets\**\*.glb" />
+    <!-- Mailbox models (Forge pack in Forge/Mailbox). -->
+    <EmbeddedResource Include="Mailbox\Generated\Assets\**\*.glb" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,103 @@
+{
+  "id": "Drake_PostRoof3",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Post Wall Roof (3 wide)",
+  "look": {
+    "mesh": {
+      "file": "models/post_roof_3.glb"
+    },
+    "materials": [
+      {
+        "target": "Wood",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      },
+      {
+        "target": "Metal",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        }
+      },
+      {
+        "target": "Cloth",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0,
+        0.16,
+        0
+      ],
+      "size": [
+        1.14,
+        0.32,
+        0.58
+      ]
+    }
+  },
+  "fields": {
+    "Piece": {
+      "m_allowRotatedOverlap": true,
+      "m_notOnTiltingSurface": false
+    },
+    "WearNTear": {
+      "m_burnable": true,
+      "m_supports": true,
+      "m_health": 400
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.57,
+        0,
+        -0.19
+      ],
+      [
+        -0.57,
+        0,
+        0.19
+      ],
+      [
+        -0.19,
+        0,
+        -0.19
+      ],
+      [
+        -0.19,
+        0,
+        0.19
+      ],
+      [
+        0.19,
+        0,
+        -0.19
+      ],
+      [
+        0.19,
+        0,
+        0.19
+      ],
+      [
+        0.57,
+        0,
+        -0.19
+      ],
+      [
+        0.57,
+        0,
+        0.19
+      ]
+    ]
+  }
+}

@@ -5,9 +5,9 @@ using UnityEngine;
 namespace DrakesItemShop;
 
 /// <summary>
-/// Display case: the chest only opens from the store side (where the sliding glass door is), that door slides open
+/// Display case (and display mat): the chest only opens from the store side (where the sliding glass door is), that door slides open
 /// while the chest is in use, and what's inside lies on the jute, one spot per slot. "In use" and the contents come
-/// from the container's synced ZDO, so every client shows its own copy.
+/// from the container's synced ZDO, so every client shows its own copy. A display mat has no door and opens from any side.
 /// </summary>
 public class DisplayCaseBehaviour : MonoBehaviour
 {
@@ -16,18 +16,22 @@ public class DisplayCaseBehaviour : MonoBehaviour
     /// <summary>The jute floor along the case's length (local Z), set per piece; slots split it evenly.</summary>
     public float m_floorZ0 = -2.224f;
     public float m_floorZ1 = 1.821f;
+    /// <summary>Height of the cloth items rest on, and its middle across (local X). The case's values by default.</summary>
+    public float m_floorY = 1.038f;
+    public float m_floorX = 0.365f;
+    /// <summary>Largest an item may be across the floor, and in height.</summary>
+    public float m_maxAcross = 1.15f;
+    public float m_maxHeight = 0.5f;
+    /// <summary>A display mat: no glass and no store side, it opens from anywhere (wards and LockSmith still decide who).</summary>
+    public bool m_anySide;
 
     private const float SlideSeconds = 0.45f;
 
     /// <summary>Local X of the case's middle: the door side is below it (see Forge/DisplayCase/README.md).</summary>
     private const float MiddleX = 0.36f;
 
-    private const float FloorY = 1.038f;
-    private const float FloorX = 0.365f;
-    /// <summary>Largest an item may be across the case, along its slot (fraction of the slot) and in height.</summary>
-    private const float MaxAcross = 1.15f;
+    /// <summary>How much of its slot an item may fill along the floor.</summary>
     private const float SlotFill = 0.85f;
-    private const float MaxHeight = 0.5f;
     private const float RefreshSeconds = 0.5f;
 
     private static readonly int InUseKey = "InUse".GetStableHashCode();
@@ -66,7 +70,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
 
     /// <summary>True when <paramref name="viewer"/> stands on the door (store) side of the case.</summary>
     public bool IsStoreSide(Component viewer) =>
-        transform.InverseTransformPoint(viewer.transform.position).x < MiddleX;
+        m_anySide || transform.InverseTransformPoint(viewer.transform.position).x < MiddleX;
 
     private void AnimateDoor()
     {
@@ -108,7 +112,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
                 continue;
             // Slot 0 is the stocker's left (they stand at the door, facing +X): the +Z end.
             var z = m_floorZ1 - (item.m_gridPos.x + 0.5f) * slotLength;
-            Show(item, new Vector3(FloorX, FloorY, z), slotLength * SlotFill);
+            Show(item, new Vector3(m_floorX, m_floorY, z), slotLength * SlotFill);
         }
     }
 
@@ -141,7 +145,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
         var across = axes[0].Size;
         var along = axes[1].Size;
         var height = axes[2].Size;
-        var scale = Mathf.Min(1f, MaxAcross / Mathf.Max(across, 0.001f), slotLength / Mathf.Max(along, 0.001f), MaxHeight / Mathf.Max(height, 0.001f));
+        var scale = Mathf.Min(1f, m_maxAcross / Mathf.Max(across, 0.001f), slotLength / Mathf.Max(along, 0.001f), m_maxHeight / Mathf.Max(height, 0.001f));
 
         var t = model.transform;
         t.SetParent(_shelf, false);

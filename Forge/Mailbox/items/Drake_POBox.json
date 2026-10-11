@@ -1,0 +1,87 @@
+{
+  "id": "Drake_POBox",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "PO Box",
+  "look": {
+    "mesh": {
+      "file": "models/pobox.glb"
+    },
+    "materials": [
+      {
+        "target": "Wood",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      },
+      {
+        "target": "Metal",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        }
+      },
+      {
+        "target": "Cloth",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0.0,
+        0.15,
+        0.0
+      ],
+      "size": [
+        0.34,
+        0.3,
+        0.32
+      ]
+    }
+  },
+  "fields": {
+    "Container": {
+      "m_width": 4,
+      "m_height": 2
+    },
+    "Piece": {
+      "m_allowRotatedOverlap": true,
+      "m_notOnTiltingSurface": false
+    },
+    "WearNTear": {
+      "m_burnable": true,
+      "m_supports": false,
+      "m_health": 400
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.17,
+        0.0,
+        -0.16
+      ],
+      [
+        -0.17,
+        0.0,
+        0.16
+      ],
+      [
+        0.17,
+        0.0,
+        -0.16
+      ],
+      [
+        0.17,
+        0.0,
+        0.16
+      ]
+    ]
+  }
+}

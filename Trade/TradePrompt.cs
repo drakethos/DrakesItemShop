@@ -8,10 +8,16 @@ namespace DrakesItemShop.Trade;
 /// <summary>"Bjorn wants to trade with you": Accept or Decline, gone after 30 seconds.</summary>
 internal static class TradePrompt
 {
-    private const int Seconds = 30;
     private static UkWindow? _window;
 
-    public static void Show(string who, Action accept, Action decline)
+    /// <summary>Close the prompt without answering (the asker cancelled).</summary>
+    public static void Dismiss()
+    {
+        _window?.CloseSilent();
+        _window = null;
+    }
+
+    public static void Show(string who, int seconds, Action accept, Action decline)
     {
         _window?.CloseSilent();
         var window = new UkWindow("drakes_trade_request", 400, UkWindow.DialogLayer, dim: false, draggable: false);
@@ -19,7 +25,7 @@ internal static class TradePrompt
         window.SetHeader("Trade request");
 
         var text = UkControls.Text($"{who} wants to trade with you.", 18, UkTheme.Text);
-        var countdown = UkControls.Text($"Expires in {Seconds} s", 13, UkTheme.TextMuted, wrap: false);
+        var countdown = UkControls.Text($"Expires in {seconds} s", 13, UkTheme.TextMuted, wrap: false);
         countdown.style.marginTop = 6;
         window.Body.Add(text);
         window.Body.Add(countdown);
@@ -37,7 +43,7 @@ internal static class TradePrompt
                 decline();
         }
 
-        var left = Seconds;
+        var left = seconds;
         var timer = window.Body.schedule.Execute(() =>
         {
             left--;

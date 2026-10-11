@@ -1,34 +1,18 @@
 # DrakesItemShop
 
-**DrakesWorkshop** — JSON-driven shops for Valheim RP servers and small groups.
+**DrakesWorkshop**: pieces for shops, stalls and post offices on Valheim RP servers and small groups. Everything is in the **Drake Shop** hammer tab.
 
 ## Features
 
-- **Drake Shop** hammer tab — Display Case, Small Display Case, armor, weapon and wall racks, Merchant Box, Shop Sign, NPC Spawner
-- **Display cases** — glass and wood cases (6 or 3 slots) that show what's inside lying on jute. Stock them from the door side: the glass door slides open while you do. From the glass side they're just looked at.
-- **Armor, weapon and wall racks** — finewood racks with iron hooks and pegs. Free-standing armor racks and weapon racks (6 or 4 slots) take only armor or only weapons and shields; wall racks (5 or 3 slots) take both. What's inside hangs on the rack: weapons and shields the way an item stand shows them, armor upright on its hook.
-- **Merchant Box** — vending machine: owner **E** stock, **Shift+E** shop, **Alt+E** manage/restock; customer **E** dispense pickup, **Shift+E** buy/sell
-- **Shop Ledger** — use from inventory; link at merchant box via **Alt+E** manage, or `shop_give_ledger`
-- **Shop Sign** — catalog prices; **Shift+E** to set `shopId`
-- **Silent trader NPC** — configurable Haldor-style clone without dialogue (`npcs/*.json`)
-- **Coins** buy/sell with optional item currencies in catalog JSON
-- **Ward rules** per shop: `none`, `vanilla`, `betterwards`, `wardislove`
-- **Server-authoritative** buy/sell via ZNet RPC
-- **Price tags** on purchased items via `Drake_MarketPrice` and DrakeModsLibs `ShopOverlay` display layer
+- **Armor and weapon racks**: finewood racks with iron hooks and pegs. Free-standing armor racks and weapon racks (6 or 4 slots) take only armor or only weapons and shields; wall racks (5 or 3 slots) take both. What's inside hangs on the rack: weapons and shields the way an item stand shows them, armor upright on its hook. Poses can be tuned per weapon type and per item.
+- **Display cases**: glass and wood cases (6 or 3 slots) that show what's inside lying on jute. Stock them from the door side: the glass door slides open while you do. From the glass side they're just looked at.
+- **Trading menu (beta)**: press **Shift+T** near another player (a picker appears if several are near). They get a request; if they accept, you both offer items in one trade window and swap when you both confirm. The trade ends if you move too far apart.
+- **Mailbox and Drop Box**: a post-mounted mailbox and a tabletop box for a shop stall. Anyone can send up to 3 stacks and a note through the front slot (one way: they can't take it back out). The back is a plain 10-slot chest with its own door, opened by whoever the ward or LockSmith allows. The owner can set an allow list, an item filter, and close the slot (**Shift+E**, or the Lock menu with LockSmith).
+- **PO boxes and the Post Hall**: a post hall frame with 5x2 sockets that PO boxes snap into. Each PO box has one door: its assigned owner (and anyone they delegate to) opens it like a chest, everyone else gets the send window. The builder can act as postmaster. A flag shows mail waiting (green) or a full box (red).
 
-## Config layout
+## BepInEx config
 
-`BepInEx/config/com.drakesworkshop.itemshop/ItemShop/`
-
-| Folder | Purpose |
-|--------|---------|
-| `catalogs/` | Items, buy/sell prices, stock |
-| `shops/` | Shop name, catalog ref, ward, permissions |
-| `npcs/` | Silent trader prefab + catalog |
-
-Example files are created on first run if missing.
-
-## BepInEx config (synced)
+Synced (server settings):
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -39,39 +23,15 @@ Example files are created on first run if missing.
 | `WallRackCost` / `SmallWallRackCost` | `FineWood:8,BronzeNails:5` / `FineWood:5,BronzeNails:3` | Wall racks (armor and weapons). |
 | `WeaponRackCost` / `SmallWeaponRackCost` | `FineWood:10,BronzeNails:6` / `FineWood:7,BronzeNails:4` | Free-standing weapon racks. |
 
-## Console commands
+Local (per player) settings: `06 Trade` (shortcut, request seconds, cancel distance, nearby range), `07 Mailbox` (skip the send warning).
 
-| Command | Description |
-|---------|-------------|
-| `shop_reload` | Reload JSON configs and refresh signs |
-| `shop_spawn_npc <npcId>` | Spawn silent trader at player |
-| `shop_give_ledger <shopId>` | Give portable ledger pre-bound to a shop |
-| `shop_link_ledger` | Link inventory ledger to the merchant box you are looking at (admin) |
-
-## Quick setup (ledger → shop)
-
-1. Define shops in `ItemShop/shops/*.json` (example `market_stall` on first run).
-2. Place a **Merchant Box**, press **Alt+E**, choose the shop id, press **Link ledger in inventory** (ledger must be in your inventory).
-3. **Use** the ledger from inventory to open that shop. Stock comes from the linked box; portable ledgers use their own 8×4 stock.
-
-Admin shortcut: `shop_give_ledger market_stall` gives a portable ledger without placing a box.
-
-## Vending machine flow (Merchant Box)
-
-Shops with `"stockSource": "container"` use vending mode:
-
-1. **Owner** puts sellable items in the **stock chest** (**E**).
-2. **Owner** puts coins in the **treasury** (**Alt+E** → Treasury) so the shop can pay sellers.
-3. **Customer** uses **Shift+E** to buy/sell from the catalog.
-4. **Purchases** go to the **dispense slot** (2×2) — customer collects with **E**.
-5. **Sold items** go to **sell hold**; payment comes from **treasury**.
-
-Owner restock shortcuts (**Alt+E** manage panel): Stock chest, Treasury, Sell hold, Dispense.
+Mailbox, drop box and PO box costs are fixed in code for now.
 
 ## Dependencies
 
 - BepInEx, Jotunn
 - **DrakeModsLibs**
+- Optional: **LockSmith** (Lock menu for mailboxes and chests)
 
 ## Build
 
