@@ -54,6 +54,7 @@ internal static class ItemShopConfig
         RackPoseDebug.Bind(config);
         Trade.TradeDebug.Bind(config);
         Trade.TradeSettings.Bind(config);
+        Pricing.PriceLedgerSettings.Bind(config);
         Mail.MailboxSettings.Bind(config);
         Mail.PostWallPiece.Bind(config);
         _enabled = config.Bind(SectionGeneral, "Enabled", true, "Enable DrakesItemShop features.");

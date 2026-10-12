@@ -47,7 +47,7 @@
   "fields": {
     "Container": {
       "m_width": 7,
-      "m_height": 1
+      "m_height": 2
     },
     "Piece": {
       "m_allowRotatedOverlap": true

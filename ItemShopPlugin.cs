@@ -31,10 +31,18 @@ public partial class ItemShopPlugin : BaseUnityPlugin
         PieceBuildGatePatch.TryApply(_harmony, Logger);
         PrefabManager.OnVanillaPrefabsAvailable += RegisterWhenPrefabsReady;
         Mail.MailboxMenuTab.Register();
+        Pricing.ShopMenuTab.Register();
+        Pieces.Layout.DisplayLayoutTab.Register();
         Logger.LogInfo($"{ModName} {Version} loaded.");
     }
 
-    private void Update() => Trade.TradeKey.Update();
+    private void Update()
+    {
+        Trade.TradeKey.Update();
+        Pricing.PriceLedger.Poll();
+        Pricing.ShopServer.Tick();
+        Pricing.ShopState.TickPendingSaves();
+    }
 
     private static void RegisterWhenPrefabsReady()
     {

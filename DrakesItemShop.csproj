@@ -43,6 +43,7 @@
     <Compile Include="Trade\TradeSession.cs" />
     <Compile Include="Trade\TradeItemCodec.cs" />
     <Compile Include="Trade\TradeNet.cs" />
+    <Compile Include="Trade\TradeLedger.cs" />
     <Compile Include="Trade\TradeWindow.cs" />
     <Compile Include="Trade\TradePrompt.cs" />
     <Compile Include="Trade\TradeDummy.cs" />
@@ -57,6 +58,22 @@
     <Compile Include="Mailbox\MailboxSendWindow.cs" />
     <Compile Include="Mailbox\MailboxMenuTab.cs" />
     <Compile Include="Mailbox\MailboxSettingsWindow.cs" />
+    <Compile Include="Pricing\ShopState.cs" />
+    <Compile Include="Pricing\BuyWindow.cs" />
+    <Compile Include="Pricing\BarterWindow.cs" />
+    <Compile Include="Pricing\TradePrice.cs" />
+    <Compile Include="Pricing\PayOptions.cs" />
+    <Compile Include="Pricing\PriceEditWindow.cs" />
+    <Compile Include="Pricing\ShopMenuTab.cs" />
+    <Compile Include="Pricing\Catalog.cs" />
+    <Compile Include="Pricing\PriceLedger.cs" />
+    <Compile Include="Pricing\ShopServer.cs" />
+    <Compile Include="JuteMat\Generated\Items\*.g.cs" />
+    <Compile Include="JuteMat\MatBehaviour.cs" />
+    <Compile Include="JuteMat\MatEditor.cs" />
+    <Compile Include="Pieces\Layout\DisplayLayoutTab.cs" />
+    <Compile Include="Pieces\Layout\FreeLayoutBoard.cs" />
+    <Compile Include="Pieces\Layout\SlotLayoutBoard.cs" />
     <Compile Include="Mailbox\PostWallPiece.cs" />
     <Compile Include="Mailbox\PostSectionBehaviour.cs" />
     <Compile Include="Patches\PostWallRemovePatch.cs" />
@@ -98,5 +115,6 @@
     <EmbeddedResource Include="ItemRack\Generated\Assets\**\*.glb" />
     <!-- Mailbox models (Forge pack in Forge/Mailbox). -->
     <EmbeddedResource Include="Mailbox\Generated\Assets\**\*.glb" />
+    <EmbeddedResource Include="JuteMat\Generated\Assets\**\*.glb" />
   </ItemGroup>
 </Project>

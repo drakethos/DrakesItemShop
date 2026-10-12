@@ -40,6 +40,7 @@ internal sealed class RemotePartner : ITradePartner
 
     public string Name { get; }
     public long Peer => _peer;
+    public string Id => _id;
 
     public RemotePartner(long peer, string name, string id)
     {
@@ -348,6 +349,7 @@ internal static class TradeKey
     internal static void Update()
     {
         TradeNet.EnsureRegistered();
+        TradeLedger.Tick();
         TradeNet.WatchRange();
         Mail.MailboxSendWindow.PollKeys();
         if (!TradeSettings.Shortcut.IsDown() || !CanUse())

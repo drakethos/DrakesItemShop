@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DrakeModsLibs.Forge;
 using DrakesItemShop.Config;
 using DrakesItemShop.Data;
 using Jotunn.Configs;
@@ -37,14 +38,43 @@ internal static class DisplayCasePiece
                 Dress = DisplayCase.Items.DisplayCase.Dress, Cost = () => ItemShopConfig.DisplayCaseCost },
         new() { Name = ShopPieceNames.DisplayCaseSmall, Token = "drake_display_case_small", Slide = 0.79f, FloorZ0 = -1.1715f, FloorZ1 = 0.7685f,
                 Dress = DisplayCase.Items.SmallDisplayCase.Dress, Cost = () => ItemShopConfig.SmallDisplayCaseCost },
-        // Display mats (Forge/DisplayCase/make_display_mat.py, its MATINFO line): a tray to lay on a table.
+        // Display mats (Forge/DisplayCase): jute trays hold more; leather trays are the same size but fewer slots.
         new() { Name = ShopPieceNames.DisplayMat, Token = "drake_display_mat", FloorZ0 = -0.845f, FloorZ1 = 0.845f,
                 FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
                 Dress = DisplayCase.Items.DisplayMat.Dress, Cost = () => "FineWood:2,JuteRed:2" },
         new() { Name = ShopPieceNames.DisplayMatSmall, Token = "drake_display_mat_small", FloorZ0 = -0.405f, FloorZ1 = 0.405f,
                 FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
                 Dress = DisplayCase.Items.SmallDisplayMat.Dress, Cost = () => "FineWood:1,JuteRed:1" },
+        new() { Name = ShopPieceNames.DisplayMatWolf, Token = "drake_display_mat_wolf", FloorZ0 = -0.845f, FloorZ1 = 0.845f,
+                FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
+                Dress = DressLeatherTray(DisplayCase.Items.DisplayMat.Dress, "rug_wolf", width: 4, height: 1),
+                Cost = () => "FineWood:2,WolfPelt:2" },
+        new() { Name = ShopPieceNames.DisplayMatLox, Token = "drake_display_mat_lox", FloorZ0 = -0.845f, FloorZ1 = 0.845f,
+                FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
+                Dress = DressLeatherTray(DisplayCase.Items.DisplayMat.Dress, "rug_fur", width: 4, height: 1),
+                Cost = () => "FineWood:2,LoxPelt:2" },
+        new() { Name = ShopPieceNames.DisplayMatWolfSmall, Token = "drake_display_mat_wolf_small", FloorZ0 = -0.405f, FloorZ1 = 0.405f,
+                FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
+                Dress = DressLeatherTray(DisplayCase.Items.SmallDisplayMat.Dress, "rug_wolf", width: 2, height: 1),
+                Cost = () => "FineWood:1,WolfPelt:1" },
+        new() { Name = ShopPieceNames.DisplayMatLoxSmall, Token = "drake_display_mat_lox_small", FloorZ0 = -0.405f, FloorZ1 = 0.405f,
+                FloorY = 0.026f, FloorX = 0f, MaxAcross = 0.51f, MaxHeight = 0.3f, AnySide = true, IconYaw = 30f,
+                Dress = DressLeatherTray(DisplayCase.Items.SmallDisplayMat.Dress, "rug_fur", width: 2, height: 1),
+                Cost = () => "FineWood:1,LoxPelt:1" },
     };
+
+    /// <summary>Same tray mesh as jute, then swap the cloth for a vanilla rug look and shrink the inventory.</summary>
+    private static Action<GameObject> DressLeatherTray(Action<GameObject> baseDress, string fabricPrefab, int width, int height) =>
+        prefab =>
+        {
+            baseDress(prefab);
+            ForgeLook.Material(prefab, "Fabric", null, fabricPrefab, null, null, null);
+            if (prefab.GetComponent<Container>() is { } container)
+            {
+                container.m_width = width;
+                container.m_height = height;
+            }
+        };
 
     public static void RegisterAll()
     {

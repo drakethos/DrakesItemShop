@@ -6,6 +6,10 @@ internal static class ShopPieceNames
     public const string DisplayCaseSmall = "Drake_DisplayCaseSmall";
     public const string DisplayMat = "Drake_DisplayMat";
     public const string DisplayMatSmall = "Drake_DisplayMatSmall";
+    public const string DisplayMatWolf = "Drake_DisplayMatWolf";
+    public const string DisplayMatLox = "Drake_DisplayMatLox";
+    public const string DisplayMatWolfSmall = "Drake_DisplayMatWolfSmall";
+    public const string DisplayMatLoxSmall = "Drake_DisplayMatLoxSmall";
     public const string ArmorRack = "Drake_ArmorRack";
     public const string ArmorRackSmall = "Drake_ArmorRackSmall";
     public const string WeaponRack = "Drake_WeaponRack";

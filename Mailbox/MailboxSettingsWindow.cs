@@ -14,6 +14,26 @@ internal static class MailboxSettingsWindow
 
     internal static bool LockSmithPresent => Chainloader.PluginInfos.ContainsKey(LockSmithGuid);
 
+    /// <summary>
+    /// True when LockSmith will open the shared menu for this player on this chest (they are on the lock), and that menu carries the
+    /// Mail tab. Otherwise this window is the menu: no LockSmith, or nothing there for them.
+    /// </summary>
+    internal static bool LockSmithShowsMenu(Container container)
+    {
+        if (!LockSmithPresent)
+            return false;
+        try
+        {
+            var menu = System.Type.GetType("LockSmith.UI.PieceAccessMenu, LockSmith");
+            var has = menu?.GetMethod("HasLockMenu", new[] { typeof(Container) });
+            return has != null && (bool)has.Invoke(null, new object[] { container });
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     private static UkWindow? _window;
 
     internal static void Open(Container container, MailboxBehaviour mail, Player player)

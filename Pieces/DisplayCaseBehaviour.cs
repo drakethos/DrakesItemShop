@@ -162,7 +162,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
     /// The item's prefab copied while inactive (so none of its scripts wake up), stripped of scripts, physics and
     /// sound and particles (the ground sparkle): only meshes and lights remain. Returned inactive.
     /// </summary>
-    private static GameObject? StillCopy(GameObject prefab)
+    internal static GameObject? StillCopy(GameObject prefab)
     {
         var wasActive = prefab.activeSelf;
         prefab.SetActive(false);
@@ -216,7 +216,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
     /// and every object between it and the root active. Food also carries its inactive "placed on a table" model, which
     /// must not count, or the item is sized and centred on both and the visible one ends up buried or off its spot.
     /// </summary>
-    private static bool WillShow(Renderer renderer, Transform root)
+    internal static bool WillShow(Renderer renderer, Transform root)
     {
         if (!renderer.enabled)
             return false;
@@ -227,7 +227,7 @@ public class DisplayCaseBehaviour : MonoBehaviour
     }
 
     /// <summary>Bounds of the copy's meshes in its own root space (renderer bounds are empty while it's inactive).</summary>
-    private static bool LocalBounds(Transform root, out Bounds bounds)
+    internal static bool LocalBounds(Transform root, out Bounds bounds)
     {
         bounds = default;
         var any = false;

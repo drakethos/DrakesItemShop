@@ -273,7 +273,7 @@ internal static class MailboxSettingsInteractPatch
     private static bool Prefix(Container __instance, Humanoid character, bool hold, bool alt, ref bool __result)
     {
         var mail = __instance.GetComponent<MailboxBehaviour>();
-        if (mail == null || !alt || hold || character is not Player player || MailboxSettingsWindow.LockSmithPresent)
+        if (mail == null || !alt || hold || character is not Player player || MailboxSettingsWindow.LockSmithShowsMenu(__instance))
             return true;
         __result = true;
         if (mail.CanConfigure(player))

@@ -51,6 +51,8 @@ internal sealed class TradeSession
     public bool TheirsAccepted { get; private set; }
     public bool Done { get; private set; }
     public bool Cancelled { get; private set; }
+    /// <summary>Both accepted; the server is confirming. Nothing has left either inventory yet.</summary>
+    public bool Settling { get; private set; }
     public string Message { get; private set; } = "";
     public int MineVersion { get; private set; }
     public int TheirsVersion { get; private set; }
@@ -60,7 +62,7 @@ internal sealed class TradeSession
 
     public TradeSession(ITradePartner partner) => Partner = partner;
 
-    public bool Locked => Done || Cancelled;
+    public bool Locked => Done || Cancelled || Settling;
 
     // ---- your side ----
 
@@ -171,8 +173,15 @@ internal sealed class TradeSession
 
     public void Cancel()
     {
-        if (Locked)
+        if (Done || Cancelled)
             return;
+        if (Settling)
+        {
+            // Closing while the server confirms: ask it to drop the trade. If it already committed, the swap still lands (both sides accepted).
+            if (Partner is RemotePartner remote)
+                TradeLedger.Abort(remote.Id);
+            return;
+        }
         Cancelled = true;
         Message = "Trade cancelled.";
         Partner.SendCancel();
@@ -221,6 +230,56 @@ internal sealed class TradeSession
             return;
         }
 
+        // With the server running this mod, it settles the trade; nothing is taken from anyone until it says so.
+        if (Partner is RemotePartner remote && TradeLedger.Begin(this, remote, remote.Id))
+        {
+            Settling = true;
+            Message = "Confirming with the server...";
+            Changed?.Invoke();
+            return;
+        }
+
+        SwapLocally();
+    }
+
+    private Action? _afterServerCheck;
+
+    /// <summary>The ledger is still finding out whether the server runs this mod: continue when it knows.</summary>
+    internal void WaitForServerCheck(Action next) => _afterServerCheck = next;
+
+    internal void RunServerCheckCallback()
+    {
+        var next = _afterServerCheck;
+        _afterServerCheck = null;
+        next?.Invoke();
+    }
+
+    /// <summary>The server committed and this client applied it.</summary>
+    internal void SettleDone()
+    {
+        Settling = false;
+        Done = true;
+        Message = "Trade complete.";
+        Changed?.Invoke();
+    }
+
+    /// <summary>The server dropped the trade, or didn't answer: nothing was taken. Accepts are cleared so either side can try again or cancel.</summary>
+    internal void SettleFailed(string message)
+    {
+        Settling = false;
+        ClearAccepts(message);
+    }
+
+    /// <summary>The server doesn't run this mod: swap directly (best effort).</summary>
+    internal void FallBackToDirect()
+    {
+        Settling = false;
+        _afterServerCheck = null;
+        SwapLocally();
+    }
+
+    private void SwapLocally()
+    {
         var inventory = Player.m_localPlayer.GetInventory();
         var given = new List<TradeEntry>();
         foreach (var entry in Mine)

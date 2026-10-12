@@ -23,6 +23,7 @@ internal static class ShopPieceRegistrar
         DisplayCasePiece.RegisterAll();
         ItemRackPiece.RegisterAll();
         Mail.MailboxPiece.RegisterAll();
+        Mats.MatPiece.Register();
         Mail.PostWallPiece.RegisterAll();
         Trade.TradeDummyPiece.Register();
     }
@@ -36,8 +37,13 @@ internal static class ShopPieceRegistrar
                prefabName == ShopPieceNames.DisplayCaseSmall ||
                prefabName == ShopPieceNames.DisplayMat ||
                prefabName == ShopPieceNames.DisplayMatSmall ||
+               prefabName == ShopPieceNames.DisplayMatWolf ||
+               prefabName == ShopPieceNames.DisplayMatLox ||
+               prefabName == ShopPieceNames.DisplayMatWolfSmall ||
+               prefabName == ShopPieceNames.DisplayMatLoxSmall ||
                prefabName == Trade.TradeDummyPiece.PieceName ||
                Mail.MailboxPiece.IsMailbox(prefabName) ||
+               Mats.MatPiece.IsMat(prefabName) ||
                Mail.PostWallPiece.IsPostWall(prefabName) ||
                System.Array.Exists(ItemRackPiece.Variants, v => v.Name == prefabName);
     }
