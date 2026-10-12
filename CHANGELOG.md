@@ -1,6 +1,6 @@
 ﻿# Changelog
 
-## 1.0.0
+## 0.4.0
 - **Open for business**: display cases, racks and mats can be shops. Owners set prices in Shift+E → Shop; buyers press **E** on priced goods (no chest access needed). Coins go to a till on the piece.
 - **Prices**: coins and/or real item trades. Multiple **OR** payment options (e.g. 200 coins **or** 10 Iron + 10 coins). Buyer Gets amount per deal (lot). Search picks real ObjectDB items so names don't mistype.
 - **Free-layout mats**: Jute (12), Wolf / Lox (6), Deer (2, half size). Leather mats use the real vanilla rug meshes. Shift+E → Layout to drag, turn, lift and size goods.

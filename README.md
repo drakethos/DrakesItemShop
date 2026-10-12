@@ -4,7 +4,7 @@
 
 ## Features
 
-- **Shops (1.0)**: turn a display case, rack or mat **Open for business** (Shift+E → Shop). Set coin and/or item prices with **OR** alternatives (e.g. 200 coins or 10 Iron + 10 coins). Shoppers press **E** on priced goods; coins land in the till, item payments in the chest.
+- **Shops**: turn a display case, rack or mat **Open for business** (Shift+E → Shop). Set coin and/or item prices with **OR** alternatives (e.g. 200 coins or 10 Iron + 10 coins). Shoppers press **E** on priced goods; coins land in the till, item payments in the chest.
 - **Free-layout mats**: jute, wolf, lox and small deer rugs. Arrange goods on the Layout tab (drag, turn, lift, size).
 - **Armor and weapon racks**: finewood racks with iron hooks and pegs. Free-standing armor racks and weapon racks (6 or 4 slots) take only armor or only weapons and shields; wall racks (5 or 3 slots) take both. What's inside hangs on the rack: weapons and shields the way an item stand shows them, armor upright on its hook. Poses can be tuned per weapon type and per item.
 - **Display cases**: glass and wood cases (6 or 3 slots) that show what's inside lying on jute. Stock them from the door side: the glass door slides open while you do. From the glass side they're just looked at. Table trays (jute / wolf / lox) for counters.
@@ -43,4 +43,4 @@ The display cases' look is a Drakes Asset Forge pack in `Forge/DisplayCase` (mod
 
 ## Releases
 
-Hexium only. Push a tag matching `<Version>` in `mod.package.props` (`v1.0.0`, or `v1.0.0-beta.1` for a beta) and `.github/workflows/release.yml` builds, makes the GitHub release from that version's CHANGELOG section, and publishes to https://valheim.hexium.gg/mods/DrakeMods/DrakesItemShop.
+Hexium only. Push a tag matching `<Version>` in `mod.package.props` (`v0.4.0`, or `v0.4.0-beta.1` for a beta) and `.github/workflows/release.yml` builds, makes the GitHub release from that version's CHANGELOG section, and publishes to https://valheim.hexium.gg/mods/DrakeMods/DrakesItemShop.
