@@ -43,4 +43,4 @@ The display cases' look is a Drakes Asset Forge pack in `Forge/DisplayCase` (mod
 
 ## Releases
 
-Hexium only. Push a tag matching `<Version>` in `mod.package.props` (`v0.4.0`, or `v0.4.0-beta.1` for a beta) and `.github/workflows/release.yml` builds, makes the GitHub release from that version's CHANGELOG section, and publishes to https://valheim.hexium.gg/mods/DrakeMods/DrakesItemShop.
+Hexium only. Push a tag matching `<Version>` in `mod.package.props` (`v0.5.0-beta.1`, or `v0.5.0-beta.1-beta.1` for a beta) and `.github/workflows/release.yml` builds, makes the GitHub release from that version's CHANGELOG section, and publishes to https://valheim.hexium.gg/mods/DrakeMods/DrakesItemShop.

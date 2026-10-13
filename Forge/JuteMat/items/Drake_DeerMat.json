@@ -1,0 +1,73 @@
+{
+  "id": "Drake_DeerMat",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Deer Mat",
+  "look": {
+    "mesh": {
+      "file": "models/jutemat.glb"
+    },
+    "materials": [
+      {
+        "target": "Fabric",
+        "from": {
+          "prefab": "rug_deer",
+          "material": "deerhide_rug"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0.0,
+        0.04,
+        0.0
+      ],
+      "size": [
+        1.0,
+        0.08,
+        1.0
+      ]
+    }
+  },
+  "fields": {
+    "Container": {
+      "m_width": 2,
+      "m_height": 1
+    },
+    "Piece": {
+      "m_allowRotatedOverlap": true,
+      "m_notOnTiltingSurface": false
+    },
+    "WearNTear": {
+      "m_burnable": true,
+      "m_supports": false,
+      "m_health": 200
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.5,
+        0.0,
+        -0.5
+      ],
+      [
+        -0.5,
+        0.0,
+        0.5
+      ],
+      [
+        0.5,
+        0.0,
+        -0.5
+      ],
+      [
+        0.5,
+        0.0,
+        0.5
+      ]
+    ]
+  }
+}

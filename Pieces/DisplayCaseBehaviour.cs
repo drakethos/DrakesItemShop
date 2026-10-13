@@ -24,6 +24,10 @@ public class DisplayCaseBehaviour : MonoBehaviour
     public float m_maxHeight = 0.5f;
     /// <summary>A display mat: no glass and no store side, it opens from anywhere (wards and LockSmith still decide who).</summary>
     public bool m_anySide;
+    /// <summary>Height buy cards stand at: the glass lid on cases, just above the stock on mats.</summary>
+    public float m_cardY = 1.72f;
+    /// <summary>Customers' edge of the lid (local X, just inside the frame): cards stand up against it.</summary>
+    public float m_cardEdgeX = 1.04f;
 
     private const float SlideSeconds = 0.45f;
 

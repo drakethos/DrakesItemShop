@@ -11,7 +11,7 @@ namespace DrakesItemShop.Mail;
 internal static class MailboxMenuTab
 {
     internal static void Register() =>
-        PieceMenuTabs.Register(new PieceMenuTab("drakes.mail", "Mail", c => c.GetComponent<MailboxBehaviour>() != null, Build));
+        PieceMenuTabs.Register(new PieceMenuTab("drakes.mail", "Mail", c => c.GetComponent<MailboxBehaviour>() != null, Build, group: "mail", isRoot: true));
 
     internal static void BuildInto(PieceMenuTabContext ctx) => Build(ctx);
 

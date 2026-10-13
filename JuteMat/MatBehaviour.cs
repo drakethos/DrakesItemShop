@@ -60,7 +60,7 @@ public class MatBehaviour : MonoBehaviour
     internal const float Top = 0.028f;
     /// <summary>The longest side of a laid item never exceeds this (metres) at size 1.</summary>
     private const float MaxLongest = 1.3f;
-    /// <summary>Half-extent of the usable mat surface (metres). Full jute/wolf/lox = 0.92; small deer ≈ 0.45.</summary>
+    /// <summary>Half-extent of the usable mat surface (metres). Full jute/wolf/lox = 0.92; deer ≈ 0.65.</summary>
     internal const float DefaultHalf = 0.92f;
     /// <summary>Per-piece usable half-size; set at register time for small mats.</summary>
     public float Half = DefaultHalf;

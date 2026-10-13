@@ -27,10 +27,7 @@ $ErrorActionPreference = 'Stop'
 
 function Get-VersionParts {
     param([string]$VersionString)
-    # r2modman/Gale mods.yml only stores major.minor.patch integers.
-    # Strip SemVer prerelease/build metadata (e.g. 1.2.0-beta.3 → 1.2.0).
-    $core = ($VersionString -split '[-+]', 2)[0].Trim()
-    $parts = @($core -split '\.' | Select-Object -First 3)
+    $parts = ($VersionString -split '\.')[0..2]
     while ($parts.Count -lt 3) { $parts += '0' }
     [pscustomobject]@{
         Major = [int]$parts[0]

@@ -58,6 +58,7 @@ internal static class SlotLayoutBoard
             cell.style.alignItems = Align.Center;
             cell.style.justifyContent = Justify.Center;
             cell.pickingMode = PickingMode.Position;
+            cell.userData = slotIndex;
 
             var item = slots[x];
             if (item != null)
@@ -80,6 +81,7 @@ internal static class SlotLayoutBoard
                     return;
                 dragging = slots[slotIndex];
                 cell.CapturePointer(e.pointerId);
+                cell.style.opacity = 0.5f;
                 e.StopPropagation();
             });
             cell.RegisterCallback<PointerUpEvent>(e =>
@@ -87,12 +89,13 @@ internal static class SlotLayoutBoard
                 if (!cell.HasPointerCapture(e.pointerId))
                     return;
                 cell.ReleasePointer(e.pointerId);
+                cell.style.opacity = 1f;
                 if (dragging == null)
                     return;
                 var from = dragging;
                 dragging = null;
-                var toX = slotIndex;
-                if (from.m_gridPos.x == toX)
+                // The pressed cell holds the pointer capture, so the drop target is whatever slot is under the pointer now.
+                if (SlotUnder(cell.panel, e.position) is not { } toX || from.m_gridPos.x == toX)
                     return;
                 Swap(container, from, toX, rack ? from.m_gridPos.y : 0);
                 onChanged();
@@ -104,6 +107,14 @@ internal static class SlotLayoutBoard
         root.Add(strip);
         root.Add(UkControls.Text("Drop onto another slot to swap. Backstock (lower rows) stays put.", 13, UkTheme.TextMuted));
         return root;
+    }
+
+    private static int? SlotUnder(IPanel? panel, Vector2 position)
+    {
+        for (var e = panel?.Pick(position); e != null; e = e.parent)
+            if (e.userData is int slot)
+                return slot;
+        return null;
     }
 
     private static void Swap(Container container, ItemDrop.ItemData from, int toX, int toY)

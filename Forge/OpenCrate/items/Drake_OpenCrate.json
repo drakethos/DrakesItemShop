@@ -1,0 +1,21 @@
+{
+  "id": "Drake_OpenCrate",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Open Crate",
+  "description": "Open crate 1×1×1. Stock shows as models inside.",
+  "look": {
+    "mesh": { "file": "models/openCrate_standard.glb" },
+    "materials": [
+      {
+        "target": "Crate_mat",
+        "from": { "prefab": "dvergrprops_crate", "material": "Crate_mat" }
+      }
+    ]
+  },
+  "fields": {
+    "Container": { "m_width": 2, "m_height": 2 },
+    "Piece": { "m_allowRotatedOverlap": true, "m_notOnTiltingSurface": false },
+    "WearNTear": { "m_burnable": true, "m_supports": false, "m_health": 200 }
+  }
+}

@@ -17,7 +17,7 @@ namespace DrakesItemShop.Pricing;
 internal static class ShopMenuTab
 {
     internal static void Register() =>
-        PieceMenuTabs.Register(new PieceMenuTab("drakes.shop", "Shop", ShopState.IsPiece, Build));
+        PieceMenuTabs.Register(new PieceMenuTab("drakes.shop", "Shop", ShopState.IsPiece, Build, group: "shop", isRoot: true));
 
     internal static void BuildInto(PieceMenuTabContext ctx) => Build(ctx);
 
@@ -44,6 +44,24 @@ internal static class ShopMenuTab
         body.Add(open.Root);
         if (!manage)
             open.Root.SetEnabled(false);
+
+        if (container.GetComponent<DisplayCard.BuyCardShelf>() != null && container.GetComponent<ZNetView>() is { } nview && nview.IsValid())
+        {
+            var buying = new UkSwitch("Buying from customers",
+                "When on, this stand also buys: set offers in the Buy tab, and cards and buy crates appear on it.");
+            buying.SetValue(DisplayCard.BuyOffers.Enabled(nview.GetZDO()), notify: false);
+            buying.Changed = on =>
+            {
+                nview.ClaimOwnership();
+                DisplayCard.BuyOffers.SetEnabled(nview.GetZDO(), on);
+                container.GetComponent<DisplayCard.BuyCardShelf>()?.Dirty();
+                ctx.Rebuild();
+            };
+            buying.Root.style.marginTop = 8;
+            body.Add(buying.Root);
+            if (!manage)
+                buying.SetEnabled(false);
+        }
 
         // The till
         var till = ShopState.Till(container);
@@ -230,6 +248,8 @@ internal static class ShopInteractPatch
     {
         if (alt || !ShopState.IsPiece(__instance) || character is not Player player || !ShopState.IsOpen(__instance))
             return true;
+        if (DisplayCard.BuyCardTag.UnderCrosshair(__instance.transform) != null)
+            return true;
         if (DisplayedItemTag.UnderCrosshair(__instance.transform) is not { } shown)
             return true;
         var item = ShopState.Live(__instance, shown);
@@ -271,13 +291,15 @@ internal static class ShopSettingsInteractPatch
 
 internal static class ShopSettingsWindow
 {
+    private enum Tab { Shop, Buy, Layout }
+
     private static UkWindow? _window;
-    private static bool _layoutTab;
+    private static Tab _tab;
 
     internal static void Open(Container container, Player player)
     {
         _window?.CloseSilent();
-        _layoutTab = false;
+        _tab = Tab.Shop;
         var window = new UkWindow("drakes_shop_settings", 640);
         _window = window;
         window.SetHeader(global::Localization.instance.Localize(container.m_name), "Shop");
@@ -292,22 +314,38 @@ internal static class ShopSettingsWindow
     {
         window.Body.Clear();
         var manage = ShopState.CanManage(container, player);
+        var buy = DisplayCard.ShopBuyTab.AppliesTo(container);
+        if (_tab == Tab.Buy && !buy)
+            _tab = Tab.Shop;
         var tabs = new VisualElement().Row();
         tabs.style.marginBottom = 12;
-        tabs.Add(UkControls.MakeButton("Shop", () => { _layoutTab = false; Draw(window, container, player); },
-            _layoutTab ? UkButtonKind.Ghost : UkButtonKind.Selected));
-        var layout = UkControls.MakeButton("Layout", () => { _layoutTab = true; Draw(window, container, player); },
-            _layoutTab ? UkButtonKind.Selected : UkButtonKind.Ghost);
-        layout.style.marginLeft = 8;
-        tabs.Add(layout);
+        void AddTab(Tab tab, string label)
+        {
+            var button = UkControls.MakeButton(label, () => { _tab = tab; Draw(window, container, player); },
+                _tab == tab ? UkButtonKind.Selected : UkButtonKind.Ghost);
+            button.style.marginRight = 8;
+            tabs.Add(button);
+        }
+        AddTab(Tab.Shop, "Shop");
+        if (buy)
+            AddTab(Tab.Buy, "Buy");
+        AddTab(Tab.Layout, "Layout");
         window.Body.Add(tabs);
 
         var body = new VisualElement().Column();
         var ctx = new PieceMenuTabContext(container, body, manage, () => Draw(window, container, player));
-        if (_layoutTab)
-            Pieces.Layout.DisplayLayoutTab.BuildInto(ctx);
-        else
-            ShopMenuTab.BuildInto(ctx);
+        switch (_tab)
+        {
+            case Tab.Buy:
+                DisplayCard.ShopBuyTab.BuildInto(ctx);
+                break;
+            case Tab.Layout:
+                Pieces.Layout.DisplayLayoutTab.BuildInto(ctx);
+                break;
+            default:
+                ShopMenuTab.BuildInto(ctx);
+                break;
+        }
         window.Body.Add(body);
     }
 }

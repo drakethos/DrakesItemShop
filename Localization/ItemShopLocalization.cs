@@ -41,7 +41,15 @@ internal static class ItemShopLocalization
         loc.AddToken("drake_loxmat_name", "Lox Mat");
         loc.AddToken("drake_loxmat_desc", "A lox-pelt mat for free layout (6 stacks). Same tools as the jute mat; leather holds less.");
         loc.AddToken("drake_deermat_name", "Deer Mat");
-        loc.AddToken("drake_deermat_desc", "A small deer-hide mat for free layout (2 stacks). Half the size of the jute mat — the smallest free-layout mat.");
+        loc.AddToken("drake_deermat_desc", "A deer-hide mat for free layout (4 stacks). Smaller than the jute mat; hover matches the hide.");
+        loc.AddToken("drake_opencrate_name", "Open Crate");
+        loc.AddToken("drake_opencrate_desc", "Open crate 1×1×1 (2×2 slots). Put goods in and their models show inside.");
+        loc.AddToken("drake_opencrate_smalllow_name", "Open Crate (Small Low)");
+        loc.AddToken("drake_opencrate_smalllow_desc", "Half-height crate 1×1×½ (2×2 slots). Stock shows as models inside.");
+        loc.AddToken("drake_opencrate_biglow_name", "Open Crate (Long)");
+        loc.AddToken("drake_opencrate_biglow_desc", "Long low crate 2×1×½ (4×2 slots). Stock shows as models inside.");
+        loc.AddToken("drake_opencrate_tall_name", "Open Crate (Tall)");
+        loc.AddToken("drake_opencrate_tall_desc", "Open crate 1×1×1½ (2×4 slots). Stock stacks up as models inside.");
         loc.AddToken("drake_pobox_name", "PO Box");
         loc.AddToken("drake_pobox_desc", "A lockable post box, built into a post wall. Anyone may post mail through the slot; only its owner (and whoever they add) can open the door.");
         loc.AddToken("drake_postwall_1x1_name", "Post Wall (1 box)");
@@ -61,8 +69,6 @@ internal static class ItemShopLocalization
         loc.AddToken("drake_postwall_roofend_name", "Post Wall Roof End");
         loc.AddToken("drake_postwall_roofend_desc", "The gable end of a post wall roof, with crossed horns. Rotate it for the other end.");
         loc.AddToken("drake_dropbox_desc", "A slotted drop box for a table or counter. Customers send items through the lid; the owner opens the back.");
-        loc.AddToken("drake_trade_dummy_name", "Trade Chest");
-        loc.AddToken("drake_trade_dummy_desc", "A chest to test the trade menu with. E opens it; Shift+E opens the trade menu.");
         loc.AddToken("drake_wall_rack_desc", "Row of iron hooks on a finewood board (5 slots) for armor, weapons and shields.");
         loc.AddToken("drake_wall_rack_small_name", "Small Wall Rack");
         loc.AddToken("drake_wall_rack_small_desc", "Row of iron hooks on a finewood board (3 slots) for armor, weapons and shields.");

@@ -46,9 +46,6 @@
     <Compile Include="Trade\TradeLedger.cs" />
     <Compile Include="Trade\TradeWindow.cs" />
     <Compile Include="Trade\TradePrompt.cs" />
-    <Compile Include="Trade\TradeDummy.cs" />
-    <Compile Include="Trade\TradeDummyBehaviour.cs" />
-    <Compile Include="Patches\TradeDummyPatches.cs" />
     <Compile Include="Pieces\RackPoseSettings.cs" />
     <Compile Include="Pieces\RackPoseDebug.cs" />
     <Compile Include="ItemRack\Generated\Items\*.g.cs" />
@@ -71,9 +68,24 @@
     <Compile Include="JuteMat\Generated\Items\*.g.cs" />
     <Compile Include="JuteMat\MatBehaviour.cs" />
     <Compile Include="JuteMat\MatEditor.cs" />
+    <Compile Include="DisplayCard\Items\DisplayCard.cs" />
+    <Compile Include="DisplayCard\BuyOffer.cs" />
+    <Compile Include="DisplayCard\DisplayCardFace.cs" />
+    <Compile Include="DisplayCard\BuyCardShelf.cs" />
+    <Compile Include="DisplayCard\BuyCardTag.cs" />
+    <Compile Include="DisplayCard\BuyCardInteract.cs" />
+    <Compile Include="DisplayCard\SellWindow.cs" />
+    <Compile Include="DisplayCard\ShopBuyTab.cs" />
+    <Compile Include="DisplayCard\BuyCrates.cs" />
+    <Compile Include="DisplayCard\BuyCrateYard.cs" />
+    <Compile Include="OpenCrate\Generated\Items\*.g.cs" />
+    <Compile Include="OpenCrate\OpenCrateBehaviour.cs" />
+    <Compile Include="OpenCrate\OpenCrateShell.cs" />
+    <Compile Include="OpenCrate\OpenCratePiece.cs" />
     <Compile Include="Pieces\Layout\DisplayLayoutTab.cs" />
     <Compile Include="Pieces\Layout\FreeLayoutBoard.cs" />
     <Compile Include="Pieces\Layout\SlotLayoutBoard.cs" />
+    <Compile Include="Pieces\Layout\BuyCrateBoard.cs" />
     <Compile Include="Mailbox\PostWallPiece.cs" />
     <Compile Include="Mailbox\PostSectionBehaviour.cs" />
     <Compile Include="Patches\PostWallRemovePatch.cs" />
@@ -81,6 +93,7 @@
     <Compile Include="Pieces\ItemRackBehaviour.cs" />
     <Compile Include="Pieces\ItemRackPiece.cs" />
     <Compile Include="Pieces\PieceIcons.cs" />
+    <Compile Include="Pieces\RugFabric.cs" />
     <Compile Include="Pieces\WornArmor.cs" />
     <Compile Include="Pieces\ShopPieceRegistrar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,5 +129,11 @@
     <!-- Mailbox models (Forge pack in Forge/Mailbox). -->
     <EmbeddedResource Include="Mailbox\Generated\Assets\**\*.glb" />
     <EmbeddedResource Include="JuteMat\Generated\Assets\**\*.glb" />
+    <!-- Display Card model + RenameIt paper-mesh textures (no RenameIt hard dependency). -->
+    <EmbeddedResource Include="DisplayCard\Generated\Assets\**\*.glb" />
+    <EmbeddedResource Include="DisplayCard\Generated\Assets\**\*.png" />
+    <!-- Open crates (Forge/OpenCrate) — temp purchase stock containers. -->
+    <EmbeddedResource Include="OpenCrate\Generated\Assets\**\*.glb" />
+    <EmbeddedResource Include="OpenCrate\Generated\Assets\**\*.png" />
   </ItemGroup>
 </Project>

@@ -31,6 +31,9 @@ internal static class DisplayCasePiece
         public float IconYaw = -60f;
     }
 
+    /// <summary>Top of the glass lid (make_display_case.py TOP), where buy cards stand on cases.</summary>
+    private const float CaseLidY = 1.72f;
+
     // As built by Forge/DisplayCase/make_display_case.py: slide = door opening + 4 cm, floor = the jute cloth's length.
     private static readonly Variant[] Variants =
     {
@@ -63,12 +66,13 @@ internal static class DisplayCasePiece
                 Cost = () => "FineWood:1,LoxPelt:1" },
     };
 
-    /// <summary>Same tray mesh as jute, then swap the cloth for a vanilla rug look and shrink the inventory.</summary>
+    /// <summary>Same tray mesh as jute, then paint the cloth with a vanilla rug albedo and shrink the inventory.</summary>
     private static Action<GameObject> DressLeatherTray(Action<GameObject> baseDress, string fabricPrefab, int width, int height) =>
         prefab =>
         {
             baseDress(prefab);
-            ForgeLook.Material(prefab, "Fabric", null, fabricPrefab, null, null, null);
+            // baseDress already turned Fabric into jute_carpet_forge — target the stripped name.
+            RugFabric.Apply(prefab, "jute_carpet", fabricPrefab);
             if (prefab.GetComponent<Container>() is { } container)
             {
                 container.m_width = width;
@@ -114,9 +118,25 @@ internal static class DisplayCasePiece
         behaviour.m_maxAcross = variant.MaxAcross;
         behaviour.m_maxHeight = variant.MaxHeight;
         behaviour.m_anySide = variant.AnySide;
+        // Mats have no lid: their cards float just over the tallest stock.
+        behaviour.m_cardY = variant.AnySide ? variant.FloorY + variant.MaxHeight + 0.02f : CaseLidY;
+        if (prefab.GetComponent<DisplayCard.BuyCardShelf>() == null)
+            prefab.AddComponent<DisplayCard.BuyCardShelf>();
 
         PieceManager.Instance.AddPiece(customPiece);
-        PieceIcons.Render(customPiece.Piece, variant.IconYaw);
+        // Leather trays share the jute tray icon — extra icon bakes were blowing VRAM on Intel iGPUs.
+        var leather = variant.Name is ShopPieceNames.DisplayMatWolf or ShopPieceNames.DisplayMatLox
+            or ShopPieceNames.DisplayMatWolfSmall or ShopPieceNames.DisplayMatLoxSmall;
+        if (leather)
+        {
+            var donor = variant.Name.Contains("Small") ? ShopPieceNames.DisplayMatSmall : ShopPieceNames.DisplayMat;
+            if (PieceManager.Instance.GetPiece(donor)?.Piece?.m_icon is { } shared)
+                customPiece.Piece.m_icon = shared;
+            else
+                PieceIcons.Render(customPiece.Piece, variant.IconYaw);
+        }
+        else
+            PieceIcons.Render(customPiece.Piece, variant.IconYaw);
         ItemShopPlugin.LogSource?.LogInfo($"Registered piece {variant.Name} (clone: {ShopVanillaPrefabs.DisplayCase})");
     }
 

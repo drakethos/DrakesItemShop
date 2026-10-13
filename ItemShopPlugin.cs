@@ -31,7 +31,9 @@ public partial class ItemShopPlugin : BaseUnityPlugin
         PieceBuildGatePatch.TryApply(_harmony, Logger);
         PrefabManager.OnVanillaPrefabsAvailable += RegisterWhenPrefabsReady;
         Mail.MailboxMenuTab.Register();
+        // Registration order is the tab order in the shared menu: Shop, Buy, Layout.
         Pricing.ShopMenuTab.Register();
+        DisplayCard.ShopBuyTab.Register();
         Pieces.Layout.DisplayLayoutTab.Register();
         Logger.LogInfo($"{ModName} {Version} loaded.");
     }

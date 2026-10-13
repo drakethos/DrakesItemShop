@@ -2,6 +2,7 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using DrakeModsLibs.API;
 using DrakeModsLibs.Sync;
+using UnityEngine;
 
 namespace DrakesItemShop.Config;
 
@@ -9,6 +10,10 @@ internal static class ItemShopConfig
 {
     private const string SectionGeneral = "01 General";
     private const string SectionPieces = "03 Pieces";
+    private const string SectionBuyCards = "04 Buy Cards";
+
+    /// <summary>Where a case's buy cards sit along its length when there are fewer cards than slots.</summary>
+    internal enum CardAlign { Center, Left, Right }
 
     private static readonly DrakeConfigSync ConfigSync = CustomizeLibsAPI.CreateConfigSync(
         ItemShopPlugin.GUID,
@@ -27,6 +32,12 @@ internal static class ItemShopConfig
     internal const string DefaultSmallDisplayCaseCost = "FineWood:5,JuteRed:1,Crystal:1";
     internal static string DisplayCaseCost { get; private set; } = DefaultDisplayCaseCost;
     internal static string SmallDisplayCaseCost { get; private set; } = DefaultSmallDisplayCaseCost;
+
+    private static ConfigEntry<float> _buyCardScale = default!;
+    private static ConfigEntry<CardAlign> _buyCardAlign = default!;
+    /// <summary>Buy card size (1 = the 20 cm model); shrunk further if the case's slots are narrower.</summary>
+    internal static float BuyCardScale => _buyCardScale?.Value ?? 2.3f;
+    internal static CardAlign BuyCardAlign => _buyCardAlign?.Value ?? CardAlign.Center;
 
     private static readonly System.Collections.Generic.Dictionary<string, ConfigEntry<string>> _rackCosts = new();
 
@@ -52,7 +63,6 @@ internal static class ItemShopConfig
     internal static void Bind(ConfigFile config, ManualLogSource log)
     {
         RackPoseDebug.Bind(config);
-        Trade.TradeDebug.Bind(config);
         Trade.TradeSettings.Bind(config);
         Pricing.PriceLedgerSettings.Bind(config);
         Mail.MailboxSettings.Bind(config);
@@ -110,6 +120,15 @@ internal static class ItemShopConfig
             entry.SettingChanged += (_, _) => RackCostChanged?.Invoke();
             _rackCosts[rack.ConfigKey] = entry;
         }
+
+        _buyCardScale = config.Bind(SectionBuyCards, "CardScale", 2.3f,
+            new ConfigDescription("Size of the buy cards standing on display cases (1 = 20 cm wide). Capped so cards never overlap.",
+                new AcceptableValueRange<float>(0.5f, 3f)));
+        // The first build defaulted to 1.6 (too small to read); move untouched configs to the new default.
+        if (Mathf.Approximately(_buyCardScale.Value, 1.6f))
+            _buyCardScale.Value = 2.3f;
+        _buyCardAlign = config.Bind(SectionBuyCards, "CardAlign", CardAlign.Center,
+            "Where buy cards sit along a case when there are fewer cards than slots (Left = the stocker's left).");
 
         RackPoseSettings.Bind(config, new PoseBinder(), "DrakesItemShop.rack-poses.yaml");
 

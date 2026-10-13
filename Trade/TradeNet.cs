@@ -373,9 +373,7 @@ internal static class TradeKey
             return false;
         if (Console.IsVisible() || InventoryGui.IsVisible() || Menu.IsVisible() || TextInput.IsVisible())
             return false;
-        // The trade dummy answers its own T.
-        var hover = player.GetHoverObject();
-        return hover == null || hover.GetComponentInParent<TradeDummyBehaviour>() == null;
+        return true;
     }
 
     private static void ShowPicker(List<Player> players)

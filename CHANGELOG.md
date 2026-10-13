@@ -1,5 +1,14 @@
 ﻿# Changelog
 
+## 0.5.0-beta.1
+
+Hexium beta (no Thunderstore release). Still under heavy testing. Requires **DrakeModsLibs 1.0.0-beta.3**.
+
+- **Buy side:** stand can buy from customers (offers, budget, buy cards on the case, optional open buy crates / layout). Sell from cards back into the case.
+- **Open crates:** placeable chest clones (standard / small low / big low / tall) with stock visuals.
+- **Smart Lock-menu tabs:** Shop is the root; Buy and Layout are teal children while you’re in the Shop group; Mail stays its own root. Works with LockSmith’s Lock group.
+- Leather mats (Deer / Wolf / Lox) and DisplayCard forge assets.
+
 ## 0.4.0
 - **Open for business**: display cases, racks and mats can be shops. Owners set prices in Shift+E → Shop; buyers press **E** on priced goods (no chest access needed). Coins go to a till on the piece.
 - **Prices**: coins and/or real item trades. Multiple **OR** payment options (e.g. 200 coins **or** 10 Iron + 10 coins). Buyer Gets amount per deal (lot). Search picks real ObjectDB items so names don't mistype.

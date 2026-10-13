@@ -72,6 +72,8 @@ internal static class DisplayedItemHoverPatch
         if (__instance.GetComponent<ItemRackBehaviour>() == null && __instance.GetComponent<DisplayCaseBehaviour>() == null
             && __instance.GetComponent<Mats.MatBehaviour>() == null)
             return;
+        if (DisplayCard.BuyCardTag.UnderCrosshair(__instance.transform) != null)
+            return;
         if (DisplayedItemTag.UnderCrosshair(__instance.transform) is not { } shown)
             return;
         var item = Pricing.ShopState.Live(__instance, shown);

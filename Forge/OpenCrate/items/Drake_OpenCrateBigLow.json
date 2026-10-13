@@ -1,0 +1,21 @@
+{
+  "id": "Drake_OpenCrateBigLow",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Open Crate (Long)",
+  "description": "Long low crate 2×1×0.5. Stock shows as models inside.",
+  "look": {
+    "mesh": { "file": "models/openCrate_big_low.glb" },
+    "materials": [
+      {
+        "target": "Crate_mat",
+        "from": { "prefab": "dvergrprops_crate", "material": "Crate_mat" }
+      }
+    ]
+  },
+  "fields": {
+    "Container": { "m_width": 4, "m_height": 2 },
+    "Piece": { "m_allowRotatedOverlap": true, "m_notOnTiltingSurface": false },
+    "WearNTear": { "m_burnable": true, "m_supports": false, "m_health": 250 }
+  }
+}

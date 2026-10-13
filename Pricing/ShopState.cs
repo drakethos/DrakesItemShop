@@ -231,6 +231,16 @@ internal static class ShopState
         zdo.Set(LogKey, string.Join("\n", lines));
     }
 
+    /// <summary>Move the till by <paramref name="coins"/> (negative to pay buy offers from it); never below zero.</summary>
+    public static void AddTill(Container container, int coins)
+    {
+        if (coins == 0 || View(container) is not { } nview || !nview.IsValid())
+            return;
+        nview.ClaimOwnership();
+        var zdo = nview.GetZDO();
+        zdo.Set(TillKey, Math.Max(0, zdo.GetInt(TillKey) + coins));
+    }
+
     /// <summary>Take the till's coins (returns how many; the till is empty after).</summary>
     public static int TakeTill(Container container)
     {

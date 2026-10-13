@@ -419,3 +419,7 @@ FodyWeavers.xsd
 
 # different per computer
 environment.props
+
+# Blender sources (ship GLB/JSON from Forge, not .blend)
+*.blend
+*.blend1

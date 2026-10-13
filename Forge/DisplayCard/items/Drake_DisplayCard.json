@@ -1,0 +1,50 @@
+{
+  "id": "Drake_DisplayCard",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Display Card",
+  "look": {
+    "mesh": {
+      "file": "models/paper_mesh_card_display.glb"
+    },
+    "materials": [
+      {
+        "target": null,
+        "textures": {
+          "_MainTex": "textures/paper_mesh_sheet.png",
+          "_BumpMap": "textures/paper_mesh_normal.png"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [0.0, 0.14, 0.0],
+      "size": [0.24, 0.28, 0.05]
+    }
+  },
+  "fields": {
+    "Container": {
+      "m_width": 1,
+      "m_height": 1
+    },
+    "Piece": {
+      "m_allowRotatedOverlap": true,
+      "m_notOnTiltingSurface": false
+    },
+    "WearNTear": {
+      "m_burnable": true,
+      "m_supports": false,
+      "m_health": 50
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [-0.12, 0.0, -0.025],
+      [-0.12, 0.0, 0.025],
+      [0.12, 0.0, -0.025],
+      [0.12, 0.0, 0.025]
+    ]
+  },
+  "icon": "textures/paper_mesh_icon.png"
+}
