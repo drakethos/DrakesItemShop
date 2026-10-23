@@ -1,0 +1,191 @@
+{
+  "name": "S-20 mailbox: anyone posts, only the owner opens",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_Mailbox",
+      "dz": 2.5,
+      "dx": 0,
+      "as": "box"
+    },
+    {
+      "do": "spawn",
+      "prefab": "guard_stone",
+      "dz": -2,
+      "owner": "Alice",
+      "enabled": true,
+      "radius": 15
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": true,
+      "label": "Alice (builder) may open her mailbox"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "mail.maySend",
+      "args": {
+        "target": "box"
+      },
+      "expect": true,
+      "label": "Bob may post into it"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 10
+    },
+    {
+      "do": "hook",
+      "name": "mail.send",
+      "args": {
+        "target": "box",
+        "prefab": "Wood",
+        "count": 10,
+        "note": "hi Alice"
+      },
+      "expect": "",
+      "label": "Bob posts 10 wood with a note",
+      "stop": true
+    },
+    {
+      "do": "check",
+      "check": "noItem",
+      "prefab": "Wood",
+      "label": "the wood left Bob's inventory"
+    },
+    {
+      "do": "hook",
+      "name": "mail.count",
+      "args": {
+        "target": "box",
+        "prefab": "Wood"
+      },
+      "expect": 10,
+      "label": "the wood is in the box"
+    },
+    {
+      "do": "hook",
+      "name": "mail.recent",
+      "args": {
+        "target": "box"
+      },
+      "contains": "hi Alice",
+      "label": "the log shows who sent it and the note"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": false,
+      "label": "Bob may not open it"
+    },
+    {
+      "do": "interact",
+      "target": "box"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "check",
+      "check": "uiVisible",
+      "name": "InventoryGui",
+      "expect": false,
+      "label": "pressing E at the front as Bob only offers the send slot"
+    },
+    {
+      "do": "closeUi"
+    },
+    {
+      "do": "teleport",
+      "to": "box",
+      "distance": 1.5
+    },
+    {
+      "do": "wait",
+      "seconds": 0.3
+    },
+    {
+      "do": "interact",
+      "target": "box"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "check",
+      "check": "uiVisible",
+      "name": "InventoryGui",
+      "expect": false,
+      "label": "round the back Bob still cannot open it (inside the ward of Alice)"
+    },
+    {
+      "do": "closeUi"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "interact",
+      "target": "box"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "check",
+      "check": "uiVisible",
+      "name": "InventoryGui",
+      "label": "Alice opens the back door"
+    },
+    {
+      "do": "check",
+      "check": "containerHas",
+      "target": "box",
+      "prefab": "Wood",
+      "count": 10,
+      "label": "and sees the wood"
+    },
+    {
+      "do": "screenshot",
+      "name": "mailbox"
+    },
+    {
+      "do": "closeUi"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

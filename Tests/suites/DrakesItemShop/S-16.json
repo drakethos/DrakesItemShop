@@ -1,0 +1,26 @@
+{
+  "name": "S-16 AdminOnlyBuildPieces",
+  "description": "A non-admin being refused needs a dedicated server: manual.",
+  "steps": [
+    {
+      "do": "setConfig",
+      "values": {
+        "01 General/AdminOnlyBuildPieces": "true"
+      }
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "dx": 0,
+      "as": "case",
+      "label": "the single-player host is an admin: may still build"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

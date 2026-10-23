@@ -13,9 +13,9 @@ internal static class PieceBuildGatePatch
 {
     public static void TryApply(Harmony harmony, ManualLogSource log)
     {
-        var target = AccessTools.Method(typeof(Player), "PlacePiece", new[] { typeof(GameObject), typeof(bool) })
-                     ?? AccessTools.Method(typeof(Player), "PlacePiece", new[] { typeof(bool) })
-                     ?? FindPlaceMethod(typeof(Player));
+        // Live Valheim: PlacePiece(Piece, Vector3, Quaternion, bool, ...) returns void; older builds differ. Any overload works:
+        // the prefix reads the piece from the first argument (or the ghost) and skips the call to refuse.
+        var target = FindPlaceMethod(typeof(Player));
 
         if (target == null)
         {
@@ -34,12 +34,13 @@ internal static class PieceBuildGatePatch
         return Jotunn.Managers.SynchronizationManager.Instance?.PlayerIsAdmin == true && player == Player.m_localPlayer;
     }
 
-    public static bool Prefix(Player __instance, ref bool __result)
+    public static bool Prefix(Player __instance, object[] __args)
     {
-        if (!ItemShopConfig.AdminOnlyBuildPieces)
+        if (!ItemShopConfig.AdminOnlyBuildPieces || __instance == null)
             return true;
 
-        if (__instance == null || !TryGetGhostPieceName(__instance, out var pieceName))
+        var pieceName = __args.Length > 0 && __args[0] is Piece piece && piece != null ? piece.name : "";
+        if (pieceName.Length == 0 && !TryGetGhostPieceName(__instance, out pieceName))
             return true;
 
         if (!ShopPieceRegistrar.IsDrakeShopPiece(pieceName))
@@ -49,7 +50,6 @@ internal static class PieceBuildGatePatch
             return true;
 
         CustomizeLibsAPI.ShowHudMessage(__instance, MessageHud.MessageType.Center, "Only admins can build Drake Shop pieces.");
-        __result = false;
         return false;
     }
 
@@ -68,11 +68,8 @@ internal static class PieceBuildGatePatch
     {
         foreach (var method in AccessTools.GetDeclaredMethods(type))
         {
-            if (method.Name != "PlacePiece")
-                continue;
-            if (method.ReturnType != typeof(bool))
-                continue;
-            return method;
+            if (method.Name == "PlacePiece")
+                return method;
         }
 
         return null;

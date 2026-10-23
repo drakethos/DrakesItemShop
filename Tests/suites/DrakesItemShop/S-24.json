@@ -1,0 +1,90 @@
+{
+  "name": "S-24 a mailbox outside a ward is open to anyone (and says so)",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_Mailbox",
+      "dz": 2.5,
+      "dx": 0,
+      "as": "box"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "mail.isProtected",
+      "args": {
+        "target": "box"
+      },
+      "expect": false,
+      "label": "no ward: the box knows it is unprotected"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "label": "observed: anyone may open an unwarded mailbox (by design; informational)"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "guard_stone",
+      "dz": -2,
+      "owner": "Alice",
+      "enabled": true,
+      "radius": 15
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "mail.isProtected",
+      "args": {
+        "target": "box"
+      },
+      "expect": true,
+      "label": "inside her ward it is protected"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": false,
+      "label": "and Bob can no longer open it"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

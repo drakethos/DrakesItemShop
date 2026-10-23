@@ -1,0 +1,117 @@
+{
+  "name": "S-41 buying: out of budget and not enough goods",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "open for business",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "buy.addOffer",
+      "args": {
+        "target": "shop",
+        "want": "Wood",
+        "amount": 10,
+        "pay": 5,
+        "budget": 4
+      },
+      "expect": true
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 10
+    },
+    {
+      "do": "hook",
+      "name": "buy.sell",
+      "args": {
+        "target": "shop",
+        "offer": 0,
+        "deals": 1
+      },
+      "notContains": "Sold",
+      "label": "budget too small: refused"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Wood",
+      "count": 10,
+      "label": "wood kept"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "hook",
+      "name": "buy.addOffer",
+      "args": {
+        "target": "shop",
+        "want": "Stone",
+        "amount": 5,
+        "pay": 1,
+        "budget": 10
+      },
+      "expect": true
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "give",
+      "prefab": "Stone",
+      "count": 3
+    },
+    {
+      "do": "hook",
+      "name": "buy.sell",
+      "args": {
+        "target": "shop",
+        "offer": 1,
+        "deals": 1
+      },
+      "notContains": "Sold",
+      "label": "3 stone for a 5-stone deal: refused"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

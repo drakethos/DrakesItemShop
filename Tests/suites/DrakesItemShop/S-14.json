@@ -1,0 +1,30 @@
+{
+  "name": "S-14 hidden pieces stay out of the build menu",
+  "description": "",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.pieceEnabled",
+      "args": {
+        "prefab": "Drake_POBox"
+      },
+      "expect": false,
+      "label": "the PO box is not in the build menu (it only comes inside post wall sections)"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_POBox",
+      "dz": 3,
+      "dx": 0,
+      "as": "pobox",
+      "label": "the hammer cannot build a PO box on its own",
+      "expect": false
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

@@ -195,6 +195,292 @@ T('S-11', 'racks and mats are shops too', [
     play('me'),
 ])
 
+# ---------------------------------------------------------------- every piece, mail, post wall, storefront, buying, crates, apron
+
+def M(name, expect=None, label=None, contains=None, notContains=None, stop=False, **args):
+    s = {'do': 'hook', 'name': name}
+    if args:
+        s['args'] = args
+    for k, v in (('expect', expect), ('contains', contains), ('notContains', notContains), ('label', label)):
+        if v is not None:
+            s[k] = v
+    if stop:
+        s['stop'] = True
+    return s
+
+
+def wait(s=0.3):
+    return {'do': 'wait', 'seconds': s}
+
+
+def place(prefab, tag, dz=3, dx=0, label=None, **f):
+    s = {'do': 'place', 'prefab': prefab, 'dz': dz, 'dx': dx, 'as': tag}
+    if label:
+        s['label'] = label
+    s.update(f)
+    return s
+
+
+SHOP_PIECES = ['Drake_DisplayCase', 'Drake_DisplayCaseSmall', 'Drake_DisplayMat', 'Drake_DisplayMatSmall', 'Drake_DisplayMatWolf',
+               'Drake_DisplayMatLox', 'Drake_DisplayMatWolfSmall', 'Drake_DisplayMatLoxSmall', 'Drake_ArmorRack', 'Drake_ArmorRackSmall',
+               'Drake_WeaponRack', 'Drake_WeaponRackSmall', 'Drake_WallRack', 'Drake_WallRackSmall']
+OTHER_PIECES = ['Drake_Mailbox', 'Drake_DropBox', 'Drake_StoreSign', 'Drake_OpenSign', 'Drake_DoorBell', 'Drake_DeskBell',
+                'Drake_TradeCounter', 'Drake_OpenCrate', 'Drake_OpenCrateSmallLow', 'Drake_OpenCrateBigLow', 'Drake_OpenCrateTall',
+                'Drake_JuteMat', 'Drake_DeerMat', 'Drake_WolfMat', 'Drake_LoxMat']
+
+
+def build_each(pieces, label):
+    steps = []
+    for prefab in pieces:
+        steps += [place(prefab, 'p', label=f'{label}: {prefab}'), {'do': 'destroy', 'target': 'p'}, wait(0.1)]
+    return steps
+
+
+T('S-12', 'every shop piece builds from the hammer (cases, mats, racks)', [
+    *build_each(SHOP_PIECES, 'shop piece'),
+], desc='Each piece is placed through the build menu (it must be listed and switched on) and removed again.')
+
+T('S-13', 'every other ItemShop piece builds (mail, storefront, crates, mats)', [
+    *build_each(OTHER_PIECES, 'piece'),
+])
+
+T('S-14', 'hidden pieces stay out of the build menu', [
+    M('itemshop.pieceEnabled', False, 'the PO box is not in the build menu (it only comes inside post wall sections)', prefab='Drake_POBox'),
+    place('Drake_POBox', 'pobox', expect=False, label='the hammer cannot build a PO box on its own'),
+])
+
+T('S-15', 'build costs: needs the materials, uses them up', [
+    place('piece_workbench', 'bench', dz=-3, dx=3, label='a workbench in range (the shop pieces need one, like a chest)'),
+    {'do': 'give', 'prefab': 'FineWood', 'count': 10}, {'do': 'give', 'prefab': 'JuteRed', 'count': 2}, {'do': 'give', 'prefab': 'Crystal', 'count': 1},
+    place('Drake_DisplayCase', 'case', free=False, expect=False, label='one crystal short: refused'),
+    {'do': 'give', 'prefab': 'Crystal', 'count': 1},
+    place('Drake_DisplayCase', 'case', free=False, label='with the full cost it builds'),
+    check('noItem', 'fine wood used', prefab='FineWood'),
+    check('noItem', 'crystal used', prefab='Crystal'),
+], desc='Default DisplayCaseCost FineWood:10,JuteRed:2,Crystal:2.')
+
+T('S-16', 'AdminOnlyBuildPieces', [
+    {'do': 'setConfig', 'values': {'01 General/AdminOnlyBuildPieces': 'true'}},
+    place('Drake_DisplayCase', 'case', label='the single-player host is an admin: may still build'),
+], desc='A non-admin being refused needs a dedicated server: manual.')
+
+def mailbox(prefab='Drake_Mailbox', owner='Alice', ward=True):
+    """The owner builds the box; inside the owner's ward by default (a mailbox's back door follows the ward, like any chest)."""
+    s = [play(owner), place(prefab, 'box', dz=2.5)]
+    if ward:
+        s.append({'do': 'spawn', 'prefab': 'guard_stone', 'dz': -2, 'owner': owner, 'enabled': True, 'radius': 15})
+    return s + [wait(0.5)]
+
+T('S-20', 'mailbox: anyone posts, only the owner opens', [
+    *mailbox(),
+    M('mail.canOpen', True, 'Alice (builder) may open her mailbox', target='box'),
+    play('Bob'),
+    M('mail.maySend', True, 'Bob may post into it', target='box'),
+    give('Wood', 10),
+    M('mail.send', '', 'Bob posts 10 wood with a note', stop=True, target='box', prefab='Wood', count=10, note='hi Alice'),
+    check('noItem', 'the wood left Bob\'s inventory', prefab='Wood'),
+    M('mail.count', 10, 'the wood is in the box', target='box', prefab='Wood'),
+    M('mail.recent', label='the log shows who sent it and the note', contains='hi Alice', target='box'),
+    M('mail.canOpen', False, 'Bob may not open it', target='box'),
+    {'do': 'interact', 'target': 'box'}, wait(0.4),
+    check('uiVisible', 'pressing E at the front as Bob only offers the send slot', name='InventoryGui', expect=False),
+    {'do': 'closeUi'},
+    {'do': 'teleport', 'to': 'box', 'distance': 1.5}, wait(0.3),
+    {'do': 'interact', 'target': 'box'}, wait(0.4),
+    check('uiVisible', 'round the back Bob still cannot open it (inside the ward of Alice)', name='InventoryGui', expect=False),
+    {'do': 'closeUi'},
+    play('Alice'),
+    {'do': 'interact', 'target': 'box'}, wait(0.4),
+    check('uiVisible', 'Alice opens the back door', name='InventoryGui'),
+    check('containerHas', 'and sees the wood', target='box', prefab='Wood', count=10),
+    {'do': 'screenshot', 'name': 'mailbox'},
+    {'do': 'closeUi'},
+    play('me'),
+])
+
+T('S-21', 'drop box works the same', [
+    *mailbox('Drake_DropBox'),
+    play('Bob'),
+    give('Stone', 5),
+    M('mail.send', '', target='box', prefab='Stone', count=5),
+    M('mail.count', 5, target='box', prefab='Stone'),
+    M('mail.canOpen', False, 'not Bob\'s', target='box'),
+    play('me'),
+])
+
+T('S-22', 'assigning a PO box to a player', [
+    play('Alice'),
+    place('Drake_PostSection1x3', 'section', dz=3, label='Alice (the postmaster) builds a post wall section'),
+    wait(1.0),
+    {**M('mail.sectionBox', index=0, target='section'), 'as': 'box'},
+    M('mail.signName', label='an unassigned PO box says so', contains='Unassigned', target='box', plain=''),
+    M('mail.assign', True, 'Alice gives the box to Carol', target='box', who='Carol'),
+    M('mail.signName', label='the plate shows its new owner', contains='Carol', target='box', plain=''),
+    play('Carol'),
+    M('mail.mayOpen', True, 'Carol may open it now', target='box'),
+    M('mail.canOpen', True, 'and the chest agrees (PO box access rules)', target='box'),
+    play('Bob'),
+    M('mail.mayOpen', False, 'Bob still may not', target='box'),
+    M('mail.canOpen', False, 'not even through the chest', target='box'),
+    M('mail.assign', False, 'and cannot reassign it', target='box', who='Bob'),
+    play('Alice'),
+    M('mail.canOpen', True, 'the postmaster (builder) can still open it', target='box'),
+    M('mail.assign', True, 'clear the assignment', target='box', who=''),
+    play('Carol'),
+    M('mail.mayOpen', False, 'Carol lost access', target='box'),
+    play('me'),
+], desc='Assigning owners is a PO box feature; a plain mailbox belongs to its builder and follows the ward.')
+
+T('S-23', 'mailbox sign and a full box', [
+    *mailbox(),
+    M('mail.setSign', True, target='box', text='Alice & Co'),
+    M('mail.signName', label='sign text shown', contains='Alice & Co', target='box', plain=''),
+    play('Bob'),
+    M('mail.setSign', False, 'Bob cannot change the sign', target='box', text='Bob was here'),
+    give('Stone', 2000),
+    M('mail.send', label='posting more than fits is refused', notContains='may not', target='box', prefab='Stone', count=2000),
+    M('mail.count', label='observed: how much fitted (informational)', target='box', prefab='Stone'),
+    play('me'),
+])
+
+T('S-24', 'a mailbox outside a ward is open to anyone (and says so)', [
+    *mailbox(ward=False),
+    M('mail.isProtected', False, 'no ward: the box knows it is unprotected', target='box'),
+    play('Bob'),
+    M('mail.canOpen', label='observed: anyone may open an unwarded mailbox (by design; informational)', target='box'),
+    play('Alice'),
+    {'do': 'spawn', 'prefab': 'guard_stone', 'dz': -2, 'owner': 'Alice', 'enabled': True, 'radius': 15},
+    wait(0.5),
+    M('mail.isProtected', True, 'inside her ward it is protected', target='box'),
+    play('Bob'),
+    M('mail.canOpen', False, 'and Bob can no longer open it', target='box'),
+    play('me'),
+])
+
+T('S-25', 'post wall: sections build PO boxes, each with its own owner', [
+    place('Drake_PostSection1x3', 'section', dz=3, label='build a post wall section (experimental setting on for this suite)'),
+    wait(1.0),
+    M('mail.sectionBoxes', label='the section spawned PO boxes', notContains='0', target='section'),
+    {'do': 'screenshot', 'name': 'post-wall'},
+    {**M('mail.sectionBox', index=0, target='section'), 'as': 'box0'},
+    {**M('mail.sectionBox', index=1, target='section'), 'as': 'box1'},
+    M('mail.assign', True, 'the builder gives box 0 to Bob', target='box0', who='Bob'),
+    play('Carol'),
+    give('Wood', 3),
+    M('mail.send', '', 'Carol posts to box 0', target='box0', prefab='Wood', count=3),
+    play('Bob'),
+    M('mail.canOpen', True, 'Bob opens his PO box', target='box0'),
+    M('mail.canOpen', False, 'but not the next one', target='box1'),
+    M('mail.count', 3, 'his mail is there', target='box0', prefab='Wood'),
+    play('me'),
+], desc='PO boxes are reported glitchy: these checks pin down spawn, ownership and delivery.')
+
+T('S-26', 'post wall: boxes survive logging out and in; removing the section removes its boxes', [
+    place('Drake_PostSection1x3', 'section', dz=3, keep=True),
+    wait(1.0),
+    {**M('mail.sectionBox', index=0, target='section'), 'as': 'box0'},
+    give('Wood', 4),
+    M('mail.send', '', target='box0', prefab='Wood', count=4),
+    M('mail.sectionBoxes', label='boxes before the relog (informational)', target='section'),
+    {'do': 'relog', 'timeout': 240},
+    M('mail.sectionBoxes', label='the same number of boxes after the relog (no duplicates, none lost)', notContains='0', target='section'),
+    M('mail.count', 4, 'the mail is still in box 0', target='box0', prefab='Wood'),
+    {'do': 'destroy', 'target': 'section'},
+    {'do': 'wait', 'timeout': 15, 'until': {'check': 'objectNear', 'target': 'Drake_POBox', 'radius': 6, 'expect': False}},
+    check('objectNear', 'no PO box is left behind (boxes remove themselves a few seconds after their section)', target='Drake_POBox', radius=6, expect=False),
+    check('objectNear', 'the mail in box 0 dropped on the ground, not lost', target='Wood', radius=6),
+], desc='Duplicate or orphaned PO boxes are the classic post-wall glitch.')
+
+T('S-30', 'Open Sign flips OPEN / CLOSED', [
+    place('Drake_OpenSign', 'sign', dz=2.5),
+    M('store.signIsOpen', True, 'starts OPEN', target='sign'),
+    {'do': 'interact', 'target': 'sign'}, wait(0.3),
+    M('store.signIsOpen', False, 'E turns it CLOSED', target='sign'),
+    check('hoverText', 'the hover says closed', target='sign', contains='CLOSED'),
+    {'do': 'interact', 'target': 'sign'}, wait(0.3),
+    M('store.signIsOpen', True, 'and back to OPEN', target='sign'),
+])
+
+T('S-31', 'Store Sign text and bells', [
+    place('Drake_StoreSign', 'store', dz=2.5),
+    M('store.signText', "Drake's Goods", 'set the sign text (sign window Save)', target='store', text="Drake's Goods"),
+    {'do': 'screenshot', 'name': 'store-sign'},
+    place('Drake_DeskBell', 'desk', dz=2.5, dx=1.5),
+    {'do': 'interact', 'target': 'desk'}, wait(0.3),
+    check('lastResult', 'E rings the desk bell', expect=True),
+    place('wood_door', 'door', dz=3, dx=-2),
+    place('Drake_DoorBell', 'doorbell', dz=3, dx=-3),
+    wait(0.3),
+    {'do': 'interact', 'target': 'door'}, wait(0.6),
+    check('message', 'opening a nearby door rings the door bell', contains='customer'),
+])
+
+T('S-40', 'buying from customers: offer, budget, sell, collect', [
+    *shop(),
+    M('buy.addOffer', True, 'Alice buys wood: 10 per deal for 5 coins, budget 20', target='shop', want='Wood', amount=10, pay=5, budget=20),
+    play('Bob'),
+    M('buy.addOffer', False, 'Bob cannot add offers to Alice\'s shop', target='shop', want='Stone', amount=1, pay=1),
+    give('Wood', 10),
+    M('buy.sell', '', 'Bob sells 10 wood', stop=True, target='shop', offer=0, deals=1),
+    check('noItem', 'his wood is gone', prefab='Wood'),
+    check('hasItem', 'he got 5 coins', prefab='Coins', count=5),
+    M('buy.budget', 15, 'the budget dropped by 5', target='shop'),
+    M('buy.held', 0, 'no buy crate: nothing is held on the card', target='shop', prefab='Wood'),
+    check('containerHas', 'the wood went into the shop chest', target='shop', prefab='Wood', count=10),
+    play('me'),
+], desc='Without a buy crate the goods go straight into the shop chest; with a crate they are held on the card until collected.')
+
+T('S-41', 'buying: out of budget and not enough goods', [
+    *shop(),
+    M('buy.addOffer', True, target='shop', want='Wood', amount=10, pay=5, budget=4),
+    play('Bob'),
+    give('Wood', 10),
+    M('buy.sell', label='budget too small: refused', notContains='Sold', target='shop', offer=0, deals=1),
+    check('hasItem', 'wood kept', prefab='Wood', count=10),
+    play('Alice'),
+    M('buy.addOffer', True, target='shop', want='Stone', amount=5, pay=1, budget=10),
+    play('Bob'),
+    give('Stone', 3),
+    M('buy.sell', label='3 stone for a 5-stone deal: refused', notContains='Sold', target='shop', offer=1, deals=1),
+    play('me'),
+])
+
+T('S-50', 'open crates hold items and open for the builder', [
+    place('Drake_OpenCrate', 'crate', dz=2.5),
+    {'do': 'interact', 'target': 'crate'}, wait(0.4),
+    check('uiVisible', 'the crate opens', name='InventoryGui'),
+    {'do': 'closeUi'},
+    {'do': 'screenshot', 'name': 'open-crate'},
+])
+
+T('S-60', "Shopkeeper's Apron: crafted at the workbench, worn, Open for business", [
+    {'do': 'give', 'prefab': 'LinenThread', 'count': 6}, {'do': 'give', 'prefab': 'LeatherScraps', 'count': 4}, {'do': 'give', 'prefab': 'BronzeNails', 'count': 2},
+    place('piece_workbench', 'bench', dz=3, dx=2),
+    {'do': 'lookAt', 'target': 'bench', 'distance': 2},
+    {'do': 'craft', 'prefab': 'Drake_ShopApron', 'free': False, 'station': 'bench'},
+    check('hasItem', 'crafted with the real cost', prefab='Drake_ShopApron'),
+    check('noItem', 'linen used', prefab='LinenThread'),
+    {'do': 'give', 'prefab': 'Drake_ShopApron', 'equip': True},
+    wait(0.5),
+    check('stat', 'Open for business: +50 carry weight', name='carryWeight', min=350),
+    {'do': 'screenshot', 'name': 'apron'},
+])
+
+T('S-61', 'apron styles are craftable', [
+    *[{'do': 'craft', 'prefab': a, 'label': f'craft {a}'} for a in ['Drake_ShopApronBlack', 'Drake_ShopApronCafe', 'Drake_ShopApronGreen', 'Drake_ShopApronMerchant', 'Drake_ShopApronRed']],
+    *[check('hasItem', f'{a} made', prefab=a) for a in ['Drake_ShopApronBlack', 'Drake_ShopApronCafe', 'Drake_ShopApronGreen', 'Drake_ShopApronMerchant', 'Drake_ShopApronRed']],
+])
+
+T('S-70', 'racks and mats show what they sell', [
+    *shop([('ArmorBronzeChest', 1, 'c:50', None)], piece='Drake_ArmorRack'),
+    {'do': 'screenshot', 'name': 'armor-rack'},
+    play('Alice'),
+    place('Drake_DisplayMat', 'mat', dz=3, dx=2.5),
+    M('itemshop.stock', True, target='mat', prefab='SwordBronze', count=1, price='c:5'),
+    {'do': 'screenshot', 'name': 'display-mat'},
+    play('me'),
+], desc='How goods lie and hang is checked by the screenshots.')
+
 suite = {
     'name': 'DrakesItemShop',
     'description': "Automated regression for Drake's ItemShop: a test shop next to the house (display case, rack, mat) stocked and opened by Alice, "
@@ -202,6 +488,8 @@ suite = {
                    'sales log, collecting and who may run a shop.',
     'requireMods': [{'guid': GUID, 'minVersion': '0.4.0'}],
     'configOverrides': [],
+    # settings that only apply at game start: Run-TestLabSuites.ps1 writes them into the cfg before launching
+    'launchConfig': [{'guid': GUID, 'section': '08 Experimental', 'key': 'Post wall and PO boxes', 'value': 'true'}],
     'setup': {'timeOfDay': 0.5, 'freezeTime': 1, 'god': 1, 'noBuild': 'off', 'hideUnlockPopups': 1},
     'resetBetweenTests': True,
 }

@@ -276,23 +276,19 @@ public class MailboxBehaviour : MonoBehaviour
         }
     }
 
-    /// <summary>True when the box stands inside an active ward (so its back door isn't open to just anyone).</summary>
     private static readonly System.Reflection.MethodInfo? CheckAccess =
         HarmonyLib.AccessTools.Method(typeof(Container), "CheckAccess", new[] { typeof(long) });
 
-    /// <summary>Whether this player may open the chest (wards and LockSmith included). The game keeps CheckAccess protected, hence reflection.</summary>
+    /// <summary>
+    /// Whether this player may open the chest (wards and LockSmith included). The game keeps CheckAccess protected, hence reflection.
+    /// A PO box answers with its own rules (PoBoxAccessPatch); a mailbox's back door also has to get past the ward, as Container.Interact does.
+    /// </summary>
     public bool CanOpen(Player player) =>
-        Box != null && (CheckAccess == null || (bool)CheckAccess.Invoke(Box, new object[] { player.GetPlayerID() }));
+        Box != null && (CheckAccess == null || (bool)CheckAccess.Invoke(Box, new object[] { player.GetPlayerID() }))
+        && (m_singleDoor || Pricing.ShopState.PassesWard(Box, player));
 
-    public bool IsProtected
-    {
-        get
-        {
-            // Read by reflection: the API stubs we build against predate it. Unknown counts as protected (no nagging).
-            var check = typeof(PrivateArea).GetMethod("CheckInPrivateArea", new[] { typeof(Vector3), typeof(bool) });
-            return check == null || (bool)check.Invoke(null, new object[] { transform.position, false });
-        }
-    }
+    /// <summary>True when the box stands inside an enabled ward (unknown counts as protected, so nobody is nagged).</summary>
+    public bool IsProtected => Box == null || Pricing.ShopState.InWard(Box);
 
     public bool NotifyOn
     {

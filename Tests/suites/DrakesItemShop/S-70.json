@@ -1,0 +1,85 @@
+{
+  "name": "S-70 racks and mats show what they sell",
+  "description": "How goods lie and hang is checked by the screenshots.",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_ArmorRack",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "prefab": "ArmorBronzeChest",
+        "count": 1,
+        "price": "c:50",
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "stock 1 ArmorBronzeChest at c:50",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "open for business",
+      "stop": true
+    },
+    {
+      "do": "screenshot",
+      "name": "armor-rack"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayMat",
+      "dz": 3,
+      "dx": 2.5,
+      "as": "mat"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "mat",
+        "prefab": "SwordBronze",
+        "count": 1,
+        "price": "c:5"
+      },
+      "expect": true
+    },
+    {
+      "do": "screenshot",
+      "name": "display-mat"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

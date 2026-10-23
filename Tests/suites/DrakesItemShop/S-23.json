@@ -1,0 +1,97 @@
+{
+  "name": "S-23 mailbox sign and a full box",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_Mailbox",
+      "dz": 2.5,
+      "dx": 0,
+      "as": "box"
+    },
+    {
+      "do": "spawn",
+      "prefab": "guard_stone",
+      "dz": -2,
+      "owner": "Alice",
+      "enabled": true,
+      "radius": 15
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "mail.setSign",
+      "args": {
+        "target": "box",
+        "text": "Alice & Co"
+      },
+      "expect": true
+    },
+    {
+      "do": "hook",
+      "name": "mail.signName",
+      "args": {
+        "target": "box",
+        "plain": ""
+      },
+      "contains": "Alice & Co",
+      "label": "sign text shown"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "mail.setSign",
+      "args": {
+        "target": "box",
+        "text": "Bob was here"
+      },
+      "expect": false,
+      "label": "Bob cannot change the sign"
+    },
+    {
+      "do": "give",
+      "prefab": "Stone",
+      "count": 2000
+    },
+    {
+      "do": "hook",
+      "name": "mail.send",
+      "args": {
+        "target": "box",
+        "prefab": "Stone",
+        "count": 2000
+      },
+      "notContains": "may not",
+      "label": "posting more than fits is refused"
+    },
+    {
+      "do": "hook",
+      "name": "mail.count",
+      "args": {
+        "target": "box",
+        "prefab": "Stone"
+      },
+      "label": "observed: how much fitted (informational)"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

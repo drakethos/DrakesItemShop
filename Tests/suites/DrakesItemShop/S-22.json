@@ -1,0 +1,161 @@
+{
+  "name": "S-22 assigning a PO box to a player",
+  "description": "Assigning owners is a PO box feature; a plain mailbox belongs to its builder and follows the ward.",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_PostSection1x3",
+      "dz": 3,
+      "dx": 0,
+      "as": "section",
+      "label": "Alice (the postmaster) builds a post wall section"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.0
+    },
+    {
+      "do": "hook",
+      "name": "mail.sectionBox",
+      "args": {
+        "index": 0,
+        "target": "section"
+      },
+      "as": "box"
+    },
+    {
+      "do": "hook",
+      "name": "mail.signName",
+      "args": {
+        "target": "box",
+        "plain": ""
+      },
+      "contains": "Unassigned",
+      "label": "an unassigned PO box says so"
+    },
+    {
+      "do": "hook",
+      "name": "mail.assign",
+      "args": {
+        "target": "box",
+        "who": "Carol"
+      },
+      "expect": true,
+      "label": "Alice gives the box to Carol"
+    },
+    {
+      "do": "hook",
+      "name": "mail.signName",
+      "args": {
+        "target": "box",
+        "plain": ""
+      },
+      "contains": "Carol",
+      "label": "the plate shows its new owner"
+    },
+    {
+      "do": "playAs",
+      "who": "Carol"
+    },
+    {
+      "do": "hook",
+      "name": "mail.mayOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": true,
+      "label": "Carol may open it now"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": true,
+      "label": "and the chest agrees (PO box access rules)"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "mail.mayOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": false,
+      "label": "Bob still may not"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": false,
+      "label": "not even through the chest"
+    },
+    {
+      "do": "hook",
+      "name": "mail.assign",
+      "args": {
+        "target": "box",
+        "who": "Bob"
+      },
+      "expect": false,
+      "label": "and cannot reassign it"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": true,
+      "label": "the postmaster (builder) can still open it"
+    },
+    {
+      "do": "hook",
+      "name": "mail.assign",
+      "args": {
+        "target": "box",
+        "who": ""
+      },
+      "expect": true,
+      "label": "clear the assignment"
+    },
+    {
+      "do": "playAs",
+      "who": "Carol"
+    },
+    {
+      "do": "hook",
+      "name": "mail.mayOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": false,
+      "label": "Carol lost access"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using DrakesItemShop.Mail;
+using HarmonyLib;
 using DrakesItemShop.Pricing;
 using UnityEngine;
 
@@ -105,6 +107,36 @@ internal static class ItemShopTestHooks
         return true;
     }
 
+    /// <summary>
+    /// Put a stack from the current player's inventory on the shelf and price it (dragging it into the case, then the price editor):
+    /// prefab, index (nth stack), count (default all), price. Keeps everything on the item (custom name, look, crafter).
+    /// </summary>
+    [TestHook("itemshop.putIn")]
+    static bool PutIn(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var shop = Shop(target);
+        if (!ShopState.CanManage(shop, P))
+            return false;
+        var prefab = S(args, "prefab");
+        var stacks = P.GetInventory().GetAllItems().Where(i => PrefabOf(i).Equals(prefab, StringComparison.OrdinalIgnoreCase)).ToList();
+        var index = I(args, "index");
+        if (stacks.Count <= index)
+            throw new InvalidOperationException($"no {prefab} in the inventory");
+        var item = stacks[index];
+        var count = Math.Min(I(args, "count", item.m_stack), item.m_stack);
+        var moved = item.Clone();
+        moved.m_stack = count;
+        if (!shop.GetInventory().AddItem(moved))
+            throw new InvalidOperationException("the shop has no room");
+        P.GetInventory().RemoveItem(item, count);
+        var live = shop.GetInventory().GetAllItems().LastOrDefault(i => PrefabOf(i).Equals(prefab, StringComparison.OrdinalIgnoreCase) && !PayOptions.Has(i)) ?? moved;
+        var price = S(args, "price");
+        if (price.Length > 0)
+            PayOptions.Set(live, Decode(price));
+        ShopState.NotifyChanged(shop);
+        return true;
+    }
+
     /// <summary>Change the price of a stocked item (manager only): prefab, price.</summary>
     [TestHook("itemshop.setPrice")]
     static bool SetPrice(Dictionary<string, object?> args, GameObject? target = null)
@@ -136,13 +168,15 @@ internal static class ItemShopTestHooks
     [TestHook("itemshop.isOpen")]
     static bool IsOpen(GameObject? target = null) => ShopState.IsOpen(Shop(target));
 
-    /// <summary>Buy as the current player through the buy window's own purchase code: prefab, deals (default 1), option (pay option index), pay (the price the buyer saw; default the current one).
+    /// <summary>Buy as the current player through the buy window's own purchase code: prefab, index (nth priced stack), deals (default 1), option (pay option index), pay (the price the buyer saw; default the current one).
     /// Returns "" when it went through, else the message the buyer sees.</summary>
     [TestHook("itemshop.buy")]
     static string Buy(Dictionary<string, object?> args, GameObject? target = null)
     {
         var shop = Shop(target);
-        var hint = Stock(shop, S(args, "prefab"));
+        // index: the nth priced stack of that prefab (renamed and plain stacks are separate goods)
+        var priced = shop.GetInventory().GetAllItems().Where(i => PrefabOf(i).Equals(S(args, "prefab"), StringComparison.OrdinalIgnoreCase) && PayOptions.Has(i)).ToList();
+        var hint = args.ContainsKey("index") ? (I(args, "index") < priced.Count ? priced[I(args, "index")] : null) : Stock(shop, S(args, "prefab"));
         if (hint == null)
             return "Sold out or changed. Look again.";
         return ShopPurchase.Purchase(shop, hint, I(args, "deals", 1), I(args, "option", 0), S(args, "pay", PayOptions.Raw(hint)), P) ?? "";
@@ -174,6 +208,229 @@ internal static class ItemShopTestHooks
     [TestHook("itemshop.sales")]
     static string Sales(GameObject? target = null) =>
         string.Join(" | ", ShopState.Sales(Shop(target)).Select(s => $"{s.Buyer}: {s.Quantity} x {s.Item} for {s.Coins}"));
+
+    // ---------- mail (mailbox, drop box, PO boxes)
+
+    static MailboxBehaviour Mail(GameObject? target)
+    {
+        var box = target != null ? target.GetComponentInChildren<MailboxBehaviour>() ?? target.GetComponentInParent<MailboxBehaviour>() : null;
+        if (box != null)
+            return box;
+        MailboxBehaviour? best = null;
+        var bestD = 30f;
+        foreach (var b in UnityEngine.Object.FindObjectsOfType<MailboxBehaviour>())
+        {
+            var d = Vector3.Distance(b.transform.position, P.transform.position);
+            if (d < bestD) { best = b; bestD = d; }
+        }
+
+        return best ?? throw new InvalidOperationException("no mailbox within 30 m");
+    }
+
+    /// <summary>The player id DrakesTestLab's playAs gives a name (its fixed Alice/Bob/Carol/Amy, else a stable hash).</summary>
+    static long PlayAsId(string name) => name.ToLowerInvariant() switch
+    {
+        "alice" => 100001,
+        "bob" => 100002,
+        "carol" => 100003,
+        "amy" => 100004,
+        _ => 200000 + Math.Abs(name.GetStableHashCode() % 100000)
+    };
+
+    /// <summary>Post items as the current player, as the send window does: prefab, count, note. Returns "" when sent, else why not.</summary>
+    [TestHook("mail.send")]
+    static string MailSend(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var box = Mail(target);
+        if (!box.MaySend(P))
+            return "may not send";
+        var prefab = S(args, "prefab");
+        var item = P.GetInventory().GetAllItems().FirstOrDefault(i => PrefabOf(i).Equals(prefab, StringComparison.OrdinalIgnoreCase))
+                   ?? throw new InvalidOperationException($"no {prefab} in the inventory");
+        if (!box.Accepts(item))
+            return "not accepted";
+        var count = Math.Min(I(args, "count", item.m_stack), item.m_stack);
+        return box.Deposit(P.GetInventory(), new List<(ItemDrop.ItemData, int)> { (item, count) }, S(args, "note")) ? "" : "deposit refused (full?)";
+    }
+
+    [TestHook("mail.maySend")] static bool MaySend(GameObject? target = null) => Mail(target).MaySend(P);
+    [TestHook("mail.mayOpen")] static bool MayOpen(GameObject? target = null) => Mail(target).MayOpen(P.GetPlayerID());
+    [TestHook("mail.canOpen")] static bool CanOpenMail(GameObject? target = null) => Mail(target).CanOpen(P);
+    /// <summary>Is the box inside an active ward (so its back door is not open to anyone)?</summary>
+    [TestHook("mail.isProtected")] static bool IsProtected(GameObject? target = null) => Mail(target).IsProtected;
+    [TestHook("mail.canConfigure")] static bool CanConfigure(GameObject? target = null) => Mail(target).CanConfigure(P);
+
+    [TestHook("mail.accepts")]
+    static bool Accepts(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var go = ObjectDB.instance.GetItemPrefab(S(args, "prefab")) ?? throw new InvalidOperationException("unknown item");
+        return Mail(target).Accepts(go.GetComponent<ItemDrop>().m_itemData);
+    }
+
+    /// <summary>Give the box to a player (owner side, as the settings window does): who = me, Alice, Bob...; "" clears it.</summary>
+    [TestHook("mail.assign")]
+    static bool Assign(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var box = Mail(target);
+        if (!box.CanConfigure(P))
+            return false;
+        var who = S(args, "who");
+        if (who.Length == 0)
+            box.ClearAssignee();
+        else if (who.Equals("me", StringComparison.OrdinalIgnoreCase))
+            box.Assign(P.GetPlayerID(), P.GetPlayerName());
+        else
+            box.Assign(args.ContainsKey("id") ? I(args, "id") : PlayAsId(who), who);
+        return true;
+    }
+
+    [TestHook("mail.setSign")]
+    static bool SetSign(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var box = Mail(target);
+        if (!box.CanConfigure(P))
+            return false;
+        box.SetSign(S(args, "text"));
+        return true;
+    }
+
+    /// <summary>The name the box shows (sign / assignee).</summary>
+    [TestHook("mail.signName")]
+    static string SignName(Dictionary<string, object?> args, GameObject? target = null) => Mail(target).SignName(S(args, "plain"));
+
+    /// <summary>Items inside the box: count of prefab (or every item when prefab is empty).</summary>
+    [TestHook("mail.count")]
+    static int MailCount(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var inv = Mail(target).GetComponent<Container>()?.GetInventory() ?? throw new InvalidOperationException("the box has no inventory");
+        var prefab = S(args, "prefab");
+        return inv.GetAllItems().Where(i => prefab.Length == 0 || PrefabOf(i).Equals(prefab, StringComparison.OrdinalIgnoreCase)).Sum(i => i.m_stack);
+    }
+
+    /// <summary>Take everything out of the box into the inventory (Take all), when the current player may open it. Returns stacks taken, -1 when not allowed.</summary>
+    [TestHook("mail.takeAll")]
+    static int TakeAll(GameObject? target = null)
+    {
+        var box = Mail(target);
+        if (!box.CanOpen(P))
+            return -1;
+        var inv = box.GetComponent<Container>()?.GetInventory() ?? throw new InvalidOperationException("the box has no inventory");
+        var taken = 0;
+        foreach (var item in inv.GetAllItems().ToList())
+        {
+            if (!P.GetInventory().AddItem(item.Clone()))
+                break;
+            inv.RemoveItem(item);
+            taken++;
+        }
+
+        return taken;
+    }
+
+    /// <summary>The mail log: "From: N stacks (note)" newest first.</summary>
+    [TestHook("mail.recent")]
+    static string Recent(GameObject? target = null) =>
+        string.Join(" | ", Mail(target).RecentMail().Select(m => $"{m.From}: {m.Stacks} ({m.Note})"));
+
+    /// <summary>PO boxes a post wall section spawned (target = the section).</summary>
+    [TestHook("mail.sectionBoxes")]
+    static int SectionBoxes(GameObject? target = null)
+    {
+        var section = (target != null ? target.GetComponentInChildren<PostSectionBehaviour>() ?? target.GetComponentInParent<PostSectionBehaviour>() : null)
+                      ?? UnityEngine.Object.FindObjectsOfType<PostSectionBehaviour>().OrderBy(s => Vector3.Distance(s.transform.position, P.transform.position)).FirstOrDefault()
+                      ?? throw new InvalidOperationException("no post wall section nearby");
+        return section.Boxes().Count();
+    }
+
+    /// <summary>Tag the nth PO box of the nearest section for later steps (returns it; use "as").</summary>
+    [TestHook("mail.sectionBox")]
+    static GameObject SectionBox(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var section = (target != null ? target.GetComponentInChildren<PostSectionBehaviour>() : null)
+                      ?? UnityEngine.Object.FindObjectsOfType<PostSectionBehaviour>().OrderBy(s => Vector3.Distance(s.transform.position, P.transform.position)).FirstOrDefault()
+                      ?? throw new InvalidOperationException("no post wall section nearby");
+        var boxes = section.Boxes().ToList();
+        var i = I(args, "index");
+        if (boxes.Count <= i)
+            throw new InvalidOperationException($"the section has {boxes.Count} PO boxes");
+        return boxes[i].gameObject;
+    }
+
+    // ---------- storefront
+
+    /// <summary>Store sign text (the sign window's Save): returns the text stored afterwards.</summary>
+    [TestHook("store.signText")]
+    static string StoreSignText(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var sign = (target != null ? target.GetComponentInChildren<Storefront.TextSignBehaviour>() : null)
+                   ?? UnityEngine.Object.FindObjectsOfType<Storefront.TextSignBehaviour>().OrderBy(s => Vector3.Distance(s.transform.position, P.transform.position)).FirstOrDefault()
+                   ?? throw new InvalidOperationException("no store sign nearby");
+        if (args.ContainsKey("text"))
+        {
+            var style = sign.Stored.Clone();
+            AccessTools.Field(style.GetType(), "Text")?.SetValue(style, S(args, "text"));
+            sign.Save(style);
+        }
+
+        return AccessTools.Field(sign.Stored.GetType(), "Text")?.GetValue(sign.Stored) as string ?? "";
+    }
+
+    [TestHook("store.signIsOpen")]
+    static bool OpenSignIsOpen(GameObject? target = null)
+    {
+        var sign = (target != null ? target.GetComponentInChildren<Storefront.OpenSignBehaviour>() : null)
+                   ?? UnityEngine.Object.FindObjectsOfType<Storefront.OpenSignBehaviour>().FirstOrDefault()
+                   ?? throw new InvalidOperationException("no open sign nearby");
+        return sign.IsOpen;
+    }
+
+    // ---------- buying from customers (buy offers, sell window)
+
+    static ZDO ShopZdo(Container shop) => shop.GetComponent<ZNetView>()?.GetZDO() ?? throw new InvalidOperationException("shop has no ZDO");
+
+    /// <summary>Add a buy offer (manager only): want (prefab), amount per deal, pay (coins), cap (0 = no limit), budget (coins added).</summary>
+    [TestHook("buy.addOffer")]
+    static bool AddOffer(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var shop = Shop(target);
+        if (!ShopState.CanManage(shop, P))
+            return false;
+        var zdo = ShopZdo(shop);
+        global::DrakesItemShop.DisplayCard.BuyOffers.Add(zdo, new global::DrakesItemShop.DisplayCard.BuyOfferEntry(
+            S(args, "want"), Math.Max(1, I(args, "amount", 1)), I(args, "pay", 1), I(args, "cap", 0)));
+        global::DrakesItemShop.DisplayCard.BuyOffers.SetEnabled(zdo, true);
+        if (I(args, "budget", 0) > 0)
+            global::DrakesItemShop.DisplayCard.BuyOffers.AddBudget(zdo, I(args, "budget", 0));
+        return true;
+    }
+
+    /// <summary>Sell to the shop as the current player, through the sell window's own code: offer (index), deals. "" = sold, else the refusal.</summary>
+    [TestHook("buy.sell")]
+    static string Sell(Dictionary<string, object?> args, GameObject? target = null) =>
+        global::DrakesItemShop.DisplayCard.ShopSell.Sell(Shop(target), I(args, "offer", 0), I(args, "deals", 1), P) ?? "";
+
+    [TestHook("buy.budget")]
+    static int Budget(GameObject? target = null) => global::DrakesItemShop.DisplayCard.BuyOffers.Budget(ShopZdo(Shop(target)));
+
+    [TestHook("buy.held")]
+    static int Held(Dictionary<string, object?> args, GameObject? target = null) =>
+        global::DrakesItemShop.DisplayCard.BuyOffers.HeldOf(ShopZdo(Shop(target)), S(args, "prefab"));
+
+    /// <summary>The owner collects bought goods into the inventory (manager only); returns how many.</summary>
+    [TestHook("buy.collect")]
+    static int CollectBought(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var shop = Shop(target);
+        return ShopState.CanManage(shop, P) ? global::DrakesItemShop.DisplayCard.ShopSell.Collect(shop, S(args, "prefab"), P) : -1;
+    }
+
+    /// <summary>Is the hammer piece placeable (in the menu and switched on)?</summary>
+    [TestHook("itemshop.pieceEnabled")]
+    static bool PieceEnabled(Dictionary<string, object?> args)
+    {
+        var go = ZNetScene.instance.GetPrefab(S(args, "prefab"));
+        return go != null && go.GetComponent<global::Piece>() is { } piece && piece.m_enabled;
+    }
 
     /// <summary>May the current player open the shop's chest itself (wards / LockSmith)?</summary>
     [TestHook("itemshop.canOpenChest")]

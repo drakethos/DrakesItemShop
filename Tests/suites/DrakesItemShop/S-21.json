@@ -1,0 +1,76 @@
+{
+  "name": "S-21 drop box works the same",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DropBox",
+      "dz": 2.5,
+      "dx": 0,
+      "as": "box"
+    },
+    {
+      "do": "spawn",
+      "prefab": "guard_stone",
+      "dz": -2,
+      "owner": "Alice",
+      "enabled": true,
+      "radius": 15
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "give",
+      "prefab": "Stone",
+      "count": 5
+    },
+    {
+      "do": "hook",
+      "name": "mail.send",
+      "args": {
+        "target": "box",
+        "prefab": "Stone",
+        "count": 5
+      },
+      "expect": ""
+    },
+    {
+      "do": "hook",
+      "name": "mail.count",
+      "args": {
+        "target": "box",
+        "prefab": "Stone"
+      },
+      "expect": 5
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box"
+      },
+      "expect": false,
+      "label": "not Bob's"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

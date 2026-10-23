@@ -8,6 +8,14 @@
     }
   ],
   "configOverrides": [],
+  "launchConfig": [
+    {
+      "guid": "com.drakesworkshop.itemshop",
+      "section": "08 Experimental",
+      "key": "Post wall and PO boxes",
+      "value": "true"
+    }
+  ],
   "setup": {
     "timeOfDay": 0.5,
     "freezeTime": 1,

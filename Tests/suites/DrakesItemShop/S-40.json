@@ -1,0 +1,128 @@
+{
+  "name": "S-40 buying from customers: offer, budget, sell, collect",
+  "description": "Without a buy crate the goods go straight into the shop chest; with a crate they are held on the card until collected.",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "open for business",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "buy.addOffer",
+      "args": {
+        "target": "shop",
+        "want": "Wood",
+        "amount": 10,
+        "pay": 5,
+        "budget": 20
+      },
+      "expect": true,
+      "label": "Alice buys wood: 10 per deal for 5 coins, budget 20"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "buy.addOffer",
+      "args": {
+        "target": "shop",
+        "want": "Stone",
+        "amount": 1,
+        "pay": 1
+      },
+      "expect": false,
+      "label": "Bob cannot add offers to Alice's shop"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 10
+    },
+    {
+      "do": "hook",
+      "name": "buy.sell",
+      "args": {
+        "target": "shop",
+        "offer": 0,
+        "deals": 1
+      },
+      "expect": "",
+      "label": "Bob sells 10 wood",
+      "stop": true
+    },
+    {
+      "do": "check",
+      "check": "noItem",
+      "prefab": "Wood",
+      "label": "his wood is gone"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Coins",
+      "count": 5,
+      "label": "he got 5 coins"
+    },
+    {
+      "do": "hook",
+      "name": "buy.budget",
+      "args": {
+        "target": "shop"
+      },
+      "expect": 15,
+      "label": "the budget dropped by 5"
+    },
+    {
+      "do": "hook",
+      "name": "buy.held",
+      "args": {
+        "target": "shop",
+        "prefab": "Wood"
+      },
+      "expect": 0,
+      "label": "no buy crate: nothing is held on the card"
+    },
+    {
+      "do": "check",
+      "check": "containerHas",
+      "target": "shop",
+      "prefab": "Wood",
+      "count": 10,
+      "label": "the wood went into the shop chest"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

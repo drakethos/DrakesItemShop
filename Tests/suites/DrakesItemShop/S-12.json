@@ -1,0 +1,236 @@
+{
+  "name": "S-12 every shop piece builds from the hammer (cases, mats, racks)",
+  "description": "Each piece is placed through the build menu (it must be listed and switched on) and removed again.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayCase"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCaseSmall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayCaseSmall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayMat",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayMat"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayMatSmall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayMatSmall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayMatWolf",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayMatWolf"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayMatLox",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayMatLox"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayMatWolfSmall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayMatWolfSmall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayMatLoxSmall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_DisplayMatLoxSmall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_ArmorRack",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_ArmorRack"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_ArmorRackSmall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_ArmorRackSmall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_WeaponRack",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_WeaponRack"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_WeaponRackSmall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_WeaponRackSmall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_WallRack",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_WallRack"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_WallRackSmall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "shop piece: Drake_WallRackSmall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

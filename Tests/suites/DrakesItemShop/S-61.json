@@ -1,0 +1,67 @@
+{
+  "name": "S-61 apron styles are craftable",
+  "description": "",
+  "steps": [
+    {
+      "do": "craft",
+      "prefab": "Drake_ShopApronBlack",
+      "label": "craft Drake_ShopApronBlack"
+    },
+    {
+      "do": "craft",
+      "prefab": "Drake_ShopApronCafe",
+      "label": "craft Drake_ShopApronCafe"
+    },
+    {
+      "do": "craft",
+      "prefab": "Drake_ShopApronGreen",
+      "label": "craft Drake_ShopApronGreen"
+    },
+    {
+      "do": "craft",
+      "prefab": "Drake_ShopApronMerchant",
+      "label": "craft Drake_ShopApronMerchant"
+    },
+    {
+      "do": "craft",
+      "prefab": "Drake_ShopApronRed",
+      "label": "craft Drake_ShopApronRed"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Drake_ShopApronBlack",
+      "label": "Drake_ShopApronBlack made"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Drake_ShopApronCafe",
+      "label": "Drake_ShopApronCafe made"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Drake_ShopApronGreen",
+      "label": "Drake_ShopApronGreen made"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Drake_ShopApronMerchant",
+      "label": "Drake_ShopApronMerchant made"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Drake_ShopApronRed",
+      "label": "Drake_ShopApronRed made"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

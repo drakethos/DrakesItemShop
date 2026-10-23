@@ -1,0 +1,121 @@
+{
+  "name": "S-25 post wall: sections build PO boxes, each with its own owner",
+  "description": "PO boxes are reported glitchy: these checks pin down spawn, ownership and delivery.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_PostSection1x3",
+      "dz": 3,
+      "dx": 0,
+      "as": "section",
+      "label": "build a post wall section (experimental setting on for this suite)"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.0
+    },
+    {
+      "do": "hook",
+      "name": "mail.sectionBoxes",
+      "args": {
+        "target": "section"
+      },
+      "notContains": "0",
+      "label": "the section spawned PO boxes"
+    },
+    {
+      "do": "screenshot",
+      "name": "post-wall"
+    },
+    {
+      "do": "hook",
+      "name": "mail.sectionBox",
+      "args": {
+        "index": 0,
+        "target": "section"
+      },
+      "as": "box0"
+    },
+    {
+      "do": "hook",
+      "name": "mail.sectionBox",
+      "args": {
+        "index": 1,
+        "target": "section"
+      },
+      "as": "box1"
+    },
+    {
+      "do": "hook",
+      "name": "mail.assign",
+      "args": {
+        "target": "box0",
+        "who": "Bob"
+      },
+      "expect": true,
+      "label": "the builder gives box 0 to Bob"
+    },
+    {
+      "do": "playAs",
+      "who": "Carol"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 3
+    },
+    {
+      "do": "hook",
+      "name": "mail.send",
+      "args": {
+        "target": "box0",
+        "prefab": "Wood",
+        "count": 3
+      },
+      "expect": "",
+      "label": "Carol posts to box 0"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box0"
+      },
+      "expect": true,
+      "label": "Bob opens his PO box"
+    },
+    {
+      "do": "hook",
+      "name": "mail.canOpen",
+      "args": {
+        "target": "box1"
+      },
+      "expect": false,
+      "label": "but not the next one"
+    },
+    {
+      "do": "hook",
+      "name": "mail.count",
+      "args": {
+        "target": "box0",
+        "prefab": "Wood"
+      },
+      "expect": 3,
+      "label": "his mail is there"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

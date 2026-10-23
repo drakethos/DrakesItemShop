@@ -1,0 +1,40 @@
+{
+  "name": "S-50 open crates hold items and open for the builder",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_OpenCrate",
+      "dz": 2.5,
+      "dx": 0,
+      "as": "crate"
+    },
+    {
+      "do": "interact",
+      "target": "crate"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "check",
+      "check": "uiVisible",
+      "name": "InventoryGui",
+      "label": "the crate opens"
+    },
+    {
+      "do": "closeUi"
+    },
+    {
+      "do": "screenshot",
+      "name": "open-crate"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

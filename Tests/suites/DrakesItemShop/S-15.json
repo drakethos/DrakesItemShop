@@ -1,0 +1,71 @@
+{
+  "name": "S-15 build costs: needs the materials, uses them up",
+  "description": "Default DisplayCaseCost FineWood:10,JuteRed:2,Crystal:2.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "piece_workbench",
+      "dz": -3,
+      "dx": 3,
+      "as": "bench",
+      "label": "a workbench in range (the shop pieces need one, like a chest)"
+    },
+    {
+      "do": "give",
+      "prefab": "FineWood",
+      "count": 10
+    },
+    {
+      "do": "give",
+      "prefab": "JuteRed",
+      "count": 2
+    },
+    {
+      "do": "give",
+      "prefab": "Crystal",
+      "count": 1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "dx": 0,
+      "as": "case",
+      "label": "one crystal short: refused",
+      "free": false,
+      "expect": false
+    },
+    {
+      "do": "give",
+      "prefab": "Crystal",
+      "count": 1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "dx": 0,
+      "as": "case",
+      "label": "with the full cost it builds",
+      "free": false
+    },
+    {
+      "do": "check",
+      "check": "noItem",
+      "prefab": "FineWood",
+      "label": "fine wood used"
+    },
+    {
+      "do": "check",
+      "check": "noItem",
+      "prefab": "Crystal",
+      "label": "crystal used"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

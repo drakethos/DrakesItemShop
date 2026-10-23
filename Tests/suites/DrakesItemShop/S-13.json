@@ -1,0 +1,252 @@
+{
+  "name": "S-13 every other ItemShop piece builds (mail, storefront, crates, mats)",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_Mailbox",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_Mailbox"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DropBox",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_DropBox"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_StoreSign",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_StoreSign"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_OpenSign",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_OpenSign"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DoorBell",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_DoorBell"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DeskBell",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_DeskBell"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_TradeCounter",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_TradeCounter"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_OpenCrate",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_OpenCrate"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_OpenCrateSmallLow",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_OpenCrateSmallLow"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_OpenCrateBigLow",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_OpenCrateBigLow"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_OpenCrateTall",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_OpenCrateTall"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_JuteMat",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_JuteMat"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DeerMat",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_DeerMat"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_WolfMat",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_WolfMat"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_LoxMat",
+      "dz": 3,
+      "dx": 0,
+      "as": "p",
+      "label": "piece: Drake_LoxMat"
+    },
+    {
+      "do": "destroy",
+      "target": "p"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.1
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

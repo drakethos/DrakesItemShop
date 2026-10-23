@@ -1,0 +1,86 @@
+{
+  "name": "S-31 Store Sign text and bells",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_StoreSign",
+      "dz": 2.5,
+      "dx": 0,
+      "as": "store"
+    },
+    {
+      "do": "hook",
+      "name": "store.signText",
+      "args": {
+        "target": "store",
+        "text": "Drake's Goods"
+      },
+      "expect": "Drake's Goods",
+      "label": "set the sign text (sign window Save)"
+    },
+    {
+      "do": "screenshot",
+      "name": "store-sign"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DeskBell",
+      "dz": 2.5,
+      "dx": 1.5,
+      "as": "desk"
+    },
+    {
+      "do": "interact",
+      "target": "desk"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.3
+    },
+    {
+      "do": "check",
+      "check": "lastResult",
+      "expect": true,
+      "label": "E rings the desk bell"
+    },
+    {
+      "do": "place",
+      "prefab": "wood_door",
+      "dz": 3,
+      "dx": -2,
+      "as": "door"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DoorBell",
+      "dz": 3,
+      "dx": -3,
+      "as": "doorbell"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.3
+    },
+    {
+      "do": "interact",
+      "target": "door"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.6
+    },
+    {
+      "do": "check",
+      "check": "message",
+      "contains": "customer",
+      "label": "opening a nearby door rings the door bell"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

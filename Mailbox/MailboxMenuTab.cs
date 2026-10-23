@@ -160,7 +160,7 @@ internal static class MailboxMenuTab
             foreach (var other in Trade.TradeNet.Nearby().Take(5))
             {
                 var captured = other;
-                row.Add(AssignButton(other.GetPlayerName(), () => { mail.Assign(captured.GetZDOID().UserID, captured.GetPlayerName()); ctx.Rebuild(); }));
+                row.Add(AssignButton(other.GetPlayerName(), () => { mail.Assign(captured.GetPlayerID(), captured.GetPlayerName()); ctx.Rebuild(); }));
             }
             if (assigned)
                 row.Add(AssignButton("Clear", () => { mail.ClearAssignee(); ctx.Rebuild(); }));

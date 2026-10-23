@@ -132,9 +132,40 @@ internal static class ShopState
     public static int Till(Container container) =>
         View(container) is { } nview && nview.IsValid() ? nview.GetZDO().GetInt(TillKey) : 0;
 
-    /// <summary>Whether this player may open the chest itself (wards and LockSmith included). The game keeps CheckAccess protected, hence reflection.</summary>
+    /// <summary>
+    /// Whether this player may open the chest itself (wards and LockSmith included), as Container.Interact decides: the chest's own
+    /// access (CheckAccess, protected in the game, hence reflection) and the ward it stands in.
+    /// </summary>
     public static bool CanOpen(Container container, Player player) =>
-        CheckAccess == null || (bool)CheckAccess.Invoke(container, new object[] { player.GetPlayerID() });
+        (CheckAccess == null || (bool)CheckAccess.Invoke(container, new object[] { player.GetPlayerID() })) && PassesWard(container, player);
+
+    /// <summary>
+    /// The ward part of opening a chest: skipped when the chest doesn't check wards (LockSmith public turns that off) or the player
+    /// is a LockSmith guest of it; otherwise the ward decides. Not used for running a shop: public chests and guests don't manage.
+    /// </summary>
+    public static bool PassesWard(Container container, Player player) =>
+        !container.m_checkGuardStone || (player == Player.m_localPlayer && LockSmithGuest(container)) || WardAllows(container, player);
+
+    private static System.Reflection.MethodInfo? _lockSmithGuest;
+    private static bool _lockSmithGuestLooked;
+
+    /// <summary>LockSmith (when installed) lets its guests past the ward: PieceGuestService.ShouldBypassWardForGuest, read by reflection.</summary>
+    private static bool LockSmithGuest(Container container)
+    {
+        if (!_lockSmithGuestLooked)
+        {
+            _lockSmithGuestLooked = true;
+            _lockSmithGuest = System.Type.GetType("LockSmith.Access.PieceGuestService, LockSmith")?.GetMethod("ShouldBypassWardForGuest", new[] { typeof(Container) });
+        }
+        try
+        {
+            return _lockSmithGuest != null && (bool)_lockSmithGuest.Invoke(null, new object[] { container });
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     private static bool AreaEnabled(PrivateArea area) =>
         AreaIsEnabled != null && (bool)AreaIsEnabled.Invoke(area, null);

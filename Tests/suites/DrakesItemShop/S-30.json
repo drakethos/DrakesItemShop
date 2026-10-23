@@ -1,0 +1,69 @@
+{
+  "name": "S-30 Open Sign flips OPEN / CLOSED",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_OpenSign",
+      "dz": 2.5,
+      "dx": 0,
+      "as": "sign"
+    },
+    {
+      "do": "hook",
+      "name": "store.signIsOpen",
+      "args": {
+        "target": "sign"
+      },
+      "expect": true,
+      "label": "starts OPEN"
+    },
+    {
+      "do": "interact",
+      "target": "sign"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.3
+    },
+    {
+      "do": "hook",
+      "name": "store.signIsOpen",
+      "args": {
+        "target": "sign"
+      },
+      "expect": false,
+      "label": "E turns it CLOSED"
+    },
+    {
+      "do": "check",
+      "check": "hoverText",
+      "target": "sign",
+      "contains": "CLOSED",
+      "label": "the hover says closed"
+    },
+    {
+      "do": "interact",
+      "target": "sign"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.3
+    },
+    {
+      "do": "hook",
+      "name": "store.signIsOpen",
+      "args": {
+        "target": "sign"
+      },
+      "expect": true,
+      "label": "and back to OPEN"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

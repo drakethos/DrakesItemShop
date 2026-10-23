@@ -1,0 +1,108 @@
+{
+  "name": "S-26 post wall: boxes survive logging out and in; removing the section removes its boxes",
+  "description": "Duplicate or orphaned PO boxes are the classic post-wall glitch.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_PostSection1x3",
+      "dz": 3,
+      "dx": 0,
+      "as": "section",
+      "keep": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.0
+    },
+    {
+      "do": "hook",
+      "name": "mail.sectionBox",
+      "args": {
+        "index": 0,
+        "target": "section"
+      },
+      "as": "box0"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 4
+    },
+    {
+      "do": "hook",
+      "name": "mail.send",
+      "args": {
+        "target": "box0",
+        "prefab": "Wood",
+        "count": 4
+      },
+      "expect": ""
+    },
+    {
+      "do": "hook",
+      "name": "mail.sectionBoxes",
+      "args": {
+        "target": "section"
+      },
+      "label": "boxes before the relog (informational)"
+    },
+    {
+      "do": "relog",
+      "timeout": 240
+    },
+    {
+      "do": "hook",
+      "name": "mail.sectionBoxes",
+      "args": {
+        "target": "section"
+      },
+      "notContains": "0",
+      "label": "the same number of boxes after the relog (no duplicates, none lost)"
+    },
+    {
+      "do": "hook",
+      "name": "mail.count",
+      "args": {
+        "target": "box0",
+        "prefab": "Wood"
+      },
+      "expect": 4,
+      "label": "the mail is still in box 0"
+    },
+    {
+      "do": "destroy",
+      "target": "section"
+    },
+    {
+      "do": "wait",
+      "timeout": 15,
+      "until": {
+        "check": "objectNear",
+        "target": "Drake_POBox",
+        "radius": 6,
+        "expect": false
+      }
+    },
+    {
+      "do": "check",
+      "check": "objectNear",
+      "target": "Drake_POBox",
+      "radius": 6,
+      "expect": false,
+      "label": "no PO box is left behind (boxes remove themselves a few seconds after their section)"
+    },
+    {
+      "do": "check",
+      "check": "objectNear",
+      "target": "Wood",
+      "radius": 6,
+      "label": "the mail in box 0 dropped on the ground, not lost"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}
