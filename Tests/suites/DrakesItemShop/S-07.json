@@ -1,0 +1,95 @@
+{
+  "name": "S-07 no room in the buyer's inventory",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "prefab": "SwordBronze",
+        "count": 1,
+        "price": "c:20",
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "stock 1 SwordBronze at c:20",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "open for business",
+      "stop": true
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "give",
+      "prefab": "Coins",
+      "count": 20
+    },
+    {
+      "do": "give",
+      "prefab": "Stone",
+      "count": 1550
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.buy",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      },
+      "expect": "No room in your inventory."
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Coins",
+      "count": 20,
+      "label": "coins not taken"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stockCount",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      },
+      "expect": 1,
+      "label": "still on the shelf"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

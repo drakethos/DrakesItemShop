@@ -1,0 +1,104 @@
+{
+  "name": "S-05 alternative payments (coins OR iron)",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "prefab": "SwordBronze",
+        "count": 2,
+        "price": "c:50|Iron:2",
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "stock 2 SwordBronze at c:50|Iron:2",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "open for business",
+      "stop": true
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "give",
+      "prefab": "Iron",
+      "count": 2
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.buy",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze",
+        "option": 1
+      },
+      "expect": "",
+      "label": "pays with the second option (2 iron)"
+    },
+    {
+      "do": "check",
+      "check": "noItem",
+      "prefab": "Iron",
+      "label": "iron spent"
+    },
+    {
+      "do": "give",
+      "prefab": "Coins",
+      "count": 50
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.buy",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze",
+        "option": 0
+      },
+      "expect": "",
+      "label": "or with the first (50 coins)"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "SwordBronze",
+      "count": 2,
+      "label": "two swords bought"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

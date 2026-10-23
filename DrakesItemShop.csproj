@@ -32,6 +32,7 @@
     <Compile Include="Config\ItemShopConfig.cs" />
     <Compile Include="Data\ShopDataKeys.cs" />
     <Compile Include="ItemShopPlugin.cs" />
+    <Compile Include="Testing\ItemShopTestHooks.cs" />
     <Compile Include="Localization\ItemShopLocalization.cs" />
     <Compile Include="Data\ShopPieceCategories.cs" />
     <Compile Include="Patches\PieceBuildGatePatch.cs" />

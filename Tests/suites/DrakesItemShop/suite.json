@@ -1,0 +1,19 @@
+{
+  "name": "DrakesItemShop",
+  "description": "Automated regression for Drake's ItemShop: a test shop next to the house (display case, rack, mat) stocked and opened by Alice, bought from by Bob through the buy window's own purchase code: coins, barter, alternative payments, lots, refusals, till, sales log, collecting and who may run a shop.",
+  "requireMods": [
+    {
+      "guid": "com.drakesworkshop.itemshop",
+      "minVersion": "0.4.0"
+    }
+  ],
+  "configOverrides": [],
+  "setup": {
+    "timeOfDay": 0.5,
+    "freezeTime": 1,
+    "god": 1,
+    "noBuild": "off",
+    "hideUnlockPopups": 1
+  },
+  "resetBetweenTests": true
+}

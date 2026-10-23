@@ -1,0 +1,188 @@
+{
+  "name": "S-02 buy for coins: stock, till, sales log, collect",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "prefab": "SwordBronze",
+        "count": 1,
+        "price": "c:20",
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "stock 1 SwordBronze at c:20",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "open for business",
+      "stop": true
+    },
+    {
+      "do": "screenshot",
+      "name": "stocked"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.canManage",
+      "args": {
+        "target": "shop"
+      },
+      "expect": false,
+      "label": "a customer cannot run the shop"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.buy",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      },
+      "expect": "You can't afford that payment.",
+      "label": "no coins, no sale"
+    },
+    {
+      "do": "give",
+      "prefab": "Coins",
+      "count": 20
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.buy",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      },
+      "expect": "",
+      "label": "Bob buys the sword",
+      "stop": true
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "SwordBronze",
+      "label": "the sword is in Bob's inventory"
+    },
+    {
+      "do": "check",
+      "check": "noItem",
+      "prefab": "Coins",
+      "label": "his 20 coins are gone"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stockCount",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      },
+      "expect": 0,
+      "label": "sold out"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.till",
+      "args": {
+        "target": "shop"
+      },
+      "expect": 20,
+      "label": "the till holds 20 coins"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.sales",
+      "args": {
+        "target": "shop"
+      },
+      "contains": "Bob",
+      "label": "the sale is logged with the buyer"
+    },
+    {
+      "do": "check",
+      "check": "message",
+      "contains": "Bought",
+      "label": "the buyer is told"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.collect",
+      "args": {
+        "target": "shop"
+      },
+      "expect": -1,
+      "label": "Bob cannot collect the till"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.collect",
+      "args": {
+        "target": "shop"
+      },
+      "expect": 20,
+      "label": "Alice collects 20 coins"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Coins",
+      "count": 20,
+      "label": "into her inventory"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.till",
+      "args": {
+        "target": "shop"
+      },
+      "expect": 0,
+      "label": "till empty"
+    },
+    {
+      "do": "check",
+      "check": "logContains",
+      "text": "open for business = True",
+      "label": "the shop logged opening"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

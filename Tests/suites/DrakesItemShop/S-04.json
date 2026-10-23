@@ -1,0 +1,105 @@
+{
+  "name": "S-04 barter for items",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "prefab": "SwordBronze",
+        "count": 1,
+        "price": "Wood:10",
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "stock 1 SwordBronze at Wood:10",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "open for business",
+      "stop": true
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 9
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.buy",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      },
+      "notContains": "Bought",
+      "label": "9 wood is not enough"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 1
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.buy",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      },
+      "expect": "",
+      "label": "pays 10 wood"
+    },
+    {
+      "do": "check",
+      "check": "noItem",
+      "prefab": "Wood",
+      "label": "wood handed over"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stockCount",
+      "args": {
+        "target": "shop",
+        "prefab": "Wood"
+      },
+      "expect": 10,
+      "label": "the wood is now in the shop"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

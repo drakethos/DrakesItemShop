@@ -1,0 +1,121 @@
+{
+  "name": "S-10 who may run a shop",
+  "description": "",
+  "steps": [
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "spawn",
+      "prefab": "guard_stone",
+      "dz": -2,
+      "owner": "Alice",
+      "enabled": true,
+      "radius": 15,
+      "permitted": [
+        "Carol"
+      ]
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "prefab": "SwordBronze",
+        "count": 1,
+        "price": "c:20",
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "stock 1 SwordBronze at c:20",
+      "stop": true
+    },
+    {
+      "do": "playAs",
+      "who": "Carol"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.canManage",
+      "args": {
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "a player permitted on the ward may run it"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "expect": true,
+      "label": "and open it"
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.canManage",
+      "args": {
+        "target": "shop"
+      },
+      "expect": false,
+      "label": "a stranger may not"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.setPrice",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze",
+        "price": "c:1"
+      },
+      "expect": false,
+      "label": "or change prices"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": false
+      },
+      "expect": false,
+      "label": "or close it"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.isOpen",
+      "args": {
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "still open"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

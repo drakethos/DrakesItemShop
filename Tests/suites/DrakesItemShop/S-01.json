@@ -1,0 +1,40 @@
+{
+  "name": "S-01 build a display case with the hammer",
+  "description": "Real placement from the build menu (free).",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "as": "shop"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.canManage",
+      "args": {
+        "target": "shop"
+      },
+      "expect": true,
+      "label": "the builder runs the shop"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.isOpen",
+      "args": {
+        "target": "shop"
+      },
+      "expect": false,
+      "label": "a new shop starts closed"
+    },
+    {
+      "do": "screenshot",
+      "name": "display-case"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}
