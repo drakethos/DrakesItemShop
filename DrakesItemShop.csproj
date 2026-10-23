@@ -24,6 +24,9 @@
     <Reference Include="Jotunn"><HintPath>packages\JotunnLib.2.26.1\lib\net462\Jotunn.dll</HintPath></Reference>
     <Reference Include="Newtonsoft.Json"><HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath><Private>True</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(CorlibPath)\UnityEngine.CoreModule.dll</HintPath></Reference>
+    <Reference Condition="Exists('$(CorlibPath)\netstandard.dll')" Include="netstandard"><HintPath>$(CorlibPath)\netstandard.dll</HintPath><Private>False</Private></Reference>
+    <Reference Condition="Exists('$(CorlibPath)\UnityEngine.AudioModule.dll')" Include="UnityEngine.AudioModule"><HintPath>$(CorlibPath)\UnityEngine.AudioModule.dll</HintPath></Reference>
+    <Reference Condition="Exists('$(CorlibPath)\UnityEngine.PhysicsModule.dll')" Include="UnityEngine.PhysicsModule"><HintPath>$(CorlibPath)\UnityEngine.PhysicsModule.dll</HintPath></Reference>
     <Reference Include="UnityEngine.UI"><HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath></Reference>
     <Reference Include="UnityEngine.TextMeshPro"><HintPath>$(CorlibPath)\Unity.TextMeshPro.dll</HintPath></Reference>
     <Reference Include="System" /><Reference Include="System.Core" />
@@ -32,7 +35,7 @@
     <Compile Include="Config\ItemShopConfig.cs" />
     <Compile Include="Data\ShopDataKeys.cs" />
     <Compile Include="ItemShopPlugin.cs" />
-    <Compile Include="Testing\ItemShopTestHooks.cs" />
+    <Compile Include="Testing\ItemShopTestHooks.cs" Condition="'$(Configuration)' == 'Debug'" />
     <Compile Include="Localization\ItemShopLocalization.cs" />
     <Compile Include="Data\ShopPieceCategories.cs" />
     <Compile Include="Patches\PieceBuildGatePatch.cs" />
@@ -83,6 +86,23 @@
     <Compile Include="OpenCrate\OpenCrateBehaviour.cs" />
     <Compile Include="OpenCrate\OpenCrateShell.cs" />
     <Compile Include="OpenCrate\OpenCratePiece.cs" />
+    <Compile Include="Apron\ApronItem.cs" />
+    <Compile Include="Apron\ApronArt.cs" />
+    <Compile Include="Apron\ApronBody.cs" />
+    <Compile Include="Apron\ApronTuning.cs" />
+    <Compile Include="Apron\ApronTuner.cs" />
+    <Compile Include="Apron\ApronAutoFit.cs" />
+    <Compile Include="Apron\ApronStyles.cs" />
+    <Compile Include="Storefront\StorefrontModel.cs" />
+    <Compile Include="Storefront\StorefrontAudio.cs" />
+    <Compile Include="Storefront\StorefrontUse.cs" />
+    <Compile Include="Storefront\StorefrontSettings.cs" />
+    <Compile Include="Storefront\StorefrontPieces.cs" />
+    <Compile Include="Storefront\TextSignBehaviour.cs" />
+    <Compile Include="Storefront\TextSignWindow.cs" />
+    <Compile Include="Storefront\OpenSignBehaviour.cs" />
+    <Compile Include="Storefront\BellBehaviours.cs" />
+    <Compile Include="Storefront\TradeCounterBehaviour.cs" />
     <Compile Include="Pieces\Layout\DisplayLayoutTab.cs" />
     <Compile Include="Pieces\Layout\FreeLayoutBoard.cs" />
     <Compile Include="Pieces\Layout\SlotLayoutBoard.cs" />
@@ -136,5 +156,8 @@
     <!-- Open crates (Forge/OpenCrate) — temp purchase stock containers. -->
     <EmbeddedResource Include="OpenCrate\Generated\Assets\**\*.glb" />
     <EmbeddedResource Include="OpenCrate\Generated\Assets\**\*.png" />
+    <!-- Storefront: sign, bell and counter models (Forge/Storefront) and the bell / register / sign sounds. -->
+    <EmbeddedResource Include="Storefront\Generated\Assets\**\*.glb" />
+    <EmbeddedResource Include="Storefront\Sounds\*.wav" />
   </ItemGroup>
 </Project>

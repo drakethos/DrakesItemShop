@@ -1,4 +1,13 @@
-﻿# Changelog
+# Changelog
+
+## 0.5.0
+
+Release of the 0.5.0 beta, Hexium only. Requires **DrakeModsLibs 1.0.0**.
+
+- **Storefront pieces:** Store Sign (hanging sign; text edited in a rich-text window with fonts, colours, outline, size and both faces), Open Sign (E flips OPEN / CLOSED), Door Bell (jingles and shows "A customer has arrived" when a nearby door opens), Desk Bell (E rings it for everyone nearby) and Trade Counter (two-sided counter: E starts a trade with the person across it, the register chest holds stock and takings, a sale rings the till). New local settings in `08 Storefront`.
+- **Shopkeeper's Apron:** a cape-slot cosmetic (worn over armor, other players see it too) with a linen bib and skirt, leather waistband and crossed straps, built on your body when you wear it. Gives "Open for business" (+50 carry weight). Workbench: Linen Thread 6, Leather Scraps 4, Bronze Nails 2.
+- Bells use a real bell recording; Open Sign letters no longer stretch.
+- Automated tests (DrakesTestLab suite in `Tests/`, test hooks in Debug builds only); not part of the release.
 
 ## 0.5.0-beta.1
 

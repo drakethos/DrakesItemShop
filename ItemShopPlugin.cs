@@ -41,10 +41,13 @@ public partial class ItemShopPlugin : BaseUnityPlugin
     private void Update()
     {
         Trade.TradeKey.Update();
+        Apron.ApronTuner.Tick();
         Pricing.PriceLedger.Poll();
         Pricing.ShopServer.Tick();
         Pricing.ShopState.TickPendingSaves();
     }
+
+    private void OnGUI() => Apron.ApronTuner.Draw();
 
     private static void RegisterWhenPrefabsReady()
     {

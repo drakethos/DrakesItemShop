@@ -1,0 +1,43 @@
+{
+  "id": "drakesis_door_bell",
+  "kind": "piece",
+  "base": "ashwood_arch_big",
+  "name": "Door Bell",
+  "description": "Tells you when customers come in",
+  "look": {
+    "mesh": {
+      "file": "models/door_bell.glb"
+    },
+    "materials": [
+      {
+        "target": "Bronze_mat",
+        "from": {
+          "prefab": "BronzeNails",
+          "material": "bronzenails"
+        }
+      },
+      {
+        "target": "Crate_mat",
+        "from": {
+          "prefab": "dvergrprops_crate",
+          "material": "Crate_mat"
+        }
+      }
+    ]
+  },
+  "craft": {
+    "station": "workbench",
+    "tool": "Hammer",
+    "category": "Building",
+    "requirements": [
+      {
+        "item": "Wood",
+        "amount": 10
+      },
+      {
+        "item": "Bronze",
+        "amount": 1
+      }
+    ]
+  }
+}

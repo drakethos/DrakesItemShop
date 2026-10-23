@@ -60,6 +60,9 @@ internal sealed class TradeSession
     /// <summary>Anything on screen may need redrawing.</summary>
     public event Action? Changed;
 
+    /// <summary>A trade finished (either way it can: server-settled or direct). Raised once per session, on this client.</summary>
+    internal static event Action<TradeSession>? Completed;
+
     public TradeSession(ITradePartner partner) => Partner = partner;
 
     public bool Locked => Done || Cancelled || Settling;
@@ -261,6 +264,7 @@ internal sealed class TradeSession
         Done = true;
         Message = "Trade complete.";
         Changed?.Invoke();
+        Completed?.Invoke(this);
     }
 
     /// <summary>The server dropped the trade, or didn't answer: nothing was taken. Accepts are cleared so either side can try again or cancel.</summary>
@@ -300,5 +304,6 @@ internal sealed class TradeSession
         Done = true;
         Message = "Trade complete.";
         Changed?.Invoke();
+        Completed?.Invoke(this);
     }
 }

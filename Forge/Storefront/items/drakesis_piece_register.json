@@ -1,0 +1,81 @@
+{
+  "id": "drakesis_piece_register",
+  "kind": "piece",
+  "base": "piece_chest",
+  "name": "Cash Register",
+  "description": "Its a cash register not sure how to use this thing",
+  "look": {
+    "mesh": {
+      "file": "models/tradebox.glb"
+    },
+    "materials": [
+      {
+        "target": "Bead_mat",
+        "from": {
+          "prefab": "AncientGemstoneGreen",
+          "material": "ancient_gemstone_green_mat"
+        }
+      },
+      {
+        "target": "Crate_mat",
+        "from": {
+          "prefab": "dvergrprops_crate",
+          "material": "Crate_mat"
+        }
+      },
+      {
+        "target": "Iron_mat",
+        "from": {
+          "prefab": "IronNails",
+          "material": "ironnails"
+        }
+      },
+      {
+        "target": "Bronze_mat",
+        "from": {
+          "prefab": "BronzeNails",
+          "material": "bronzenails"
+        }
+      },
+      {
+        "target": "Gold_mat",
+        "from": {
+          "prefab": "Coins",
+          "material": "coin"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [0, 0.48, 0],
+      "size": [1.2, 0.96, 0.676]
+    }
+  },
+  "craft": {
+    "tool": "Hammer",
+    "category": "Furniture",
+    "requirements": [
+      {
+        "item": "FineWood",
+        "amount": 20
+      },
+      {
+        "item": "nail",
+        "amount": 4
+      },
+      {
+        "item": "Coins",
+        "amount": 10
+      }
+    ]
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [-0.6, 0, -0.338],
+      [0.6, 0, -0.338],
+      [0.6, 0, 0.338],
+      [-0.6, 0, 0.338]
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "drakesis_open_sign_copy",
+  "kind": "piece",
+  "base": "sign",
+  "name": "Store Sign",
+  "description": "Store Sign",
+  "look": {
+    "mesh": {
+      "file": "models/sign_runes.glb"
+    },
+    "materials": [
+      {
+        "target": "Metal_mat",
+        "from": {
+          "prefab": "bar_iron_stack",
+          "material": "iron"
+        },
+        "tint": "#8A5A28"
+      },
+      {
+        "target": "Chain_mat",
+        "from": {
+          "prefab": "bar_iron_stack",
+          "material": "iron"
+        },
+        "tint": "#B0B8C0"
+      },
+      {
+        "target": "Rune_dark_mat",
+        "tint": "#7FB2E5"
+      },
+      {
+        "target": "Rune_glow_mat",
+        "tint": "#7FB2E5"
+      },
+      {
+        "target": "Crate_mat",
+        "from": {
+          "prefab": "dvergrprops_crate",
+          "material": "Crate_mat"
+        }
+      },
+      {
+        "target": "glb default",
+        "from": {
+          "prefab": "wood_floor",
+          "material": "woodwall"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [0.625, -0.18, 0],
+      "size": [1.25, 0.96, 0.09]
+    }
+  },
+  "craft": {
+    "tool": "Hammer",
+    "category": "Furniture",
+    "requirements": [
+      {
+        "item": "Wood",
+        "amount": 10
+      },
+      {
+        "item": "Coal",
+        "amount": 1
+      },
+      {
+        "item": "Chain",
+        "amount": 2
+      }
+    ]
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [0, 0.3, -0.045],
+      [0, 0.3, 0.045],
+      [0, -0.3, 0.045],
+      [0, -0.3, -0.045]
+    ]
+  }
+}

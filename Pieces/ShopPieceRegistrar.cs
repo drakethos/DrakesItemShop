@@ -26,6 +26,10 @@ internal static class ShopPieceRegistrar
         Mats.MatPiece.Register();
         Mail.PostWallPiece.RegisterAll();
         OpenCrate.OpenCratePiece.RegisterAll();
+        Storefront.StorefrontPieces.RegisterAll();
+        Apron.ApronItem.Register();
+        Trade.TradeSession.Completed -= Storefront.TradeCounterBehaviour.OnTradeCompleted;
+        Trade.TradeSession.Completed += Storefront.TradeCounterBehaviour.OnTradeCompleted;
     }
 
     public static bool IsDrakeShopPiece(string? prefabName)
@@ -45,6 +49,7 @@ internal static class ShopPieceRegistrar
                Mats.MatPiece.IsMat(prefabName) ||
                Mail.PostWallPiece.IsPostWall(prefabName) ||
                OpenCrate.OpenCratePiece.IsOpenCrate(prefabName) ||
+               Storefront.StorefrontPieces.IsStorefrontPiece(prefabName) ||
                System.Array.Exists(ItemRackPiece.Variants, v => v.Name == prefabName);
     }
 }

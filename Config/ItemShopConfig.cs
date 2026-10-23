@@ -66,6 +66,8 @@ internal static class ItemShopConfig
         Trade.TradeSettings.Bind(config);
         Pricing.PriceLedgerSettings.Bind(config);
         Mail.MailboxSettings.Bind(config);
+        Storefront.StorefrontSettings.Bind(config);
+        Apron.ApronSettings.Bind(config);
         Mail.PostWallPiece.Bind(config);
         _enabled = config.Bind(SectionGeneral, "Enabled", true, "Enable DrakesItemShop features.");
         _lockSyncedConfig = ConfigSync.BindSynced(

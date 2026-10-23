@@ -1,0 +1,57 @@
+{
+  "id": "drakesis_piece_desk_bell",
+  "kind": "piece",
+  "base": "piece_jackoturnip",
+  "name": "Desk Bell",
+  "description": "Ding im here come help me",
+  "look": {
+    "mesh": {
+      "file": "models/desk_bell.glb"
+    },
+    "materials": [
+      {
+        "target": "Bronze_mat",
+        "from": {
+          "prefab": "BronzeNails",
+          "material": "bronzenails"
+        }
+      },
+      {
+        "target": "Crate_mat",
+        "from": {
+          "prefab": "dvergrprops_crate",
+          "material": "Crate_mat"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [0, 0.07, 0],
+      "size": [0.162, 0.14, 0.17]
+    }
+  },
+  "craft": {
+    "tool": "Hammer",
+    "category": "Furniture",
+    "requirements": [
+      {
+        "item": "Wood",
+        "amount": 2
+      },
+      {
+        "item": "Bronze",
+        "amount": 1,
+        "recover": false
+      }
+    ]
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [-0.081, 0, -0.085],
+      [0.081, 0, -0.085],
+      [0.081, 0, 0.085],
+      [-0.081, 0, 0.085]
+    ]
+  }
+}

@@ -50,6 +50,23 @@ internal static class ItemShopLocalization
         loc.AddToken("drake_opencrate_biglow_desc", "Long low crate 2×1×½ (4×2 slots). Stock shows as models inside.");
         loc.AddToken("drake_opencrate_tall_name", "Open Crate (Tall)");
         loc.AddToken("drake_opencrate_tall_desc", "Open crate 1×1×1½ (2×4 slots). Stock stacks up as models inside.");
+        loc.AddToken("drake_storesign_name", "Store Sign");
+        loc.AddToken("drake_storesign_desc", "A bracket sign on chains. Press E to write on it: rich text, fonts, colours and outline, on both faces.");
+        foreach (var apron in Apron.ApronStyles.All)
+        {
+            loc.AddToken(apron.PrefabName.ToLowerInvariant() + "_name", apron.Name);
+            loc.AddToken(apron.PrefabName.ToLowerInvariant() + "_desc", apron.Description);
+        }
+        loc.AddToken("drake_shopapron_effect", "Open for business");
+        loc.AddToken("drake_shopapron_effect_tip", "Carry a little more: +50 carry weight.");
+        loc.AddToken("drake_opensign_name", "Open Sign");
+        loc.AddToken("drake_opensign_desc", "A door sign that flips between OPEN and CLOSED when you press E.");
+        loc.AddToken("drake_doorbell_name", "Door Bell");
+        loc.AddToken("drake_doorbell_desc", "A bell on a bracket by the door. When a nearby door opens it jingles and tells you \"A customer has arrived\".");
+        loc.AddToken("drake_deskbell_name", "Desk Bell");
+        loc.AddToken("drake_deskbell_desc", "Press E to ring for service. Everyone nearby hears it and sees who is waiting.");
+        loc.AddToken("drake_tradecounter_name", "Trade Counter");
+        loc.AddToken("drake_tradecounter_desc", "A two-sided counter for selling in person: shopkeeper behind it, customer in front. Press E to start a trade with whoever is across; a sale rings the till. The register chest holds stock and takings.");
         loc.AddToken("drake_pobox_name", "PO Box");
         loc.AddToken("drake_pobox_desc", "A lockable post box, built into a post wall. Anyone may post mail through the slot; only its owner (and whoever they add) can open the door.");
         loc.AddToken("drake_postwall_1x1_name", "Post Wall (1 box)");
