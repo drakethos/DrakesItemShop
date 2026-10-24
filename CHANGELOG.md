@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.1
+
+Hexium only. Requires **DrakeModsLibs 1.0.0**.
+
+- **Fixed (mailboxes):** a mailbox outside a ward never warned that anyone can open its back door; it does now ("Not in a ward: anyone can open this back", and the Mail tab says so).
+- **Fixed (PO boxes):** assigning a PO box to a nearby player from the Mail tab saved the wrong id, so that player could not open their own box in multiplayer.
+- **Fixed:** `AdminOnlyBuildPieces` did nothing on the current game version; non-admins are now stopped from building Drake Shop pieces when it is on.
+- **Fixed (chest access):** who may open a shop's or mailbox's chest now follows the ward, LockSmith public and LockSmith guests, the same way pressing E does. Running a shop still needs the ward (a public chest or a guest does not get the Shop controls).
+- Comprehensive DrakesTestLab suite in `Tests/` (not part of the release).
+
 ## 0.5.0
 
 Release of the 0.5.0 beta, Hexium only. Requires **DrakeModsLibs 1.0.0**.
