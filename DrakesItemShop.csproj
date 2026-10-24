@@ -90,8 +90,8 @@
     <Compile Include="Apron\ApronArt.cs" />
     <Compile Include="Apron\ApronBody.cs" />
     <Compile Include="Apron\ApronTuning.cs" />
-    <Compile Include="Apron\ApronTuner.cs" />
-    <Compile Include="Apron\ApronAutoFit.cs" />
+    <Compile Include="Apron\ApronTuner.cs" Condition="'$(Configuration)' == 'Debug'" />
+    <Compile Include="Apron\ApronAutoFit.cs" Condition="'$(Configuration)' == 'Debug'" />
     <Compile Include="Apron\ApronStyles.cs" />
     <Compile Include="Storefront\StorefrontModel.cs" />
     <Compile Include="Storefront\StorefrontAudio.cs" />

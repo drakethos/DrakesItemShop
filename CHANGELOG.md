@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.2
+
+Hexium only. Requires **DrakeModsLibs 1.0.0**.
+
+- **Fixed:** the apron fitting-room helper (F8 overlay and Auto-fit) was never meant to ship and is no longer part of release builds. It is kept in the source for Debug builds only.
+
 ## 0.5.1
 
 Hexium only. Requires **DrakeModsLibs 1.0.0**.
