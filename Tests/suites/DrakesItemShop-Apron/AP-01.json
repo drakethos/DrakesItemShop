@@ -1,0 +1,394 @@
+{
+  "name": "AP-01 auto-fit the apron to the body",
+  "timeout": 600,
+  "steps": [
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApron",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.begin",
+      "label": "start"
+    },
+    {
+      "do": "log",
+      "message": "before"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 1.1,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a0-before-front"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 1.1,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a0-before-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 180,
+        "focus": 1.1,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a0-before-back"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a0-before-threeq"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 1.0,
+        "dist": 1.5,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a0-before-closeFront"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 8
+      },
+      "label": "pass 1 x8"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 1"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 8
+      },
+      "label": "pass 2 x8"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 2"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a2-pass-threeq"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 4
+      },
+      "label": "pass 3 x4"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 3"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 4
+      },
+      "label": "pass 4 x4"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 4"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a4-pass-threeq"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 2
+      },
+      "label": "pass 5 x2"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 5"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 2
+      },
+      "label": "pass 6 x2"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 6"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "a6-pass-threeq"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 1
+      },
+      "label": "pass 7 x1"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 7"
+    },
+    {
+      "do": "hook",
+      "name": "apron.pass",
+      "args": {
+        "stepScale": 1
+      },
+      "label": "pass 8 x1"
+    },
+    {
+      "do": "hook",
+      "name": "apron.report",
+      "label": "after pass 8"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 1.1,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "z-after-front"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 1.1,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "z-after-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 180,
+        "focus": 1.1,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "z-after-back"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "z-after-threeq"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 1.0,
+        "dist": 1.5,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.4
+    },
+    {
+      "do": "screenshot",
+      "name": "z-after-closeFront"
+    },
+    {
+      "do": "hook",
+      "name": "apron.dump",
+      "args": {
+        "name": "calibrated"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    }
+  ],
+  "asserts": [
+    {
+      "check": "hook",
+      "name": "apron.insidePct",
+      "max": 30,
+      "label": "under 30% of the cloth is inside the skin"
+    },
+    {
+      "check": "hook",
+      "name": "apron.floatingPct",
+      "max": 40,
+      "label": "under 40% floats off the body"
+    },
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

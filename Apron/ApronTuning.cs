@@ -31,7 +31,7 @@ internal static class ApronTuning
         new() { Group = "Placement", Key = "BackDepth", Label = "Back: further back", Min = -0.20f, Max = 0.30f, Step = 0.005f, Default = -0.01f },
         new() { Group = "Placement", Key = "Size", Label = "Whole apron: scale", Min = 0.5f, Max = 2.0f, Step = 0.02f, Default = 1f, Unit = "x" },
         new() { Group = "Placement", Key = "RotYaw", Label = "Whole apron: turn left/right", Min = -90f, Max = 90f, Step = 1f, Default = -4f, Unit = "deg" },
-        new() { Group = "Placement", Key = "RotPitch", Label = "Whole apron: tilt forward/back", Min = -90f, Max = 90f, Step = 1f, Default = 3f, Unit = "deg" },
+        new() { Group = "Placement", Key = "RotPitch", Label = "Whole apron: tilt forward/back", Min = -90f, Max = 90f, Step = 1f, Default = 16.0f, Unit = "deg" },
         new() { Group = "Placement", Key = "RotRoll", Label = "Whole apron: roll sideways", Min = -90f, Max = 90f, Step = 1f, Default = 0f, Unit = "deg" },
 
         // Shape: the panel itself.
@@ -40,23 +40,28 @@ internal static class ApronTuning
         new() { Group = "Bib", Key = "SeamBlend", Label = "Waist seam: how gently bib and skirt meet", Min = 0f, Max = 0.35f, Step = 0.005f, Default = 0.085f },
         new() { Group = "Bib", Key = "TopExtra", Label = "Bib: taller", Min = -0.40f, Max = 0.60f, Step = 0.0025f, Default = 0.015f },
         new() { Group = "Skirt", Key = "HemExtra", Label = "Hem: longer", Min = -0.50f, Max = 0.80f, Step = 0.005f, Default = -0.055f },
-        new() { Group = "Bib", Key = "TopForward", Label = "Top of the bib: further forward (+) / back to the neck (-)", Min = -0.20f, Max = 0.20f, Step = 0.0025f, Default = -0.0175f },
+        new() { Group = "Bib", Key = "TopForward", Label = "Top of the bib: further forward (+) / back to the neck (-)", Min = -0.20f, Max = 0.20f, Step = 0.0025f, Default = -0.035f },
         new() { Group = "Bib", Key = "TopZone", Label = "Top of the bib: how much of the bib that covers", Min = 0.10f, Max = 1.0f, Step = 0.02f, Default = 0.5f, Unit = "" },
         new() { Group = "Bib", Key = "TopWrapExtra", Label = "Top of the bib: wrap more / less round the chest", Min = -2f, Max = 2f, Step = 0.0025f, Default = -0.735f, Unit = "" },
         new() { Group = "Bib", Key = "Bulge", Label = "Chest: further forward", Min = -0.20f, Max = 0.40f, Step = 0.005f, Default = 0.14f },
-        new() { Group = "Skirt", Key = "Flare", Label = "Hem: further forward", Min = -0.20f, Max = 0.40f, Step = 0.005f, Default = 0.07f },
-        new() { Group = "Skirt", Key = "SkirtBelly", Label = "Skirt: puffs out mid-length", Min = -0.10f, Max = 0.25f, Step = 0.005f, Default = 0.05f },
-        new() { Group = "Bib", Key = "Curve", Label = "Bib: wrap round the sides", Min = 0f, Max = 3f, Step = 0.05f, Default = 1.8f, Unit = "" },
-        new() { Group = "Skirt", Key = "SkirtCurve", Label = "Skirt: wrap round the sides", Min = 0f, Max = 3f, Step = 0.05f, Default = 1.5f, Unit = "" },
-        new() { Group = "Bib", Key = "BibPitch", Label = "Bib: tilt top forward", Min = -90f, Max = 90f, Step = 1f, Default = 17f, Unit = "deg" },
+        new() { Group = "Skirt", Key = "Flare", Label = "Hem: further forward", Min = -0.20f, Max = 0.40f, Step = 0.005f, Default = 0.04f },
+        new() { Group = "Skirt", Key = "SkirtBelly", Label = "Skirt: puffs out mid-length", Min = -0.10f, Max = 0.25f, Step = 0.005f, Default = 0.02f },
+        new() { Group = "Bib", Key = "Curve", Label = "Bib: wrap round the sides", Min = 0f, Max = 3f, Step = 0.05f, Default = 1.45f, Unit = "" },
+        new() { Group = "Skirt", Key = "SkirtCurve", Label = "Skirt: wrap round the sides", Min = 0f, Max = 3f, Step = 0.05f, Default = 1.15f, Unit = "" },
+        new() { Group = "Bib", Key = "BibPitch", Label = "Bib: tilt top forward", Min = -90f, Max = 90f, Step = 1f, Default = 28.0f, Unit = "deg" },
         new() { Group = "Skirt", Key = "SkirtPitch", Label = "Skirt: swing hem forward", Min = -90f, Max = 90f, Step = 1f, Default = -2f, Unit = "deg" },
         new() { Group = "Cloth", Key = "FoldAmp", Label = "Cloth: fold depth", Min = 0f, Max = 0.06f, Step = 0.002f, Default = 0.012f },
         new() { Group = "Cloth", Key = "FoldCount", Label = "Cloth: number of folds", Min = 1f, Max = 14f, Step = 1f, Default = 8f, Unit = "" },
         new() { Group = "Cloth", Key = "PocketPuff", Label = "Pocket: stands out", Min = 0f, Max = 0.06f, Step = 0.002f, Default = 0.014f },
+        new() { Group = "Cloth", Key = "SeamStretch", Label = "Waist: how far the cloth stretches between chest and hips (0 = separate bib and skirt)", Min = 0f, Max = 0.25f, Step = 0.005f, Default = 0.09f },
         new() { Group = "Cloth", Key = "Clearance", Label = "Clearance off the skin", Min = 0f, Max = 0.12f, Step = 0.002f, Default = 0.044f },
 
         // Belt
-        new() { Group = "Belt", Key = "BandHeight", Label = "Belt: height", Min = 0.01f, Max = 0.30f, Step = 0.005f, Default = 0.03f },
+        new() { Group = "Belt", Key = "HalfBandWidth", Label = "Waist apron only: tie size round the body", Min = 0.5f, Max = 1.6f, Step = 0.01f, Default = 1.21f, Unit = "x" },
+        new() { Group = "Skirt", Key = "HalfDepth", Label = "Waist apron only: depth at the waist", Min = -0.08f, Max = 0.08f, Step = 0.0025f, Default = -0.03f },
+        new() { Group = "Skirt", Key = "HalfFlare", Label = "Waist apron only: hem further forward", Min = -0.15f, Max = 0.15f, Step = 0.0025f, Default = -0.03f },
+        new() { Group = "Belt", Key = "HalfBandHeight", Label = "Waist apron only: tie thickness", Min = 0.006f, Max = 0.06f, Step = 0.001f, Default = 0.012f },
+        new() { Group = "Belt", Key = "BandHeight", Label = "Belt: height", Min = 0.01f, Max = 0.30f, Step = 0.005f, Default = 0.022f },
         new() { Group = "Belt", Key = "BandWidth", Label = "Belt: size round the body", Min = 0.6f, Max = 2.0f, Step = 0.01f, Default = 1.08f, Unit = "x" },
         new() { Group = "Belt", Key = "BeltTie", Label = "Belt: tied with a knot and tails (1) or plain (0)", Min = 0f, Max = 1f, Step = 1f, Default = 1f, Unit = "" },
         new() { Group = "Belt", Key = "TieTail", Label = "Belt: tail length", Min = 0.04f, Max = 0.50f, Step = 0.01f, Default = 0.2f },
@@ -69,7 +74,7 @@ internal static class ApronTuning
         new() { Group = "Neck", Key = "NeckLift", Label = "Neck loop: up / down", Min = -0.15f, Max = 0.25f, Step = 0.0025f, Default = 0f },
         new() { Group = "Neck", Key = "NeckForward", Label = "Neck loop: forward / back", Min = -0.15f, Max = 0.15f, Step = 0.0025f, Default = 0f },
         new() { Group = "Neck", Key = "NeckAngle", Label = "Neck loop: where the side straps meet it (round the front)", Min = 0.2f, Max = 1.6f, Step = 0.0025f, Default = 0.75f, Unit = "" },
-        new() { Group = "Neck", Key = "StrapWidth", Label = "Straps: width", Min = 0.01f, Max = 0.15f, Step = 0.0025f, Default = 0.04f },
+        new() { Group = "Neck", Key = "StrapWidth", Label = "Straps: width", Min = 0.01f, Max = 0.15f, Step = 0.0025f, Default = 0.03f },
         new() { Group = "Crossed straps", Key = "StrapSpread", Label = "Straps: where they leave the bib (x)", Min = 0f, Max = 0.50f, Step = 0.005f, Default = 0.15f },
         new() { Group = "Crossed straps", Key = "StrapShoulder", Label = "Straps: where they cross the shoulder (x)", Min = 0f, Max = 0.50f, Step = 0.005f, Default = 0.185f },
         new() { Group = "Crossed straps", Key = "StrapRise", Label = "Straps: shoulder height above the bib", Min = -0.20f, Max = 0.50f, Step = 0.005f, Default = 0.07f },
@@ -154,13 +159,27 @@ internal static class ApronTuning
         }
     }
 
-    internal static void Save()
+    internal static void Set(string key, float value) => Set(IndexOf(key), value);
+
+    internal static void Save() => SaveTo(FilePath);
+
+    internal static void LoadFrom(string path)
+    {
+        EnsureLoaded();
+        var saved = JsonConvert.DeserializeObject<Dictionary<string, float>>(File.ReadAllText(path)) ?? new Dictionary<string, float>();
+        for (var i = 0; i < All.Length; i++)
+            if (saved.TryGetValue(All[i].Key, out var v))
+                Set(i, v);
+    }
+
+    internal static void SaveTo(string path)
     {
         EnsureLoaded();
         var saved = new Dictionary<string, float>();
         for (var i = 0; i < All.Length; i++)
             saved[All[i].Key] = (float)Math.Round(Values[i], 4);
-        File.WriteAllText(FilePath, JsonConvert.SerializeObject(saved, Formatting.Indented));
-        ItemShopPlugin.LogSource?.LogInfo($"[Apron] saved the fitting to {FilePath}");
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.WriteAllText(path, JsonConvert.SerializeObject(saved, Formatting.Indented));
+        ItemShopPlugin.LogSource?.LogInfo($"[Apron] saved the fitting to {path}");
     }
 }

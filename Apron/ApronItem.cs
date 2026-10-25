@@ -87,16 +87,16 @@ internal static class ApronItem
     {
         if (_effect != null)
             return _effect;
-        var effect = ScriptableObject.CreateInstance<SE_Stats>();
+        var effect = ScriptableObject.CreateInstance<SE_ShopkeeperApron>();
         effect.name = EffectName;
         effect.m_name = "$drake_shopapron_effect";
         effect.m_tooltip = "$drake_shopapron_effect_tip";
-        effect.m_addMaxCarryWeight = 50f;
         ItemManager.Instance.AddStatusEffect(new CustomStatusEffect(effect, false));
         return _effect = effect;
     }
 }
 
+#if DEBUG
 /// <summary>While the fitting is being worked out: one of each apron in your inventory on entering the world (config 09 Apron).</summary>
 [HarmonyPatch(typeof(Player), "OnSpawned")]
 internal static class ApronGivePatch
@@ -134,20 +134,47 @@ internal static class ApronGivePatch
     }
 }
 
+#endif
+
 internal static class ApronSettings
 {
+    private static BepInEx.Configuration.ConfigEntry<float>? _carry;
+    private static BepInEx.Configuration.ConfigEntry<int>? _stamina;
+    private static BepInEx.Configuration.ConfigEntry<ApronCondition>? _condition;
+
+    /// <summary>Extra carry weight while the apron's condition holds.</summary>
+    internal static float CarryBonus => _carry?.Value ?? 50f;
+
+    /// <summary>Percent less stamina used (running, jumping, swimming, sneaking, dodging, attacking, blocking).</summary>
+    internal static int StaminaCut => _stamina?.Value ?? 10;
+
+    internal static ApronCondition Condition => _condition?.Value ?? ApronCondition.UnderRoofNotDungeon;
+
+#if DEBUG
     private static BepInEx.Configuration.ConfigEntry<bool>? _give;
     private static BepInEx.Configuration.ConfigEntry<KeyCode>? _key;
 
     internal static bool GiveApron => _give?.Value ?? false;
 
     internal static KeyCode TunerKey => _key?.Value ?? KeyCode.F8;
+#endif
 
     internal static void Bind(BepInEx.Configuration.ConfigFile config)
     {
-        _give = config.Bind("09 Apron", "Give apron", true,
-            "While the aprons are being tuned: put one of each apron in your inventory when you enter the world (once per game start, only the ones you don't have).");
-        _key = config.Bind("09 Apron", "Tuner key", KeyCode.F8,
-            "Opens the apron fitting room (see the panel for the controls; Save writes BepInEx/config/DrakesItemShop.apron.json).");
+        const string section = "09 Apron";
+        _carry = Config.ItemShopConfig.Synced(config, section, "Carry weight bonus", 50f,
+            "Extra carry weight the shopkeeper aprons give while their condition holds. 0 = none.",
+            new BepInEx.Configuration.AcceptableValueRange<float>(0f, 500f));
+        _stamina = Config.ItemShopConfig.Synced(config, section, "Stamina use reduction", 10,
+            "Percent less stamina used for running, jumping, swimming, sneaking, dodging, attacking and blocking while the apron's condition holds. 0 = none.",
+            new BepInEx.Configuration.AcceptableValueRange<int>(0, 90));
+        _condition = Config.ItemShopConfig.Synced(config, section, "Bonus applies", ApronCondition.UnderRoofNotDungeon,
+            "Always, UnderRoof (any roof, dungeons too) or UnderRoofNotDungeon (houses, sheds and shops, but not dungeons).");
+#if DEBUG
+        _give = config.Bind(section, "Give apron", false,
+            "Debug builds only: put one of each apron in your inventory when you enter the world (once per game start).");
+        _key = config.Bind(section, "Tuner key", KeyCode.F8,
+            "Debug builds only: opens the apron fitting room (Save writes BepInEx/config/DrakesItemShop.apron.json).");
+#endif
     }
 }

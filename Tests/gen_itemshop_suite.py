@@ -3,7 +3,7 @@ The build copies it into the test profiles; Tests/ is never packaged."""
 import json, os, shutil
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'suites', 'DrakesItemShop')
-GUID = 'com.drakesworkshop.itemshop'
+GUID = 'com.drakemods.itemshop'
 NOERR = {'check': 'noErrors', 'source': 'DrakesItemShop'}
 
 

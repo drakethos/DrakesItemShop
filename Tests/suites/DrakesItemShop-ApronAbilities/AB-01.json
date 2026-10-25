@@ -1,0 +1,72 @@
+{
+  "name": "AB-01 rule table",
+  "steps": [],
+  "asserts": [
+    {
+      "check": "hook",
+      "name": "apron.decide",
+      "args": {
+        "condition": "Always",
+        "sheltered": false,
+        "dungeon": true
+      },
+      "expect": true,
+      "label": "Always applies anywhere"
+    },
+    {
+      "check": "hook",
+      "name": "apron.decide",
+      "args": {
+        "condition": "UnderRoof",
+        "sheltered": true,
+        "dungeon": true
+      },
+      "expect": true,
+      "label": "UnderRoof applies in a dungeon (sheltered)"
+    },
+    {
+      "check": "hook",
+      "name": "apron.decide",
+      "args": {
+        "condition": "UnderRoof",
+        "sheltered": false,
+        "dungeon": false
+      },
+      "expect": false,
+      "label": "UnderRoof not outdoors"
+    },
+    {
+      "check": "hook",
+      "name": "apron.decide",
+      "args": {
+        "condition": "UnderRoofNotDungeon",
+        "sheltered": true,
+        "dungeon": false
+      },
+      "expect": true,
+      "label": "a house counts"
+    },
+    {
+      "check": "hook",
+      "name": "apron.decide",
+      "args": {
+        "condition": "UnderRoofNotDungeon",
+        "sheltered": true,
+        "dungeon": true
+      },
+      "expect": false,
+      "label": "a dungeon does not"
+    },
+    {
+      "check": "hook",
+      "name": "apron.decide",
+      "args": {
+        "condition": "UnderRoofNotDungeon",
+        "sheltered": false,
+        "dungeon": false
+      },
+      "expect": false,
+      "label": "outdoors does not"
+    }
+  ]
+}

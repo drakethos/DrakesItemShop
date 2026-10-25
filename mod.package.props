@@ -4,9 +4,9 @@
     <ThunderstoreAuthor>DrakeMods</ThunderstoreAuthor>
     <RootNamespace>DrakesItemShop</RootNamespace>
     <AssemblyName>DrakesItemShop</AssemblyName>
-    <Version>0.5.2</Version>
+    <Version>0.5.3</Version>
     <BepInPluginName>DrakesItemShop</BepInPluginName>
-    <BepInGuid>com.drakesworkshop.itemshop</BepInGuid>
+    <BepInGuid>com.drakemods.itemshop</BepInGuid>
     <ModInfoClass>ItemShopPlugin</ModInfoClass>
     <Description>Open-for-business shops on display pieces (coin or item OR prices), free-layout mats, racks, display cases, player trading, and mail for RP servers.</Description>
     <WebsiteUrl>https://github.com/drakethos/DrakesItemShop</WebsiteUrl>

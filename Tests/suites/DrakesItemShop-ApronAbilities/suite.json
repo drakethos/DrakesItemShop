@@ -1,0 +1,17 @@
+{
+  "name": "DrakesItemShop-ApronAbilities",
+  "description": "The apron's carry weight and stamina bonuses and when they apply (config 09 Apron).",
+  "requireMods": [
+    {
+      "guid": "com.drakemods.itemshop",
+      "minVersion": "0.5.0"
+    }
+  ],
+  "setup": {
+    "timeOfDay": 0.5,
+    "freezeTime": 1,
+    "god": 1,
+    "hideUnlockPopups": 1
+  },
+  "resetBetweenTests": true
+}

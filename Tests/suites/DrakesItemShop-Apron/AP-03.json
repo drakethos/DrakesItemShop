@@ -1,0 +1,181 @@
+{
+  "name": "AP-03 waist close-ups",
+  "timeout": 200,
+  "steps": [
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApron",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": -60,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-waist-l60"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 60,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-waist-r60"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 110,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-waist-r110"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-waist-front"
+    },
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApronCafe",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": -60,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-waist-l60"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 60,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-waist-r60"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 110,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-waist-r110"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 0.98,
+        "dist": 1.2,
+        "pitch": 10
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-waist-front"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

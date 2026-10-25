@@ -8,13 +8,14 @@
   <PropertyGroup>
     <ProjectGuid>{A1111111-1111-4111-8111-111111111105}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <NewtonsoftJsonDll>$(MSBuildProjectDirectory)\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</NewtonsoftJsonDll>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' "><OutputPath>bin\Debug\</OutputPath><DefineConstants>DEBUG;TRACE</DefineConstants></PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' "><OutputPath>bin\Release\</OutputPath><DefineConstants>TRACE</DefineConstants></PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' "><OutputPath>bin\Debug\</OutputPath><DefineConstants>DEBUG;TRACE</DefineConstants></PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' "><OutputPath>bin\Release\</OutputPath><DefineConstants>TRACE</DefineConstants></PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony"><HintPath>$(BepInExPath)\core\0Harmony.dll</HintPath></Reference>
     <Reference Include="BepInEx"><HintPath>$(BepInExPath)\core\BepInEx.dll</HintPath></Reference>
@@ -36,6 +37,7 @@
     <Compile Include="Data\ShopDataKeys.cs" />
     <Compile Include="ItemShopPlugin.cs" />
     <Compile Include="Testing\ItemShopTestHooks.cs" Condition="'$(Configuration)' == 'Debug'" />
+    <Compile Include="Testing\ApronTestHooks.cs" Condition="'$(Configuration)' == 'Debug'" />
     <Compile Include="Localization\ItemShopLocalization.cs" />
     <Compile Include="Data\ShopPieceCategories.cs" />
     <Compile Include="Patches\PieceBuildGatePatch.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="OpenCrate\OpenCrateShell.cs" />
     <Compile Include="OpenCrate\OpenCratePiece.cs" />
     <Compile Include="Apron\ApronItem.cs" />
+    <Compile Include="Apron\ApronAbility.cs" />
     <Compile Include="Apron\ApronArt.cs" />
     <Compile Include="Apron\ApronBody.cs" />
     <Compile Include="Apron\ApronTuning.cs" />

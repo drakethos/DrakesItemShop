@@ -61,6 +61,21 @@ internal static class ApronTuner
         SelectTab(_tab);
     }
 
+    /// <summary>For automated fitting runs (see ApronTestHooks): opens or closes the room and puts the camera at a set view.</summary>
+    internal static void SetView(bool open, float yawOffset, float focus, float dist, float pitch, int tab)
+    {
+        var player = Player.m_localPlayer;
+        _open = open && player != null;
+        if (!_open)
+            return;
+        SelectTab(tab);
+        _yaw = (player != null ? player.transform.eulerAngles.y : 0f) + yawOffset;
+        _pitch = pitch;
+        _dist = dist;
+        _focus = _focusNow = focus;
+        _spin = false;
+    }
+
     private static void SelectTab(int tab)
     {
         _tab = (tab % Tabs.Length + Tabs.Length) % Tabs.Length;

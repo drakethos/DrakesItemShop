@@ -50,6 +50,11 @@ internal sealed class ApronWatcher : MonoBehaviour
         }
     }
 
+    /// <summary>Rebuilds at once if the numbers moved (automated fitting runs measure straight after a change).</summary>
+    internal void RefreshNow() => Refresh();
+
+    internal GameObject? Current => _apron;
+
     private void Refresh()
     {
         _vis ??= GetComponent<VisEquipment>() ?? GetComponentInChildren<VisEquipment>();
@@ -115,7 +120,7 @@ internal static class ApronBody
         }
 
         float T(string key) => ApronTuning.Get(key);
-        float depth = T("Depth"), bulge = T("Bulge"), flare = T("Flare"), curve = T("Curve"), width = T("Width");
+        float depth = T("Depth") + (style.Bib ? 0f : T("HalfDepth")), bulge = T("Bulge"), flare = T("Flare") + (style.Bib ? 0f : T("HalfFlare")), curve = T("Curve"), width = T("Width");
         float topForward = T("TopForward"), topZone = T("TopZone"), topWrap = T("TopWrapExtra");
         float skirtCurve = T("SkirtCurve"), belly = T("SkirtBelly"), foldAmp = T("FoldAmp"), foldCount = T("FoldCount"), puff = T("PocketPuff");
         float clearance = T("Clearance");
@@ -135,7 +140,7 @@ internal static class ApronBody
         var height = StandingHeight;
         var s = height / 1.85f;
         var waist = Waist * height + T("Lift");
-        var top = style.Bib ? BibTop * height + T("Lift") + T("TopExtra") : waist + 0.02f;
+        var top = style.Bib ? BibTop * height + T("Lift") + T("TopExtra") : waist - 0.004f;
         var hem = Hem * height + T("Lift") - T("HemExtra") - style.HemExtra;
 
         var kneeL = Find("LeftLeg", "LeftLowerLeg");
@@ -205,24 +210,36 @@ internal static class ApronBody
             }
         }
 
-        // ---- belt: an ellipse round the torso ----
+        // ---- waist ties: they leave the apron's two side edges at the waist and run round the body to the back ----
+        var edgeHalf = HalfWidth(waist, hem, waist, top, s * width, T("BibTopWidth"));
+        var beltA = style.Bib ? Mathf.Max(edgeHalf * 1.03f, 0.215f * s * width * T("BandWidth"))
+            : Mathf.Max(edgeHalf, 0.215f * s * width * T("HalfBandWidth"));
+        var beltCz = (zFront + zBack) * 0.5f;
+        var beltB = (zFront - zBack) * 0.5f + 0.004f;
         {
-            var cz = (zFront + zBack) * 0.5f;
-            var b = (zFront - zBack) * 0.5f + 0.004f;
-            var a = 0.215f * s * width * T("BandWidth");
-            var halfBand = T("BandHeight") * 0.5f;
-            const int seg = 44;
+            var halfBand = (style.Bib ? T("BandHeight") : T("HalfBandHeight")) * 0.5f;
+            // Where the ellipse round the torso is as wide as the apron: the ties start there, not across the front of the cloth.
+            var start = Mathf.Asin(Mathf.Clamp(edgeHalf / beltA, 0.2f, 0.98f));
+            const int seg = 40, blend = 5;
             var baseIndex = leatherVerts.Count;
             for (var i = 0; i <= seg; i++)
             {
-                var th = i / (float)seg * Mathf.PI * 2f;
-                var x = a * Mathf.Sin(th);
-                var z = cz + b * Mathf.Cos(th);
+                var th = Mathf.Lerp(start, Mathf.PI * 2f - start, i / (float)seg);
+                var onBody = new Vector3(beltA * Mathf.Sin(th), waist, beltCz + beltB * Mathf.Cos(th));
+                // The first and last few steps ease from the cloth's edge onto the ellipse so the tie grows out of the apron.
+                var k = Mathf.Min(i, seg - i);
+                if (k < blend)
+                {
+                    var side = th < Mathf.PI ? 1f : -1f;
+                    var edge = new Vector3(side * edgeHalf, waist, Forward(side * edgeHalf, waist) + clearance);
+                    onBody = Vector3.Lerp(edge, onBody, Mathf.SmoothStep(0f, 1f, k / (float)blend));
+                }
+                var normal = new Vector3(Mathf.Sin(th) / beltA, 0f, Mathf.Cos(th) / beltB).normalized;
                 foreach (var dy in new[] { -halfBand, halfBand })
                 {
-                    leatherVerts.Add(new Vector3(x, waist + dy, z));
-                    leatherNormals.Add(new Vector3(Mathf.Sin(th) / a, 0f, Mathf.Cos(th) / b).normalized);
-                    leatherUv.Add(new Vector2(i / (float)seg * 6f, dy > 0 ? 1f : 0f));
+                    leatherVerts.Add(new Vector3(onBody.x, waist + dy, onBody.z));
+                    leatherNormals.Add(normal);
+                    leatherUv.Add(new Vector2(i / (float)seg * 5f, dy > 0 ? 1f : 0f));
                 }
             }
             for (var i = 0; i < seg; i++)
@@ -234,9 +251,9 @@ internal static class ApronBody
         // ---- tied belt: a knot at the back with two tails hanging from it ----
         if (T("BeltTie") >= 0.5f)
         {
-            var cz = (zFront + zBack) * 0.5f;
-            var b = (zFront - zBack) * 0.5f + 0.004f;
-            var a = 0.215f * s * width * T("BandWidth");
+            var cz = beltCz;
+            var b = beltB;
+            var a = beltA;
             var th = Mathf.PI + T("TieSide");
             var knotAt = new Vector3(a * Mathf.Sin(th), waist, cz + b * Mathf.Cos(th));
             var outward = new Vector3(Mathf.Sin(th) / a, 0f, Mathf.Cos(th) / b).normalized;
@@ -374,6 +391,8 @@ internal static class ApronBody
             }
         }
 
+        var clothIdealY = clothVerts.Select(v => v.y).ToList();
+
         // ---- bend everything onto the skeleton ----
         for (var i = 0; i < clothVerts.Count; i++)
         {
@@ -411,8 +430,21 @@ internal static class ApronBody
             (leatherTris[i] < bandVertexCount ? bandTris : strapTris).Add(leatherTris[i]);
 
         var layer = body.gameObject.layer;
-        parts.Add(Part("drake_apron_skirt", hips, player, clothVerts, clothUv, clothNormals, skirtTris, clothMaterial, layer));
-        parts.Add(Part("drake_apron_bib", spine2, player, clothVerts, clothUv, clothNormals, bibTris, clothMaterial, layer));
+        var stretch = style.Bib ? T("SeamStretch") : 0f;
+        if (stretch > 0.001f)
+        {
+            // One piece of cloth whose waist is skinned across hips, belly and chest: it bends and stretches there instead of
+            // splitting into a bib and a skirt that slide over each other.
+            var cloth = new List<int>(skirtTris);
+            cloth.AddRange(bibTris);
+            parts.Add(SkinnedCloth("drake_apron_cloth", holder.transform, new[] { hips, spine1, spine2 }, clothVerts, clothUv, clothNormals,
+                cloth, clothMaterial, layer, waist, stretch, clothIdealY));
+        }
+        else
+        {
+            parts.Add(Part("drake_apron_skirt", hips, player, clothVerts, clothUv, clothNormals, skirtTris, clothMaterial, layer));
+            parts.Add(Part("drake_apron_bib", spine2, player, clothVerts, clothUv, clothNormals, bibTris, clothMaterial, layer));
+        }
         parts.Add(Part("drake_apron_band", spine1, player, leatherVerts, leatherUv, leatherNormals, bandTris, leatherMaterial, layer));
         parts.Add(Part("drake_apron_straps", spine2, player, leatherVerts, leatherUv, leatherNormals, strapTris, leatherMaterial, layer));
         return holder;
@@ -441,6 +473,48 @@ internal static class ApronBody
         go.AddComponent<MeshFilter>().sharedMesh = mesh;
         var renderer = go.AddComponent<MeshRenderer>();
         renderer.sharedMaterial = material;
+        return go;
+    }
+
+    /// <summary>
+    /// The cloth as one skinned mesh. Vertices are in the player's space (the holder sits at the player's origin). Below the waist
+    /// they follow the hips, above it the chest, and across <paramref name="stretch"/> metres either side of the waist the weight
+    /// slides hips, then belly, then chest, so the cloth bends with the body instead of tearing at the seam.
+    /// </summary>
+    private static GameObject SkinnedCloth(string name, Transform holder, Transform[] bones, List<Vector3> verts, List<Vector2> uv,
+        List<Vector3> normals, List<int> tris, Material material, int layer, float waist, float stretch, List<float> idealY)
+    {
+        var go = new GameObject(name) { layer = layer };
+        go.transform.SetParent(holder, false);
+        var mesh = new Mesh { name = name };
+        mesh.SetVertices(verts);
+        mesh.SetUVs(0, uv);
+        mesh.SetNormals(normals);
+        mesh.SetTriangles(Doubled(tris), 0);
+
+        // The panel was laid out upright (y = height) before it was bent onto the skeleton, so the weight follows that height.
+        var weights = new BoneWeight[verts.Count];
+        for (var i = 0; i < verts.Count; i++)
+        {
+            var y = idealY[i];
+            var t = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(waist - stretch, waist + stretch, y));
+            var w0 = Mathf.Clamp01(1f - 2f * t);
+            var w2 = Mathf.Clamp01(2f * t - 1f);
+            weights[i] = new BoneWeight { boneIndex0 = 0, weight0 = w0, boneIndex1 = 1, weight1 = 1f - w0 - w2, boneIndex2 = 2, weight2 = w2 };
+        }
+        mesh.boneWeights = weights;
+        var bind = new Matrix4x4[bones.Length];
+        for (var i = 0; i < bones.Length; i++)
+            bind[i] = bones[i].worldToLocalMatrix * go.transform.localToWorldMatrix;
+        mesh.bindposes = bind;
+        mesh.RecalculateBounds();
+
+        var renderer = go.AddComponent<SkinnedMeshRenderer>();
+        renderer.sharedMesh = mesh;
+        renderer.sharedMaterial = material;
+        renderer.bones = bones;
+        renderer.rootBone = bones[0];
+        renderer.updateWhenOffscreen = true;
         return go;
     }
 
@@ -644,6 +718,8 @@ internal sealed class ApronParts : MonoBehaviour
     private readonly List<GameObject> _parts = new();
 
     public void Add(GameObject part) => _parts.Add(part);
+
+    internal IReadOnlyList<GameObject> Parts => _parts;
 
     private void OnDestroy()
     {

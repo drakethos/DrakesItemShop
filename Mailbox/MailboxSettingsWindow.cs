@@ -10,7 +10,7 @@ namespace DrakesItemShop.Mail;
 /// </summary>
 internal static class MailboxSettingsWindow
 {
-    private const string LockSmithGuid = "com.drakesworkshop.locksmith";
+    private const string LockSmithGuid = "com.drakemods.locksmith";
 
     internal static bool LockSmithPresent => Chainloader.PluginInfos.ContainsKey(LockSmithGuid);
 

@@ -1,0 +1,17 @@
+{
+  "name": "DrakesItemShop-Apron",
+  "description": "Temporary apron fitting run: measures the apron against the worn body, adjusts the fitting numbers pass by pass, screenshots every stage. Results: config/DrakesTestLab/results/apron-calibration/",
+  "requireMods": [
+    {
+      "guid": "com.drakemods.itemshop",
+      "minVersion": "0.4.0"
+    }
+  ],
+  "setup": {
+    "timeOfDay": 0.5,
+    "freezeTime": 1,
+    "god": 1,
+    "hideUnlockPopups": 1
+  },
+  "resetBetweenTests": true
+}

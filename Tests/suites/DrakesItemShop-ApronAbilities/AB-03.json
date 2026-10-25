@@ -1,0 +1,41 @@
+{
+  "name": "AB-03 numbers follow config",
+  "steps": [
+    {
+      "do": "setConfig",
+      "guid": "com.drakemods.itemshop",
+      "values": {
+        "09 Apron/Bonus applies": "Always",
+        "09 Apron/Carry weight bonus": 120,
+        "09 Apron/Stamina use reduction": 25
+      }
+    },
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApron",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.refresh"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "hook",
+      "name": "apron.carryBonus",
+      "expect": 120,
+      "label": "carry bonus from config"
+    },
+    {
+      "check": "hook",
+      "name": "apron.staminaMod",
+      "expect": -0.25,
+      "label": "stamina cut from config"
+    }
+  ]
+}

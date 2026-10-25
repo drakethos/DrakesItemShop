@@ -1,0 +1,57 @@
+{
+  "name": "AB-02 always on",
+  "steps": [
+    {
+      "do": "setConfig",
+      "guid": "com.drakemods.itemshop",
+      "values": {
+        "09 Apron/Bonus applies": "Always",
+        "09 Apron/Carry weight bonus": 50,
+        "09 Apron/Stamina use reduction": 10
+      }
+    },
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApron",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.refresh"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "hook",
+      "name": "apron.carryBonus",
+      "expect": 50,
+      "label": "+50 carry weight"
+    },
+    {
+      "check": "hook",
+      "name": "apron.staminaMod",
+      "expect": -0.1,
+      "label": "-10% run stamina"
+    },
+    {
+      "check": "hook",
+      "name": "apron.jumpMod",
+      "expect": -0.1,
+      "label": "-10% jump stamina"
+    },
+    {
+      "check": "hook",
+      "name": "apron.tooltip",
+      "contains": "Carry weight: +50",
+      "label": "tooltip shows the bonus"
+    },
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

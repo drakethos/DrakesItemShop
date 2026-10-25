@@ -1,0 +1,453 @@
+{
+  "name": "AP-02 apron shapes: waist apron has no bib, cloth is one piece",
+  "timeout": 300,
+  "steps": [
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApronCafe",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-front"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-3q"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 180,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-back"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    },
+    {
+      "do": "console",
+      "command": "emote sit"
+    },
+    {
+      "do": "wait",
+      "seconds": 2.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 0.8,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-sit-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 0.8,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "cafe-sit-3q"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    },
+    {
+      "do": "console",
+      "command": "emote stop"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.0
+    },
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApron",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-front"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-3q"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 180,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-back"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    },
+    {
+      "do": "console",
+      "command": "emote sit"
+    },
+    {
+      "do": "wait",
+      "seconds": 2.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 0.8,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-sit-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 0.8,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-sit-3q"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    },
+    {
+      "do": "console",
+      "command": "emote stop"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.0
+    },
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApronMerchant",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 0,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "merchant-front"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "merchant-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "merchant-3q"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 180,
+        "focus": 1.0,
+        "dist": 2.2,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "merchant-back"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    },
+    {
+      "do": "console",
+      "command": "emote sit"
+    },
+    {
+      "do": "wait",
+      "seconds": 2.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 90,
+        "focus": 0.8,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "merchant-sit-side"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "yaw": 40,
+        "focus": 0.8,
+        "dist": 2.6,
+        "pitch": 8
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "screenshot",
+      "name": "merchant-sit-3q"
+    },
+    {
+      "do": "hook",
+      "name": "apron.view",
+      "args": {
+        "open": false
+      }
+    },
+    {
+      "do": "console",
+      "command": "emote stop"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.0
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

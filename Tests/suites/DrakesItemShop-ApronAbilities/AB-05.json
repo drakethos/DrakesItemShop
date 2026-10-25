@@ -1,0 +1,57 @@
+{
+  "name": "AB-05 indoors the bonus switches on and off",
+  "steps": [
+    {
+      "do": "setConfig",
+      "guid": "com.drakemods.itemshop",
+      "values": {
+        "09 Apron/Bonus applies": "UnderRoofNotDungeon",
+        "09 Apron/Carry weight bonus": 50,
+        "09 Apron/Stamina use reduction": 10
+      }
+    },
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApron",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "apron.goUnderRoof",
+      "label": "stand under the test house roof"
+    },
+    {
+      "do": "wait",
+      "seconds": 2
+    },
+    {
+      "do": "hook",
+      "name": "apron.refresh",
+      "label": "inside"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "hook",
+      "name": "apron.sheltered",
+      "expect": true,
+      "label": "the test house is roofed (Rested shelter rule)"
+    },
+    {
+      "check": "hook",
+      "name": "apron.carryBonus",
+      "expect": 50,
+      "label": "+50 carry inside"
+    },
+    {
+      "check": "hook",
+      "name": "apron.staminaMod",
+      "expect": -0.1,
+      "label": "-10% stamina inside"
+    }
+  ]
+}

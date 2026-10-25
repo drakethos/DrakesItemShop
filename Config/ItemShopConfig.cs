@@ -60,6 +60,10 @@ internal static class ItemShopConfig
     /// <summary>Either display case cost changed (locally or synced from the server).</summary>
     internal static event System.Action? DisplayCaseCostChanged;
 
+    /// <summary>A setting that follows the server: the host's value is everyone's.</summary>
+    internal static ConfigEntry<T> Synced<T>(ConfigFile config, string section, string key, T defaultValue, string description, AcceptableValueBase? range = null) =>
+        ConfigSync.BindSynced(config, section, section, key, defaultValue, description, range);
+
     internal static void Bind(ConfigFile config, ManualLogSource log)
     {
         RackPoseDebug.Bind(config);

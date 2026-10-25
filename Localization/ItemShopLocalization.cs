@@ -58,7 +58,7 @@ internal static class ItemShopLocalization
             loc.AddToken(apron.PrefabName.ToLowerInvariant() + "_desc", apron.Description);
         }
         loc.AddToken("drake_shopapron_effect", "Open for business");
-        loc.AddToken("drake_shopapron_effect_tip", "Carry a little more: +50 carry weight.");
+        loc.AddToken("drake_shopapron_effect_tip", "A shopkeeper carries a little more and tires less indoors.");
         loc.AddToken("drake_opensign_name", "Open Sign");
         loc.AddToken("drake_opensign_desc", "A door sign that flips between OPEN and CLOSED when you press E.");
         loc.AddToken("drake_doorbell_name", "Door Bell");

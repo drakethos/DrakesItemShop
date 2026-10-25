@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.3
+
+Hexium only. Requires **DrakeModsLibs 1.0.0**.
+
+- **Shopkeeper aprons: abilities.** "Open for business" is now configurable and only works where a shopkeeper works: under a roof, not in a dungeon. New server-synced settings in `09 Apron`: `Carry weight bonus` (default 50), `Stamina use reduction` (default 10%: running, jumping, swimming, sneaking, dodging, attacking, blocking) and `Bonus applies` (`Always`, `UnderRoof`, `UnderRoofNotDungeon`; default the last). The bonus follows you through the door and the item tooltip shows what it gives.
+- **Aprons fit better.** Refitted against the body. Bib aprons are one continuous cloth that bends at the waist instead of a separate bib and skirt. The waist ties now come off the left and right edges of the apron and tie at the back (thinner than the old belt ring). The barista's waist apron no longer has a bib stub and has its own thinner tie.
+- **Fixed:** the mailbox settings and the shop's tests looked for LockSmith and ItemShop under their old plugin ids; they now use the current ones.
+- The apron fitting room, auto-fit and the "give apron" helper stay out of release builds.
+- Tests: `DrakesItemShop-ApronAbilities` (carry weight and stamina bonuses, the roof rule, indoors and outdoors).
+
+
 ## 0.5.2
 
 Hexium only. Requires **DrakeModsLibs 1.0.0**.
