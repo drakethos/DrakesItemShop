@@ -159,6 +159,9 @@ internal static class ApronSettings
     internal static KeyCode TunerKey => _key?.Value ?? KeyCode.F8;
 #endif
 
+    /// <summary>Synced entries <see cref="Bind"/> registers (for the mod's expected-count check).</summary>
+    internal const int SyncedEntryCount = 3;
+
     internal static void Bind(BepInEx.Configuration.ConfigFile config)
     {
         const string section = "09 Apron";

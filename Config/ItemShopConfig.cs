@@ -138,7 +138,7 @@ internal static class ItemShopConfig
 
         RackPoseSettings.Bind(config, new PoseBinder(), "DrakesItemShop.rack-poses.yaml");
 
-        ConfigSync.FinalizeBinding(log, 4 + Pieces.ItemRackPiece.Variants.Length + RackPoseSettings.SyncedEntryCount, () => _lockSyncedConfig.Value);
+        ConfigSync.FinalizeBinding(log, 4 + Pieces.ItemRackPiece.Variants.Length + RackPoseSettings.SyncedEntryCount + Apron.ApronItem.SyncedEntryCount, () => _lockSyncedConfig.Value);
 
         Enabled = _enabled.Value;
         AdminOnlyBuildPieces = _adminOnlyBuildPieces.Value;

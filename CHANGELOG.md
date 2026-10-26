@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.4
+
+Hexium only. Requires **DrakeModsLibs 1.0.0**.
+
+- **Fixed:** the log no longer reports "Expected 119 synced entries, registered 122" at startup. The three apron settings from 0.5.3 were not counted; nothing about how settings sync changed.
+- New mod page description.
+
 ## 0.5.3
 
 Hexium only. Requires **DrakeModsLibs 1.0.0**.
