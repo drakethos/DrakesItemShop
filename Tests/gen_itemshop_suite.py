@@ -460,8 +460,9 @@ T('S-60', "Shopkeeper's Apron: crafted at the workbench, worn, Open for business
     {'do': 'craft', 'prefab': 'Drake_ShopApron', 'free': False, 'station': 'bench'},
     check('hasItem', 'crafted with the real cost', prefab='Drake_ShopApron'),
     check('noItem', 'linen used', prefab='LinenThread'),
+    {'do': 'setConfig', 'guid': 'com.drakemods.itemshop', 'values': {'09 Apron/Bonus applies': 'Always', '09 Apron/Carry weight bonus': 50}},
     {'do': 'give', 'prefab': 'Drake_ShopApron', 'equip': True},
-    wait(0.5),
+    wait(1.5),
     check('stat', 'Open for business: +50 carry weight', name='carryWeight', min=350),
     {'do': 'screenshot', 'name': 'apron'},
 ])

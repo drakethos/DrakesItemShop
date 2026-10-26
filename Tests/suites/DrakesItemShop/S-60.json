@@ -48,13 +48,21 @@
       "label": "linen used"
     },
     {
+      "do": "setConfig",
+      "guid": "com.drakemods.itemshop",
+      "values": {
+        "09 Apron/Bonus applies": "Always",
+        "09 Apron/Carry weight bonus": 50
+      }
+    },
+    {
       "do": "give",
       "prefab": "Drake_ShopApron",
       "equip": true
     },
     {
       "do": "wait",
-      "seconds": 0.5
+      "seconds": 1.5
     },
     {
       "do": "check",
