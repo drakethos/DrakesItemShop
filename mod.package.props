@@ -4,11 +4,11 @@
     <ThunderstoreAuthor>DrakeMods</ThunderstoreAuthor>
     <RootNamespace>DrakesItemShop</RootNamespace>
     <AssemblyName>DrakesItemShop</AssemblyName>
-    <Version>0.5.4</Version>
+    <Version>0.5.5</Version>
     <BepInPluginName>DrakesItemShop</BepInPluginName>
     <BepInGuid>com.drakemods.itemshop</BepInGuid>
     <ModInfoClass>ItemShopPlugin</ModInfoClass>
-    <Description>Finally have your perfect shop in Valheim. Open-for-business shops on display pieces (coin or item OR prices), free-layout mats, racks, display cases, player trading, and mail for RP servers. This mod is an early beta backup your world  and report bugs!</Description>
+    <Description>Finally have your perfect shop in Valheim. Open-for-business shops on display pieces (coin or item OR prices), free-layout mats, racks, display cases, player trading, and mail for RP servers. Early beta: back up your world and report bugs!</Description>
     <WebsiteUrl>https://github.com/drakethos/DrakesItemShop</WebsiteUrl>
   </PropertyGroup>
   <ItemGroup>
