@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx.Configuration;
+using DrakeModsLibs.UI;
 using DrakeModsLibs.UI.Toolkit;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,6 +16,7 @@ internal static class TradeSettings
     private static ConfigEntry<int> _seconds = default!;
     private static ConfigEntry<float> _range = default!;
     private static ConfigEntry<float> _cancelDistance = default!;
+    private static ConfigEntry<float> _promptOpacity = default!;
 
     /// <summary>Shift+T by default: plain T is the emote wheel.</summary>
     internal static KeyboardShortcut Shortcut => _key.Value;
@@ -22,6 +24,8 @@ internal static class TradeSettings
     internal static float Range => Math.Max(2f, _range.Value);
     /// <summary>Walk further than this from the other player and the trade, request or prompt ends.</summary>
     internal static float CancelDistance => Math.Max(5f, _cancelDistance.Value);
+    /// <summary>How solid the "wants to trade" card is. The trade window itself stays solid.</summary>
+    internal static float PromptOpacity => Mathf.Clamp(_promptOpacity?.Value ?? 0.62f, 0.35f, 1f);
 
     internal static void Bind(ConfigFile config)
     {
@@ -29,6 +33,10 @@ internal static class TradeSettings
         _seconds = config.Bind("06 Trade", "Request seconds", 15, "How long a trade request waits for an answer.");
         _cancelDistance = config.Bind("06 Trade", "Cancel distance", 15f, "A trade or request ends when you or the other player get further apart than this many metres (at least 5).");
         _range = config.Bind("06 Trade", "Nearby range", 12f, "How far away (metres) a player can be and still be offered for trading.");
+        _promptOpacity = config.Bind("06 Trade", "Request opacity", 0.62f,
+            new ConfigDescription(
+                "How solid the 'wants to trade' card is. It sits in the corner and does not take the mouse until someone accepts and the trade window opens.",
+                new AcceptableValueRange<float>(0.35f, 1f)));
     }
 }
 
@@ -113,21 +121,70 @@ internal static class TradeNet
             return other == null || Vector3.Distance(other.transform.position, me.transform.position) > limit;
         }
 
-        if (_active is { Locked: false } && _active.Partner is RemotePartner partner && Away(partner.Peer))
+        if (InCombat(me))
+        {
+            DropForCombat();
+            return;
+        }
+
+        if (_active is { Locked: false } && _active.Partner is RemotePartner partner && (Away(partner.Peer) || Fighting(partner.Peer)))
         {
             _active.Cancel();
-            Say("Trade cancelled: too far apart.");
+            Notice(Away(partner.Peer) ? "Trade cancelled: too far apart." : CombatMessage);
         }
-        if (_pendingId != null && Away(_pendingPeer))
-            CancelPending(_pendingId, "Trade request cancelled: too far apart.");
-        if (_promptId != null && Away(_promptPeer))
+        if (_pendingId != null && (Away(_pendingPeer) || Fighting(_pendingPeer)))
+            CancelPending(_pendingId, Away(_pendingPeer) ? "Trade request cancelled: too far apart." : CombatMessage);
+        if (_promptId != null && (Away(_promptPeer) || Fighting(_promptPeer)))
         {
             var id = _promptId;
+            var peer = _promptPeer;
+            var combat = Fighting(peer);
             _promptId = null;
             TradePrompt.Dismiss();
-            Reply(_promptPeer, id, false);
+            Reply(peer, id, combat ? 2 : 0);
+            if (combat)
+                Notice(CombatMessage);
         }
     }
+
+    const string CombatMessage = "Can't do that right now, there is combat.";
+
+    static bool Fighting(long peer)
+    {
+        var other = Player.GetAllPlayers().FirstOrDefault(p => p != null && p.GetZDOID().UserID == peer);
+        return InCombat(other);
+    }
+
+    /// <summary>A recent hit. Valheim stores that on <see cref="Humanoid.m_lastCombatTimer"/>.</summary>
+    static bool InCombat(Player? player) => player != null && player.m_lastCombatTimer > 0f;
+
+    static void DropForCombat()
+    {
+        var dropped = false;
+        if (_active is { Locked: false })
+        {
+            _active.Cancel();
+            dropped = true;
+        }
+        if (_pendingId != null)
+        {
+            CancelPending(_pendingId, null);
+            dropped = true;
+        }
+        if (_promptId != null)
+        {
+            var id = _promptId;
+            var peer = _promptPeer;
+            _promptId = null;
+            TradePrompt.Dismiss();
+            Reply(peer, id, 2);
+            dropped = true;
+        }
+        if (dropped)
+            Notice(CombatMessage);
+    }
+
+    static void Notice(string text) => DrakeMessage.Show(text, DrakeMessageKind.Warning);
 
     internal static void EnsureRegistered()
     {
@@ -194,6 +251,15 @@ internal static class TradeNet
             return;
         }
 
+        var me = Player.m_localPlayer;
+        if (me == null || target == null)
+            return;
+        if (InCombat(me) || InCombat(target))
+        {
+            Notice(CombatMessage);
+            return;
+        }
+
         _pendingId = Guid.NewGuid().ToString("N").Substring(0, 8);
         _pendingPeer = target.GetZDOID().UserID;
         _pendingName = target.GetPlayerName();
@@ -207,6 +273,9 @@ internal static class TradeNet
     {
         _waiting?.CloseSilent();
         var window = new UkWindow("drakes_trade_waiting", 380, UkWindow.DialogLayer, dim: false, draggable: false);
+        window.BlocksInput = false;
+        window.DockAside();
+        window.SetCardOpacity(TradeSettings.PromptOpacity);
         _waiting = window;
         window.SetHeader("Trade request");
         var left = TradeSettings.RequestSeconds;
@@ -255,7 +324,7 @@ internal static class TradeNet
                 OnRequest(sender, id, pkg.ReadString());
                 break;
             case Msg.Reply:
-                OnReply(sender, id, pkg.ReadInt() == 1);
+                OnReply(sender, id, pkg.ReadInt());
                 break;
             case Msg.Offer:
                 if (Mine(sender, id) is { } offerSession)
@@ -288,7 +357,14 @@ internal static class TradeNet
     {
         if (Player.m_localPlayer == null || Busy)
         {
-            Reply(sender, id, false);
+            Reply(sender, id, 0);
+            return;
+        }
+
+        if (InCombat(Player.m_localPlayer))
+        {
+            Notice(CombatMessage);
+            Reply(sender, id, 2);
             return;
         }
 
@@ -299,25 +375,25 @@ internal static class TradeNet
             if (_promptId != id)
                 return;
             _promptId = null;
-            Reply(sender, id, true);
+            Reply(sender, id, 1);
             Begin(sender, name, id);
         }, () =>
         {
             if (_promptId != id)
                 return;
             _promptId = null;
-            Reply(sender, id, false);
+            Reply(sender, id, 0);
         });
     }
 
-    private static void Reply(long peer, string id, bool accepted)
+    private static void Reply(long peer, string id, int code)
     {
         var pkg = Start(Msg.Reply, id);
-        pkg.Write(accepted ? 1 : 0);
+        pkg.Write(code);
         Send(peer, pkg);
     }
 
-    private static void OnReply(long sender, string id, bool accepted)
+    private static void OnReply(long sender, string id, int code)
     {
         if (_pendingId != id || _pendingPeer != sender)
             return;
@@ -325,8 +401,10 @@ internal static class TradeNet
         _pendingId = null;
         _waiting?.CloseSilent();
         _waiting = null;
-        if (accepted)
+        if (code == 1)
             Begin(sender, name, id);
+        else if (code == 2)
+            Notice(CombatMessage);
         else
             Say($"{name} declined the trade.");
     }

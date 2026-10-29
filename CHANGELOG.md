@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.6
+
+Hexium only. Requires **DrakeModsLibs 1.0.5**.
+
+- **Trade requests leave you free to move.** The "wants to trade" card and the waiting card sit in the corner, follow Request opacity, and leave the mouse alone. The trade window keeps holding input.
+- A request ends when you walk past Cancel distance. Combat refuses it with "Can't do that right now, there is combat."
+
 ## 0.5.5
 
 Hexium only. Requires **DrakeModsLibs 1.0.0**.

@@ -21,6 +21,9 @@ internal static class TradePrompt
     {
         _window?.CloseSilent();
         var window = new UkWindow("drakes_trade_request", 400, UkWindow.DialogLayer, dim: false, draggable: false);
+        window.BlocksInput = false;
+        window.DockAside();
+        window.SetCardOpacity(TradeSettings.PromptOpacity);
         _window = window;
         window.SetHeader("Trade request");
 
