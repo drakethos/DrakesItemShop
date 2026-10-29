@@ -4,6 +4,7 @@ using System.Linq;
 using BepInEx.Configuration;
 using DrakeModsLibs.UI;
 using DrakeModsLibs.UI.Toolkit;
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -155,8 +156,22 @@ internal static class TradeNet
         return InCombat(other);
     }
 
-    /// <summary>A recent hit. Valheim stores that on <see cref="Humanoid.m_lastCombatTimer"/>.</summary>
-    static bool InCombat(Player? player) => player != null && player.m_lastCombatTimer > 0f;
+    /// <summary>A recent hit. Valheim stores that on Humanoid.m_lastCombatTimer, which the live game does not expose.</summary>
+    static bool InCombat(Player? player)
+    {
+        if (player == null) return false;
+        try
+        {
+            _combatTimer ??= AccessTools.FieldRefAccess<Humanoid, float>("m_lastCombatTimer");
+            return _combatTimer(player) > 0f;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    static AccessTools.FieldRef<Humanoid, float>? _combatTimer;
 
     static void DropForCombat()
     {
