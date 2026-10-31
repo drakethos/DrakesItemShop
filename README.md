@@ -13,6 +13,43 @@
 - **Mailbox and Drop Box**: a post-mounted mailbox and a tabletop box for a shop stall. Anyone can send up to 3 stacks and a note through the front slot (one way: they can't take it back out). The back is a plain 10-slot chest with its own door, opened by whoever the ward or LockSmith allows. The owner can set an allow list, an item filter, and close the slot (**Shift+E**, or the Lock menu with LockSmith).
 - **PO boxes and the Post Hall**: a post hall frame with 5x2 sockets that PO boxes snap into. Each PO box has one door: its assigned owner (and anyone they delegate to) opens it like a chest, everyone else gets the send window. The builder can act as postmaster. A flag shows mail waiting (green) or a full box (red).
 
+## Pictures
+
+Taken automatically by the DrakesTestLab picture suite (`Tests/gen_pictures_suite.py`).
+
+**Display cases and mats**
+
+| | |
+|---|---|
+| ![Display case](docs/images/shop-display-case.png) | ![Small display case](docs/images/shop-display-case-small.png) |
+| ![Jute table tray](docs/images/shop-display-mat.png) | ![Small jute table tray](docs/images/shop-display-mat-small.png) |
+| ![Free-layout jute mat](docs/images/shop-jute-mat.png) | ![Open crate](docs/images/shop-open-crate.png) |
+
+**Racks**
+
+| | |
+|---|---|
+| ![Armor rack](docs/images/shop-armor-rack.png) | ![Small armor rack](docs/images/shop-armor-rack-small.png) |
+| ![Weapon rack](docs/images/shop-weapon-rack.png) | ![Small weapon rack](docs/images/shop-weapon-rack-small.png) |
+| ![Wall rack](docs/images/shop-wall-rack.png) | ![Small wall rack](docs/images/shop-wall-rack-small.png) |
+
+**Storefront, mail and apron**
+
+| | |
+|---|---|
+| ![Store sign](docs/images/shop-store-sign.png) | ![Open sign and bells](docs/images/shop-signs-bells.png) |
+| ![Trade counter](docs/images/shop-trade-counter.png) | ![Mailbox](docs/images/shop-mailbox.png) |
+| ![Shopkeeper apron](docs/images/shop-apron.png) | |
+
+**Menus**
+
+| | |
+|---|---|
+| ![Shop menu](docs/images/menu-shop.png) | ![Layout tab](docs/images/menu-layout.png) |
+| ![Buy tab](docs/images/menu-buy.png) | ![Price window](docs/images/menu-price.png) |
+| ![Buy window](docs/images/menu-buy-window.png) | ![Mailbox send window](docs/images/menu-mail-send.png) |
+| ![Trade window](docs/images/menu-trade.png) | |
+
 ## BepInEx config
 
 Synced (server settings):

@@ -435,4 +435,94 @@ internal static class ItemShopTestHooks
     /// <summary>May the current player open the shop's chest itself (wards / LockSmith)?</summary>
     [TestHook("itemshop.canOpenChest")]
     static bool CanOpenChest(GameObject? target = null) => ShopState.CanOpen(Shop(target), P);
+
+    // ---------- windows (for the README pictures)
+
+    /// <summary>Do-nothing trade partner for the picture of the trade window.</summary>
+    sealed class PicturePartner : global::DrakesItemShop.Trade.ITradePartner
+    {
+        public string Name { get; }
+        public PicturePartner(string name) => Name = name;
+        public void SendOffer(IReadOnlyList<global::DrakesItemShop.Trade.TradeEntry> mine, int version) { }
+        public void SendAccept(int mineVersion, int theirsVersion) { }
+        public void SendCancel() { }
+        public void Receive(IReadOnlyList<global::DrakesItemShop.Trade.TradeEntry> items) { }
+    }
+
+    /// <summary>Close every open toolkit window (they are not the game's own GUI, so closeUi leaves them).</summary>
+    [TestHook("itemshop.ui.closeAll")]
+    static bool UiCloseAll()
+    {
+        var field = typeof(DrakeModsLibs.UI.Toolkit.UkWindow).GetField("OpenWindows", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+        if (field?.GetValue(null) is System.Collections.IEnumerable list)
+            foreach (var w in list.Cast<object>().ToList())
+                ((DrakeModsLibs.UI.Toolkit.UkWindow)w).CloseSilent();
+        return true;
+    }
+
+    /// <summary>Open the Shift+E shop menu on a tab: tab = shop | buy | layout.</summary>
+    [TestHook("itemshop.ui.shopMenu")]
+    static bool UiShopMenu(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        ShopSettingsWindow.Open(Shop(target), P, S(args, "tab"));
+        return true;
+    }
+
+    /// <summary>Open the buy window for a stack of the shop.</summary>
+    [TestHook("itemshop.ui.buy")]
+    static bool UiBuy(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var shop = Shop(target);
+        BuyWindow.Open(shop, Stock(shop, S(args, "prefab")) ?? throw new InvalidOperationException("not in the shop"));
+        return true;
+    }
+
+    /// <summary>Open the price editor for a stack of the shop.</summary>
+    [TestHook("itemshop.ui.price")]
+    static bool UiPrice(Dictionary<string, object?> args, GameObject? target = null)
+    {
+        var shop = Shop(target);
+        PriceEditWindow.Open(shop, Stock(shop, S(args, "prefab")) ?? throw new InvalidOperationException("not in the shop"));
+        return true;
+    }
+
+    /// <summary>Open the mailbox send window.</summary>
+    [TestHook("itemshop.ui.mailSend")]
+    static bool UiMailSend(GameObject? target = null)
+    {
+        global::DrakesItemShop.Mail.MailboxSendWindow.Open(Mail(target));
+        return true;
+    }
+
+    /// <summary>Open the trade window with a stand-in partner: mine = prefab:count list from the inventory, theirs likewise (made up).</summary>
+    [TestHook("itemshop.ui.trade")]
+    static bool UiTrade(Dictionary<string, object?> args)
+    {
+        var session = new global::DrakesItemShop.Trade.TradeSession(new PicturePartner(S(args, "partner", "Bjornita")));
+        foreach (var part in S(args, "mine").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var item = P.GetInventory().GetAllItems().FirstOrDefault(i => PrefabOf(i).Equals(part.Trim(), StringComparison.OrdinalIgnoreCase));
+            if (item != null)
+                session.ToggleMine(item);
+        }
+
+        var theirs = new List<global::DrakesItemShop.Trade.TradeEntry>();
+        foreach (var part in S(args, "theirs").Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            var bits = part.Split(':');
+            var prefab = ZNetScene.instance.GetPrefab(bits[0].Trim())?.GetComponent<ItemDrop>();
+            if (prefab == null)
+                continue;
+            var data = prefab.m_itemData.Clone();
+            data.m_dropPrefab = prefab.gameObject;
+            data.m_stack = bits.Length > 1 ? int.Parse(bits[1], CultureInfo.InvariantCulture) : 1;
+            theirs.Add(new global::DrakesItemShop.Trade.TradeEntry(data, data.m_stack));
+        }
+
+        session.SetTheirs(theirs);
+        if (B(args, "theyAccept"))
+            session.PartnerAccepts();
+        global::DrakesItemShop.Trade.TradeWindow.Open(session);
+        return true;
+    }
 }

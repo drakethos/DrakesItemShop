@@ -296,10 +296,11 @@ internal static class ShopSettingsWindow
     private static UkWindow? _window;
     private static Tab _tab;
 
-    internal static void Open(Container container, Player player)
+    internal static void Open(Container container, Player player, string tab = "")
     {
         _window?.CloseSilent();
-        _tab = Tab.Shop;
+        _tab = tab.Equals("buy", System.StringComparison.OrdinalIgnoreCase) ? Tab.Buy
+            : tab.Equals("layout", System.StringComparison.OrdinalIgnoreCase) ? Tab.Layout : Tab.Shop;
         var window = new UkWindow("drakes_shop_settings", 640);
         _window = window;
         window.SetHeader(global::Localization.instance.Localize(container.m_name), "Shop");
