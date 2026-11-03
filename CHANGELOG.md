@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.0
+
+Hexium only. Requires **DrakeModsLibs 1.0.5**.
+
+- **New: vending machines, server traders without the NPCs.** Three pieces in the Drake Shop tab: Haldor's (Black Forest), Hildir's (Meadows) and the Bog Witch's (Swamp) machine. They sell that trader's real goods through the game's own store window, buying and selling, and the coins paid leave the world. Only admins can place them, whatever `AdminOnlyBuildPieces` says.
+- **Unlocked with the world.** Each machine needs world keys before it works: by default Eikthyr for Haldor, The Elder for the Bog Witch, nothing for Hildir. Until then it is dark and says "This seems to be out of order"; when the key is set it lights up, and if the key is removed again it goes back out of order. New server-synced section `10 Vending`: the unlock keys per machine, the out of order message, the sold out card text and the bay light (`Night`, `Always`, `Off`).
+- **What you see is what you buy.** Behind clear glass, 5 x 4 shelves show the goods you can buy right now; goods not unlocked yet get a "Sold out" card instead (no spoilers). Buying plays the vend: the slot's rune flashes, a pusher shoves the item off the shelf, it falls into the chute, poofs to full size with the build-dust puff and you reach out and grab it. The item goes straight into your inventory as the store puts it there; nothing is dropped, so nothing can be lost to desync.
+- Trader posters wrap both sides of each machine, like a real vending machine.
+- A trade request checks combat with the public PvP switch. Reading the protected combat timer threw every frame, so the "there is combat" refusal never ran.
+- Removing a post-wall section no longer throws while its PO boxes are going away.
+
 ## 0.5.6
 
 Hexium only. Requires **DrakeModsLibs 1.0.5**.

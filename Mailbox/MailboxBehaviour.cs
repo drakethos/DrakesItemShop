@@ -341,8 +341,10 @@ public class MailboxBehaviour : MonoBehaviour
     /// <summary>The builder's client says "mail arrived" when a delivery lands (not for deliveries before it loaded).</summary>
     private void WatchDeliveries(ZDO zdo)
     {
+        if (zdo == null || Player.m_localPlayer == null)
+            return;
         var seq = zdo.GetInt(SeqKey);
-        if (_seenSeq >= 0 && seq > _seenSeq && NotifyOn && Player.m_localPlayer != null
+        if (_seenSeq >= 0 && seq > _seenSeq && NotifyOn
             && GetComponent<Piece>() is { } piece && piece.GetCreator() == Player.m_localPlayer.GetPlayerID())
             Trade.TradeNet.Say("You have mail: " + SignName("Mailbox"));
         _seenSeq = seq;
@@ -363,8 +365,13 @@ public class MailboxBehaviour : MonoBehaviour
             return;
 
         UpdateWallLink();
+        // Removing an orphaned box destroys this object. Stop before touching its ZDO.
+        if (_nview == null || !_nview.IsValid())
+            return;
         var step = Time.deltaTime / SwingSeconds;
         var zdo = _nview.GetZDO();
+        if (zdo == null)
+            return;
         WatchDeliveries(zdo);
         _flapOpen = Mathf.MoveTowards(_flapOpen, zdo.GetInt(FlapKey) == 1 ? 1f : 0f, step);
         _doorOpen = Mathf.MoveTowards(_doorOpen, zdo.GetInt(InUseKey) == 1 ? 1f : 0f, step);

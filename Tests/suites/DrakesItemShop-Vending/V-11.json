@@ -1,0 +1,51 @@
+{
+  "name": "V-11 sold out cards hide locked goods",
+  "description": "Haldor sells more once later bosses fall; until then those slots carry the shop card, not the item.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_eikthyr",
+        "on": true
+      },
+      "expect": true,
+      "label": "world key defeated_eikthyr set"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "regex": ".*cards=[1-9].*",
+      "label": "items not unlocked yet stand behind Sold out cards"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "lockedShown=0",
+      "label": "and none of them is shown"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

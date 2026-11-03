@@ -1,0 +1,53 @@
+{
+  "name": "V-09 out of order message is configurable",
+  "description": "",
+  "steps": [
+    {
+      "do": "setConfig",
+      "values": {
+        "10 Vending/Out of order message": "Closed for repairs"
+      }
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.hover",
+      "args": {
+        "target": "m"
+      },
+      "contains": "Closed for repairs",
+      "label": "hover shows the server text"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.use",
+      "args": {
+        "target": "m"
+      },
+      "expect": false
+    },
+    {
+      "do": "check",
+      "check": "message",
+      "contains": "Closed for repairs",
+      "kind": "Card",
+      "label": "and so does E"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

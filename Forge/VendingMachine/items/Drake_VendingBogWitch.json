@@ -1,0 +1,135 @@
+{
+  "id": "Drake_VendingBogWitch",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Bog Witch's Vending Machine",
+  "look": {
+    "mesh": {
+      "file": "models/vending_bogwitch.glb"
+    },
+    "materials": [
+      {
+        "target": "Body",
+        "from": {
+          "prefab": "darkwood_beam",
+          "material": "DarkWood_mat"
+        }
+      },
+      {
+        "target": "Trim",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        }
+      },
+      {
+        "target": "Glass",
+        "from": {
+          "prefab": "crystal_wall_1x1",
+          "material": "crystal_window"
+        }
+      },
+      {
+        "target": "Black",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        },
+        "tint": "#111111"
+      },
+      {
+        "target": "Art",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        },
+        "textures": {
+          "_MainTex": "textures/vend_bogwitch.jpg"
+        }
+      },
+      {
+        "target": "Cloth",
+        "from": {
+          "prefab": "jute_carpet",
+          "material": "jute_carpet"
+        },
+        "tint": "#4E6B2A"
+      },
+      {
+        "target": "Cloth2",
+        "from": {
+          "prefab": "Candle_resin_bogwitch",
+          "material": "candle_mat"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0.0,
+        1.416,
+        0.0
+      ],
+      "size": [
+        1.27,
+        2.832,
+        0.94
+      ]
+    }
+  },
+  "fields": {
+    "Piece": {
+      "m_allowRotatedOverlap": true
+    },
+    "WearNTear": {
+      "m_burnable": false,
+      "m_supports": true,
+      "m_health": 2000
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.635,
+        0.0,
+        -0.47
+      ],
+      [
+        0.635,
+        0.0,
+        -0.47
+      ],
+      [
+        0.635,
+        0.0,
+        0.47
+      ],
+      [
+        -0.635,
+        0.0,
+        0.47
+      ],
+      [
+        -0.635,
+        2.4,
+        -0.47
+      ],
+      [
+        0.635,
+        2.4,
+        -0.47
+      ],
+      [
+        0.635,
+        2.4,
+        0.47
+      ],
+      [
+        -0.635,
+        2.4,
+        0.47
+      ]
+    ]
+  }
+}

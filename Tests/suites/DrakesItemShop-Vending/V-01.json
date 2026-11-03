@@ -1,0 +1,67 @@
+{
+  "name": "V-01 admin places all three",
+  "description": "Each machine is listed in the hammer, switched on and built the real way; placed fresh, the unlock keys decide which work.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": -1.7,
+      "as": "haldor",
+      "label": "Drake_VendingHaldor builds from the hammer (the host is an admin)"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHildir",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "hildir",
+      "label": "Drake_VendingHildir builds from the hammer (the host is an admin)"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingBogWitch",
+      "dz": 3.5,
+      "dx": 1.7,
+      "as": "bogwitch",
+      "label": "Drake_VendingBogWitch builds from the hammer (the host is an admin)"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "hildir"
+      },
+      "contains": "service=on",
+      "label": "Hildir needs no key: in service"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "haldor"
+      },
+      "contains": "service=off",
+      "label": "Haldor needs Eikthyr: out of order"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "bogwitch"
+      },
+      "contains": "service=off",
+      "label": "the Bog Witch needs The Elder: out of order"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

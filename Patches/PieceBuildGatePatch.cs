@@ -27,8 +27,13 @@ internal static class PieceBuildGatePatch
         log.LogInfo($"Piece build gate patched: {target.DeclaringType?.Name}.{target.Name}");
     }
 
+    /// <summary>Tests only: treat the local player as not an admin (the single-player host always is one).</summary>
+    internal static bool TestNotAdmin;
+
     private static bool IsAdmin(Player player)
     {
+        if (TestNotAdmin)
+            return false;
         if (ZNet.instance != null && ZNet.instance.IsServer() && player == Player.m_localPlayer)
             return true;
         return Jotunn.Managers.SynchronizationManager.Instance?.PlayerIsAdmin == true && player == Player.m_localPlayer;
@@ -36,20 +41,23 @@ internal static class PieceBuildGatePatch
 
     public static bool Prefix(Player __instance, object[] __args)
     {
-        if (!ItemShopConfig.AdminOnlyBuildPieces || __instance == null)
+        if (__instance == null)
             return true;
 
         var pieceName = __args.Length > 0 && __args[0] is Piece piece && piece != null ? piece.name : "";
         if (pieceName.Length == 0 && !TryGetGhostPieceName(__instance, out pieceName))
             return true;
 
-        if (!ShopPieceRegistrar.IsDrakeShopPiece(pieceName))
+        // Vending machines are server vendors: admins only, whatever AdminOnlyBuildPieces says.
+        var vending = Vending.VendingPiece.IsVending(pieceName);
+        if (!vending && (!ItemShopConfig.AdminOnlyBuildPieces || !ShopPieceRegistrar.IsDrakeShopPiece(pieceName)))
             return true;
 
         if (IsAdmin(__instance))
             return true;
 
-        CustomizeLibsAPI.ShowHudMessage(__instance, MessageHud.MessageType.Center, "Only admins can build Drake Shop pieces.");
+        CustomizeLibsAPI.ShowHudMessage(__instance, MessageHud.MessageType.Center,
+            vending ? "Only admins can build vending machines." : "Only admins can build Drake Shop pieces.");
         return false;
     }
 

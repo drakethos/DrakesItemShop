@@ -1,0 +1,70 @@
+{
+  "name": "vending-machines",
+  "description": "ItemShop vending machines, by hand. Haldor's, Hildir's and the Bog Witch's machines stand in a row in front of spawn. Only Eikthyr is defeated, so Haldor (Black Forest) and Hildir (Meadows) are lit and open the real store on E, while the Bog Witch (Swamp, needs The Elder) is dark and says it is out of order. Defeat The Elder (F9 > bosses, or the console: setkey defeated_gdking) and it lights up within a second. Team glow (DrakesServerTeams) is off so it doesn't tint the machines. 999 coins and gems in the bag to buy and sell.",
+  "arena": "build",
+  "noBuild": "off",
+  "timeOfDay": 0.5,
+  "freezeTime": 1,
+  "god": 1,
+  "noCost": 1,
+  "carryWeight": 9999,
+  "discover": "all",
+  "bosses": [
+    "Eikthyr"
+  ],
+  "items": [
+    {
+      "prefab": "Hammer"
+    },
+    {
+      "prefab": "Coins",
+      "count": 999
+    },
+    {
+      "prefab": "Amber",
+      "count": 10
+    },
+    {
+      "prefab": "Ruby",
+      "count": 5
+    },
+    {
+      "prefab": "SilverNecklace",
+      "count": 2
+    }
+  ],
+  "pieces": [
+    {
+      "prefab": "Drake_VendingHaldor",
+      "dx": -3.2,
+      "dz": 8,
+      "ground": true,
+      "yaw": 180,
+      "owner": "me"
+    },
+    {
+      "prefab": "Drake_VendingHildir",
+      "dx": 0,
+      "dz": 8,
+      "ground": true,
+      "yaw": 180,
+      "owner": "me"
+    },
+    {
+      "prefab": "Drake_VendingBogWitch",
+      "dx": 3.2,
+      "dz": 8,
+      "ground": true,
+      "yaw": 180,
+      "owner": "me"
+    }
+  ],
+  "configs": [
+    {
+      "guid": "com.drakemods.serverteams",
+      "section": "4 Visuals",
+      "key": "TeamGlow",
+      "value": "false"
+    }
+  ]
+}

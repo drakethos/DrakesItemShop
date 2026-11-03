@@ -34,6 +34,13 @@ internal static class ItemShopLocalization
         loc.AddToken("drake_mailbox_name", "Mailbox");
         loc.AddToken("drake_mailbox_desc", "A Norse post box. Anyone can send items through the front slot; only those allowed to open chests here can open the back.");
         loc.AddToken("drake_dropbox_name", "Drop Box");
+        loc.AddToken("drake_vending_haldor_name", "Haldor's Vending Machine");
+        loc.AddToken("drake_vending_haldor_desc", "Haldor's goods without Haldor. Admins only; works once the Black Forest is unlocked (config).");
+        loc.AddToken("drake_vending_hildir_name", "Hildir's Vending Machine");
+        loc.AddToken("drake_vending_hildir_desc", "Hildir's wares without Hildir. Admins only; works from the start (config).");
+        loc.AddToken("drake_vending_bogwitch_name", "Bog Witch's Vending Machine");
+        loc.AddToken("drake_vending_bogwitch_desc", "The Bog Witch's brews without the witch. Admins only; works once the Swamp is unlocked (config).");
+        loc.AddToken("drake_vending_browse", "Browse wares");
         loc.AddToken("drake_jutemat_name", "Jute Mat");
         loc.AddToken("drake_jutemat_desc", "A woven mat for free layout (12 stacks). Shift+E, Layout tab: drag, turn, lift and size goods on the board.");
         loc.AddToken("drake_wolfmat_name", "Wolf Mat");

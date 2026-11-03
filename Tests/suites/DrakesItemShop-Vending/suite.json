@@ -1,0 +1,19 @@
+{
+  "name": "DrakesItemShop-Vending",
+  "description": "Automated regression for ItemShop's vending machines (server trader replacements): placing (admins only, AdminOnlyBuildPieces), world-key gating (in service / out of order, on and off again), the vending settings, buying through the real store window, sold out cards, persistence.",
+  "requireMods": [
+    {
+      "guid": "com.drakemods.itemshop",
+      "minVersion": "0.6.0"
+    }
+  ],
+  "configOverrides": [],
+  "setup": {
+    "timeOfDay": 0.5,
+    "freezeTime": 1,
+    "god": 1,
+    "noBuild": "off",
+    "hideUnlockPopups": 1
+  },
+  "resetBetweenTests": true
+}

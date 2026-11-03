@@ -142,6 +142,20 @@ internal sealed class DisplayCardFace
             root.Add(Line($"{offer.Remaining} of {offer.Cap} wanted", 44, InkMuted));
     }
 
+    /// <summary>A plain notice instead of a deal (a vending machine's "Sold out" slot): a big headline and an optional muted line.</summary>
+    public void ShowNotice(string headline, string line = "")
+    {
+        var fp = "notice|" + headline + "|" + line;
+        if (fp == _fingerprint)
+            return;
+        _fingerprint = fp;
+        var root = _surface.Root;
+        root.Clear();
+        root.Add(Line(headline, headline.Length <= 9 ? 110 : 84, Ink, wrap: true));
+        if (line.Length > 0)
+            root.Add(Line(line, 52, InkMuted, wrap: true));
+    }
+
     private static Label Line(string text, int size, Color color, bool wrap = false)
     {
         var label = UkControls.Text(text, size, color, heading: true, wrap: wrap);

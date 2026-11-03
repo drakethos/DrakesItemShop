@@ -38,6 +38,7 @@
     <Compile Include="ItemShopPlugin.cs" />
     <Compile Include="Testing\ItemShopTestHooks.cs" Condition="'$(Configuration)' == 'Debug'" />
     <Compile Include="Testing\ApronTestHooks.cs" Condition="'$(Configuration)' == 'Debug'" />
+    <Compile Include="Testing\VendingTestHooks.cs" Condition="'$(Configuration)' == 'Debug'" />
     <Compile Include="Localization\ItemShopLocalization.cs" />
     <Compile Include="Data\ShopPieceCategories.cs" />
     <Compile Include="Patches\PieceBuildGatePatch.cs" />
@@ -116,6 +117,11 @@
     <Compile Include="Patches\ItemRackPatches.cs" />
     <Compile Include="Pieces\ItemRackBehaviour.cs" />
     <Compile Include="Pieces\ItemRackPiece.cs" />
+    <Compile Include="Vending\Generated\Items\*.g.cs" />
+    <Compile Include="Vending\VendingPiece.cs" />
+    <Compile Include="Vending\VendingBehaviour.cs" />
+    <Compile Include="Vending\VendingSettings.cs" />
+    <Compile Include="Vending\VendingShelf.cs" />
     <Compile Include="Pieces\PieceIcons.cs" />
     <Compile Include="Pieces\RugFabric.cs" />
     <Compile Include="Pieces\WornArmor.cs" />
@@ -163,5 +169,8 @@
     <!-- Storefront: sign, bell and counter models (Forge/Storefront) and the bell / register / sign sounds. -->
     <EmbeddedResource Include="Storefront\Generated\Assets\**\*.glb" />
     <EmbeddedResource Include="Storefront\Sounds\*.wav" />
+    <!-- Vending machines (Forge/VendingMachine): models and the side posters (not the preview renders). -->
+    <EmbeddedResource Include="Vending\Generated\Assets\models\*.glb" />
+    <EmbeddedResource Include="Vending\Generated\Assets\textures\*.jpg" />
   </ItemGroup>
 </Project>

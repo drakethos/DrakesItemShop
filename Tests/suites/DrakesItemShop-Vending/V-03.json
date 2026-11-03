@@ -1,0 +1,62 @@
+{
+  "name": "V-03 AdminOnlyBuildPieces on",
+  "description": "",
+  "steps": [
+    {
+      "do": "setConfig",
+      "values": {
+        "01 General/AdminOnlyBuildPieces": "true"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.notAdmin",
+      "args": {
+        "on": true
+      },
+      "expect": true,
+      "label": "act as a player who is not an admin"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "dx": 0,
+      "as": "case",
+      "label": "with AdminOnlyBuildPieces on, a non-admin cannot build shop pieces either",
+      "expect": false
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "haldor",
+      "label": "nor a vending machine",
+      "expect": false
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.notAdmin",
+      "args": {
+        "on": false
+      },
+      "expect": false,
+      "label": "back to admin"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "haldor",
+      "label": "an admin builds the vending machine"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

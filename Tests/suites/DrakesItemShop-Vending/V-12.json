@@ -1,0 +1,85 @@
+{
+  "name": "V-12 buy from a machine",
+  "description": "Coins removed, the item straight into the inventory, the shelf animation runs and the shelf refills.",
+  "steps": [
+    {
+      "do": "give",
+      "prefab": "Coins",
+      "count": 999
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_eikthyr",
+        "on": true
+      },
+      "expect": true,
+      "label": "world key defeated_eikthyr set"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.buy",
+      "args": {
+        "target": "m"
+      },
+      "expect": "ok",
+      "label": "the first item for sale, bought through the store window: coins down by its price, its stack in the bag (never dropped)"
+    },
+    {
+      "do": "check",
+      "check": "hasItem",
+      "prefab": "Coins",
+      "max": 998,
+      "label": "the coins were taken (they leave the world)"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "vending=yes",
+      "label": "the vend plays"
+    },
+    {
+      "do": "wait",
+      "seconds": 5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "regex": ".*items=[1-9].*vending=no",
+      "label": "and is over: the shelf is restocked"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.closeStore",
+      "expect": true
+    },
+    {
+      "do": "screenshot",
+      "name": "vending-after-buy"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

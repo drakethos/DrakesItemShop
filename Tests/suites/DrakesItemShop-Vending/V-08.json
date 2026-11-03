@@ -1,0 +1,132 @@
+{
+  "name": "V-08 unlock keys are configurable",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "setConfig",
+      "values": {
+        "10 Vending/Haldor unlock keys": ""
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "service=on",
+      "label": "empty key list: works with no boss down"
+    },
+    {
+      "do": "setConfig",
+      "values": {
+        "10 Vending/Haldor unlock keys": "defeated_bonemass"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_eikthyr",
+        "on": true
+      },
+      "expect": true,
+      "label": "world key defeated_eikthyr set"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "service=off",
+      "label": "now it wants Bonemass: Eikthyr alone is not enough"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_bonemass",
+        "on": true
+      },
+      "expect": true,
+      "label": "world key defeated_bonemass set"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "service=on",
+      "label": "Bonemass down: in service"
+    },
+    {
+      "do": "setConfig",
+      "values": {
+        "10 Vending/Haldor unlock keys": "defeated_bonemass, defeated_dragon"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "service=off",
+      "label": "a list needs every key: Moder missing"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_dragon",
+        "on": true
+      },
+      "expect": true,
+      "label": "world key defeated_dragon set"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "service=on",
+      "label": "all keys set: in service"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

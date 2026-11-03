@@ -1,0 +1,48 @@
+{
+  "name": "V-13 placed machine survives a relog",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHildir",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m",
+      "keep": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "relog"
+    },
+    {
+      "do": "wait",
+      "seconds": 2
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "regex": "service=on;glow=lit;.*items=[1-9].*",
+      "label": "after the relog the machine (the nearest one) is still in service and stocked"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.use",
+      "expect": true,
+      "label": "and opens the store"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.closeStore",
+      "expect": true
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

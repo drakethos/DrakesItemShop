@@ -395,7 +395,11 @@ internal static class ApronTestHooks
         return msg;
     }
 
-    /// <summary>Walks the player to a spot under a real roof (the test house) by sampling the roof check round the nearest station.</summary>
+    /// <summary>
+    /// Stands the player inside the test house, in front of a station the game itself calls sheltered.
+    /// Sampling a ring around the nearest station used to accept the eaves: the sample point was under the thatch
+    /// and the feet were outside, so the Rested shelter check stayed false.
+    /// </summary>
     [TestHook("apron.goUnderRoof")]
     private static string GoUnderRoof()
     {
@@ -403,26 +407,52 @@ internal static class ApronTestHooks
         var best = 1e9f;
         foreach (var s in UnityEngine.Object.FindObjectsOfType<CraftingStation>())
         {
+            if (s == null || s.m_roofCheckPoint == null)
+                continue;
+            Cover.GetCoverForPoint(s.m_roofCheckPoint.position, out var cover, out var under);
+            if (!under || cover < 0.7f)
+                continue;
             var d = (s.transform.position - P.transform.position).sqrMagnitude;
             if (d < best) { best = d; station = s; }
         }
         if (station == null)
-            throw new InvalidOperationException("no crafting station near (is the test house built?)");
-        var origin = station.transform.position;
-        Vector3? spot = null;
-        for (var r = 0f; r <= 8f && spot == null; r += 0.5f)
-            for (var a = 0; a < 360 && spot == null; a += 30)
+            throw new InvalidOperationException("no sheltered crafting station (is the test house roofed?)");
+
+        // Stations along the north wall face into the room. Step forward until the floor is open, sheltered,
+        // and not below the terrain (the game lifts a player it thinks is underground, which throws them outside).
+        Vector3? open = null;
+        Vector3? sheltered = null;
+        for (var i = 0; i < 5; i++)
+        {
+            var candidate = station.transform.position + station.transform.forward * (1.5f + i * 0.6f);
+            candidate.y = station.transform.position.y + 0.15f;
+            var ground = ZoneSystem.instance != null ? ZoneSystem.instance.GetGroundHeight(candidate) : candidate.y;
+            if (candidate.y < ground - 0.8f)
+                continue;
+            Cover.GetCoverForPoint(candidate + Vector3.up, out var cover, out var under);
+            if (!under || cover < 0.8f)
+                continue;
+            sheltered ??= candidate;
+            var blocked = Physics.CheckCapsule(
+                candidate + Vector3.up * 0.45f, candidate + Vector3.up * 1.6f, 0.25f, ~0, QueryTriggerInteraction.Ignore);
+            if (!blocked)
             {
-                var x = origin + Quaternion.Euler(0f, a, 0f) * Vector3.forward * r;
-                var p = new Vector3(x.x, origin.y + 1f, x.z);
-                Cover.GetCoverForPoint(p, out var cover, out var under);
-                if (under && cover >= 0.9f)
-                    spot = new Vector3(x.x, origin.y + 0.1f, x.z);
+                open = candidate;
+                break;
             }
-        if (spot == null)
-            throw new InvalidOperationException("no roofed spot within 8 m of " + station.name);
-        P.transform.position = spot.Value;
+        }
+
+        var stand = open ?? sheltered
+            ?? throw new InvalidOperationException("no open sheltered floor in front of a roofed station");
+        P.transform.position = stand;
+        P.transform.rotation = Quaternion.LookRotation(-station.transform.forward);
+        var body = P.GetComponent<Rigidbody>();
+        if (body != null)
+        {
+            body.position = stand;
+            body.velocity = Vector3.zero;
+        }
         Physics.SyncTransforms();
-        return $"{spot.Value.x:0.0},{spot.Value.y:0.0},{spot.Value.z:0.0}";
+        return $"{stand.x:0.0},{stand.y:0.0},{stand.z:0.0}";
     }
 }

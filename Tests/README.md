@@ -3,6 +3,7 @@
 DrakesTestLab suite for ItemShop. It runs unattended; results go to `<profile>\BepInEx\config\DrakesTestLab\results\latest.html`.
 
 - `suites/DrakesItemShop/`: the tests (generated, do not edit by hand).
+- `suites/DrakesItemShop-Vending/`: the vending machines (`python gen_vending_suite.py`; hooks in `../Testing/VendingTestHooks.cs`).
 - `gen_itemshop_suite.py`: writes the suite (`python gen_itemshop_suite.py`). The build runs it and copies the suite into the drakeTest profiles; `Tests/` is never packaged.
 - `../Testing/ItemShopTestHooks.cs`: the `itemshop.*` test hooks the suite calls. They use the mod's real code paths; no reference to DrakesTestLab, and without it installed they are never called.
 
@@ -24,6 +25,7 @@ or everything at once: `..\scripts\Test-All.ps1`. In game: F9 > Tests.
 - Mailbox and drop box: anyone posts, the note and sender are logged; only the owner opens the back (front = send slot, back = chest, checked by walking round); a box outside a ward warns it is unprotected
 - Post wall (experimental, switched on for this suite with `launchConfig`): sections spawn PO boxes, assigning a box to a player, delegates and the postmaster, boxes survive a relog, removing a section removes its boxes and drops their mail
 - Open Sign, Store Sign text, bells; aprons crafted at a workbench with the real cost, worn, Open for business carry weight
+- Vending machines: all three build from the hammer as an admin and are refused to a player who isn't one (whatever `AdminOnlyBuildPieces` says; the test switches admin off with a hook, as the single-player host always is one); out of order until their world key is set, in service within a second after, out of order again when the key is removed; unlock keys, out of order message and bay light settings; buying through the real store window (coins down by the price, the item in the bag, the vend plays, the shelf refills); sold out cards never show a locked item; a placed machine survives a relog; E on the piece
 - Racks, mats and cases: screenshots of how goods lie
 
 Owned pieces and items are built or crafted through the game; other players are simulated with play-as (Alice, Bob, Carol, Nacho-VIP).

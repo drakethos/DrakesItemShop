@@ -1,0 +1,70 @@
+{
+  "name": "V-10 bay light setting",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHildir",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "light=off",
+      "label": "Night (default) at noon: off, no daytime glare"
+    },
+    {
+      "do": "setConfig",
+      "values": {
+        "10 Vending/Bay light": "Always"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "light=on",
+      "label": "Always: on"
+    },
+    {
+      "do": "setConfig",
+      "values": {
+        "10 Vending/Bay light": "Off"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "light=off",
+      "label": "Off: off"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

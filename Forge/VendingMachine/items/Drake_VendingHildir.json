@@ -1,0 +1,135 @@
+{
+  "id": "Drake_VendingHildir",
+  "kind": "piece",
+  "base": "piece_chest_wood",
+  "name": "Hildir's Vending Machine",
+  "look": {
+    "mesh": {
+      "file": "models/vending_hildir.glb"
+    },
+    "materials": [
+      {
+        "target": "Body",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        }
+      },
+      {
+        "target": "Trim",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        }
+      },
+      {
+        "target": "Glass",
+        "from": {
+          "prefab": "crystal_wall_1x1",
+          "material": "crystal_window"
+        }
+      },
+      {
+        "target": "Black",
+        "from": {
+          "prefab": "iron_grate",
+          "material": "metalwall"
+        },
+        "tint": "#111111"
+      },
+      {
+        "target": "Art",
+        "from": {
+          "prefab": "wood_window",
+          "material": "window_wood"
+        },
+        "textures": {
+          "_MainTex": "textures/vend_hildir.jpg"
+        }
+      },
+      {
+        "target": "Cloth",
+        "from": {
+          "prefab": "jute_carpet",
+          "material": "jute_carpet"
+        },
+        "tint": "#B3261E"
+      },
+      {
+        "target": "Cloth2",
+        "from": {
+          "prefab": "jute_carpet",
+          "material": "jute_carpet"
+        }
+      }
+    ],
+    "collision": {
+      "mode": "box",
+      "center": [
+        0.0,
+        1.416,
+        0.0
+      ],
+      "size": [
+        1.27,
+        2.832,
+        0.94
+      ]
+    }
+  },
+  "fields": {
+    "Piece": {
+      "m_allowRotatedOverlap": true
+    },
+    "WearNTear": {
+      "m_burnable": false,
+      "m_supports": true,
+      "m_health": 2000
+    }
+  },
+  "snap": {
+    "mode": "replace",
+    "points": [
+      [
+        -0.635,
+        0.0,
+        -0.47
+      ],
+      [
+        0.635,
+        0.0,
+        -0.47
+      ],
+      [
+        0.635,
+        0.0,
+        0.47
+      ],
+      [
+        -0.635,
+        0.0,
+        0.47
+      ],
+      [
+        -0.635,
+        2.4,
+        -0.47
+      ],
+      [
+        0.635,
+        2.4,
+        -0.47
+      ],
+      [
+        0.635,
+        2.4,
+        0.47
+      ],
+      [
+        -0.635,
+        2.4,
+        0.47
+      ]
+    ]
+  }
+}

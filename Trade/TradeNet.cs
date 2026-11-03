@@ -156,22 +156,71 @@ internal static class TradeNet
         return InCombat(other);
     }
 
-    /// <summary>A recent hit. Valheim stores that on Humanoid.m_lastCombatTimer, which the live game does not expose.</summary>
+    /// <summary>
+    /// Attacked in the last 10 seconds. The live game stores that on protected
+    /// <c>Humanoid.m_lastCombatTimer</c> (public only in the compile stubs), so a direct read throws
+    /// <see cref="FieldAccessException"/> every frame. <c>Player.CanSwitchPVP</c> is public on the stubs
+    /// and the live assembly and is that timer past 10 seconds.
+    /// </summary>
     static bool InCombat(Player? player)
     {
-        if (player == null) return false;
+        if (!player)
+            return false;
+        var canSwitch = CanSwitchPvp();
+        if (canSwitch == null)
+            return false;
         try
         {
-            _combatTimer ??= AccessTools.FieldRefAccess<Humanoid, float>("m_lastCombatTimer");
-            return _combatTimer(player) > 0f;
+            return !canSwitch(player);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _canSwitchPvp = null;
+            _combatLookupDone = true;
+            NoteCombatUnavailable(ex);
             return false;
         }
     }
 
-    static AccessTools.FieldRef<Humanoid, float>? _combatTimer;
+    static Func<Player, bool>? _canSwitchPvp;
+    static bool _combatLookupDone;
+    static bool _combatNoted;
+
+    /// <summary>Resolved once. A missing or unusable method stays null so Update never tries again.</summary>
+    static Func<Player, bool>? CanSwitchPvp()
+    {
+        if (_combatLookupDone)
+            return _canSwitchPvp;
+        _combatLookupDone = true;
+        try
+        {
+            var method = AccessTools.Method(typeof(Player), "CanSwitchPVP", Type.EmptyTypes);
+            if (method == null || !method.IsPublic || method.ReturnType != typeof(bool))
+            {
+                NoteCombatUnavailable(null);
+                return null;
+            }
+
+            _canSwitchPvp = (Func<Player, bool>)Delegate.CreateDelegate(typeof(Func<Player, bool>), method);
+            return _canSwitchPvp;
+        }
+        catch (Exception ex)
+        {
+            _canSwitchPvp = null;
+            NoteCombatUnavailable(ex);
+            return null;
+        }
+    }
+
+    static void NoteCombatUnavailable(Exception? ex)
+    {
+        if (_combatNoted)
+            return;
+        _combatNoted = true;
+        ItemShopPlugin.LogSource?.LogWarning(
+            "[Trade] Combat check unavailable; treating players as not in combat."
+            + (ex == null ? "" : " " + ex.GetType().Name));
+    }
 
     static void DropForCombat()
     {

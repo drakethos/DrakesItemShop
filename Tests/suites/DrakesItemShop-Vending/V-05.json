@@ -1,0 +1,78 @@
+{
+  "name": "V-05 Haldor works once Eikthyr is down",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_eikthyr",
+        "on": true
+      },
+      "expect": true,
+      "label": "world key defeated_eikthyr set"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "regex": "service=on;glow=lit;.*items=[1-9].*",
+      "label": "in service within a second: glowing, stocked"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "lockedShown=0",
+      "label": "nothing locked is shown on the shelves"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.hover",
+      "args": {
+        "target": "m"
+      },
+      "contains": "Browse wares",
+      "label": "hover offers Browse wares"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.use",
+      "args": {
+        "target": "m"
+      },
+      "expect": true,
+      "label": "E opens the store"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.closeStore",
+      "expect": true
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

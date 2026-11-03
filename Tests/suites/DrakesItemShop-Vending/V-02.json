@@ -1,0 +1,78 @@
+{
+  "name": "V-02 not placeable by players",
+  "description": "Vending machines are admin-only whatever AdminOnlyBuildPieces says; other shop pieces follow that setting.",
+  "steps": [
+    {
+      "do": "setConfig",
+      "values": {
+        "01 General/AdminOnlyBuildPieces": "false"
+      }
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.notAdmin",
+      "args": {
+        "on": true
+      },
+      "expect": true,
+      "label": "act as a player who is not an admin"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "haldor",
+      "label": "a player who is not an admin cannot build Drake_VendingHaldor",
+      "expect": false
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHildir",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "hildir",
+      "label": "a player who is not an admin cannot build Drake_VendingHildir",
+      "expect": false
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingBogWitch",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "bogwitch",
+      "label": "a player who is not an admin cannot build Drake_VendingBogWitch",
+      "expect": false
+    },
+    {
+      "do": "check",
+      "check": "message",
+      "contains": "Only admins can build vending machines",
+      "kind": "Card",
+      "label": "the refusal says why"
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "dx": 0,
+      "as": "case",
+      "label": "control: the same player still builds an ordinary shop piece (AdminOnlyBuildPieces off)"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.notAdmin",
+      "args": {
+        "on": false
+      },
+      "expect": false,
+      "label": "back to admin"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

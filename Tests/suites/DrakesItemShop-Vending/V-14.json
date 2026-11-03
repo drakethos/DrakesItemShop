@@ -1,0 +1,66 @@
+{
+  "name": "V-14 E on the machine",
+  "description": "The real E key path: through the piece, not a hook.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHildir",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "interact",
+      "target": "m"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.storeOpen",
+      "expect": true,
+      "label": "pressing E on it opens the store"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.closeStore",
+      "expect": true
+    },
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 2,
+      "as": "h"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "interact",
+      "target": "h"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.storeOpen",
+      "expect": false,
+      "label": "pressing E on a locked one does not"
+    },
+    {
+      "do": "check",
+      "check": "message",
+      "contains": "This seems to be out of order",
+      "kind": "Card",
+      "label": "it says it is out of order"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "name": "V-06 Bog Witch on and off with The Elder",
+  "description": "Removing the key (a server rolling back progress) switches the machine off again.",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingBogWitch",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "contains": "service=off",
+      "label": "locked at first"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_gdking",
+        "on": true
+      },
+      "expect": true,
+      "label": "world key defeated_gdking set"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "regex": "service=on;glow=lit;.*items=[1-9].*",
+      "label": "The Elder down: in service"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.use",
+      "args": {
+        "target": "m"
+      },
+      "expect": true,
+      "label": "E opens her store"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.closeStore",
+      "expect": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.setKey",
+      "args": {
+        "key": "defeated_gdking",
+        "on": false
+      },
+      "expect": true,
+      "label": "world key defeated_gdking removed"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "regex": "service=off;glow=dark;light=off;items=0;cards=0;.*",
+      "label": "key removed again: out of order, dark, shelves cleared"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.use",
+      "args": {
+        "target": "m"
+      },
+      "expect": false,
+      "label": "E no longer opens the store"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

@@ -27,6 +27,7 @@ internal static class ShopPieceRegistrar
         Mail.PostWallPiece.RegisterAll();
         OpenCrate.OpenCratePiece.RegisterAll();
         Storefront.StorefrontPieces.RegisterAll();
+        Vending.VendingPiece.RegisterAll();
         Apron.ApronItem.Register();
         Trade.TradeSession.Completed -= Storefront.TradeCounterBehaviour.OnTradeCompleted;
         Trade.TradeSession.Completed += Storefront.TradeCounterBehaviour.OnTradeCompleted;
@@ -50,6 +51,7 @@ internal static class ShopPieceRegistrar
                Mail.PostWallPiece.IsPostWall(prefabName) ||
                OpenCrate.OpenCratePiece.IsOpenCrate(prefabName) ||
                Storefront.StorefrontPieces.IsStorefrontPiece(prefabName) ||
+               Vending.VendingPiece.IsVending(prefabName) ||
                System.Array.Exists(ItemRackPiece.Variants, v => v.Name == prefabName);
     }
 }

@@ -72,6 +72,7 @@ internal static class ItemShopConfig
         Mail.MailboxSettings.Bind(config);
         Storefront.StorefrontSettings.Bind(config);
         Apron.ApronSettings.Bind(config);
+        Vending.VendingSettings.Bind(config);
         Mail.PostWallPiece.Bind(config);
         _enabled = config.Bind(SectionGeneral, "Enabled", true, "Enable DrakesItemShop features.");
         _lockSyncedConfig = ConfigSync.BindSynced(
@@ -138,7 +139,7 @@ internal static class ItemShopConfig
 
         RackPoseSettings.Bind(config, new PoseBinder(), "DrakesItemShop.rack-poses.yaml");
 
-        ConfigSync.FinalizeBinding(log, 4 + Pieces.ItemRackPiece.Variants.Length + RackPoseSettings.SyncedEntryCount + Apron.ApronSettings.SyncedEntryCount, () => _lockSyncedConfig.Value);
+        ConfigSync.FinalizeBinding(log, 4 + Pieces.ItemRackPiece.Variants.Length + RackPoseSettings.SyncedEntryCount + Apron.ApronSettings.SyncedEntryCount + Vending.VendingSettings.SyncedEntryCount, () => _lockSyncedConfig.Value);
 
         Enabled = _enabled.Value;
         AdminOnlyBuildPieces = _adminOnlyBuildPieces.Value;

@@ -1,0 +1,73 @@
+{
+  "name": "V-04 out of order until unlocked",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHaldor",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "check",
+      "check": "globalKey",
+      "key": "defeated_eikthyr",
+      "expect": false,
+      "label": "fresh world: Eikthyr not defeated"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "regex": "service=off;glow=dark;light=off;items=0;cards=0;.*",
+      "label": "out of order: dark, no light, empty shelves"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.hover",
+      "args": {
+        "target": "m"
+      },
+      "contains": "This seems to be out of order",
+      "label": "the hover says so"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.hover",
+      "args": {
+        "target": "m"
+      },
+      "notContains": "Browse",
+      "label": "and offers no Browse wares"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.use",
+      "args": {
+        "target": "m"
+      },
+      "expect": false,
+      "label": "E does not open the store"
+    },
+    {
+      "do": "check",
+      "check": "message",
+      "contains": "This seems to be out of order",
+      "kind": "Card",
+      "label": "E says it is out of order"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

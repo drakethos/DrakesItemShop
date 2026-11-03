@@ -1,0 +1,46 @@
+{
+  "name": "V-07 Hildir from the start",
+  "description": "",
+  "steps": [
+    {
+      "do": "place",
+      "prefab": "Drake_VendingHildir",
+      "dz": 3.5,
+      "dx": 0,
+      "as": "m"
+    },
+    {
+      "do": "wait",
+      "seconds": 1.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.state",
+      "args": {
+        "target": "m"
+      },
+      "regex": "service=on;glow=lit;.*items=[1-9].*",
+      "label": "no keys needed: in service"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.use",
+      "args": {
+        "target": "m"
+      },
+      "expect": true,
+      "label": "E opens her store"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.vending.closeStore",
+      "expect": true
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}
