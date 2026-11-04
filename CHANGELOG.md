@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The README is the shop in use: cases, racks, the counter, mail, the apron and the three vending machines. The empty test-lab shots are gone.
+
 ## 0.6.0
 
 Hexium only. Requires **DrakeModsLibs 1.0.5**.
