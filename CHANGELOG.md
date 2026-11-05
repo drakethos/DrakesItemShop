@@ -3,6 +3,7 @@
 ## Unreleased
 
 - The README is the shop in use: cases, racks, the counter, mail, the apron and the three vending machines. The empty test-lab shots are gone.
+- **Icon.** The painted hanging sign on the brass knot and workshop brown, with a larger portrait on the right. DrakeMods on top, the sign says Shop. Version stays 0.6.0 until the next release.
 
 ## 0.6.0
 

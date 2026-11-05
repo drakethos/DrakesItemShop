@@ -1,0 +1,74 @@
+{
+  "name": "W-06 mailbox send window",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_Mailbox",
+      "dz": 3,
+      "dx": 0,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "playAs",
+      "who": "Bob"
+    },
+    {
+      "do": "give",
+      "prefab": "Wood",
+      "count": 30
+    },
+    {
+      "do": "give",
+      "prefab": "Honey",
+      "count": 4
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.mailSend",
+      "args": {
+        "target": "shop"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.8
+    },
+    {
+      "do": "screenshot",
+      "name": "menu-mail-send",
+      "clean": false
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

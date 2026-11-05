@@ -1,0 +1,50 @@
+{
+  "name": "P-14 drop box",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DropBox",
+      "dz": 3,
+      "dx": 0,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "lookAt",
+      "target": "shop",
+      "distance": 1.6
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-drop-box",
+      "clean": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

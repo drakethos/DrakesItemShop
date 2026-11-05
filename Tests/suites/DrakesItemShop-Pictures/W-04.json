@@ -1,0 +1,82 @@
+{
+  "name": "W-04 price window",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DisplayCase",
+      "dz": 3,
+      "dx": 0,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze",
+        "count": 1,
+        "price": "c:40|Iron:4"
+      },
+      "label": "SwordBronze at c:40|Iron:4",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.price",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.8
+    },
+    {
+      "do": "screenshot",
+      "name": "menu-price",
+      "clean": false
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

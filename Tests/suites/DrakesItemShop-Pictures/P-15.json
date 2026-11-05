@@ -1,0 +1,62 @@
+{
+  "name": "P-15 store sign",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_StoreSign",
+      "dz": 3,
+      "dx": 0,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "store.signText",
+      "args": {
+        "target": "shop",
+        "text": "Drake's Goods"
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "lookAt",
+      "target": "shop",
+      "distance": 2.8
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-store-sign",
+      "clean": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

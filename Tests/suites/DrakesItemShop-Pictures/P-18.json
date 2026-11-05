@@ -1,0 +1,42 @@
+{
+  "name": "P-18 shopkeeper apron",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "give",
+      "prefab": "Drake_ShopApronMerchant",
+      "equip": true
+    },
+    {
+      "do": "wait",
+      "seconds": 1.0
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-apron",
+      "clean": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

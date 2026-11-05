@@ -1,0 +1,65 @@
+{
+  "name": "W-07 trade window",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "give",
+      "prefab": "SwordBronze"
+    },
+    {
+      "do": "give",
+      "prefab": "Honey",
+      "count": 4
+    },
+    {
+      "do": "give",
+      "prefab": "Coins",
+      "count": 100
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.trade",
+      "args": {
+        "partner": "Bjornita",
+        "mine": "SwordBronze",
+        "theirs": "Coins:80,Honey:2",
+        "theyAccept": true
+      }
+    },
+    {
+      "do": "wait",
+      "seconds": 0.8
+    },
+    {
+      "do": "screenshot",
+      "name": "menu-trade",
+      "clean": false
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

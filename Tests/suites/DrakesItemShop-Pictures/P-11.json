@@ -1,0 +1,131 @@
+{
+  "name": "P-11 jute free-layout mat",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_JuteMat",
+      "dz": 3,
+      "dx": 0,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "Honey",
+        "count": 4,
+        "price": "c:3"
+      },
+      "label": "Honey at c:3",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "Coal",
+        "count": 10,
+        "price": "c:1"
+      },
+      "label": "Coal at c:1",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "Resin",
+        "count": 10,
+        "price": "c:1"
+      },
+      "label": "Resin at c:1",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "TrophyBoar",
+        "count": 1,
+        "price": "c:15"
+      },
+      "label": "TrophyBoar at c:15",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "SwordBronze",
+        "count": 1,
+        "price": "c:40"
+      },
+      "label": "SwordBronze at c:40",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "AxeBronze",
+        "count": 1,
+        "price": "c:35"
+      },
+      "label": "AxeBronze at c:35",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "stop": true
+    },
+    {
+      "do": "lookAt",
+      "target": "shop",
+      "distance": 2.2
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-jute-mat",
+      "clean": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

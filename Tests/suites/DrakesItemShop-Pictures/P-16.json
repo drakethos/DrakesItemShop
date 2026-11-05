@@ -1,0 +1,74 @@
+{
+  "name": "P-16 open sign, bells",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_OpenSign",
+      "dz": 3,
+      "dx": -0.8,
+      "owner": "Alice",
+      "as": "sign"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DeskBell",
+      "dz": 3,
+      "dx": 0.6,
+      "owner": "Alice",
+      "as": "bell"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_DoorBell",
+      "dz": 3,
+      "dx": 1.4,
+      "owner": "Alice",
+      "as": "dbell"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "lookAt",
+      "target": "sign",
+      "distance": 2.0
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-signs-bells",
+      "clean": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}

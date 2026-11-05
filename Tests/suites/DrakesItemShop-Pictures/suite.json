@@ -1,0 +1,20 @@
+{
+  "name": "DrakesItemShop-Pictures",
+  "description": "Takes the README pictures: every shop piece stocked and every window open. Not a regression suite.",
+  "requireMods": [
+    {
+      "guid": "com.drakemods.itemshop",
+      "minVersion": "0.4.0"
+    }
+  ],
+  "configOverrides": [],
+  "launchConfig": [],
+  "setup": {
+    "timeOfDay": 0.5,
+    "freezeTime": 1,
+    "god": 1,
+    "noBuild": "off",
+    "hideUnlockPopups": 1
+  },
+  "resetBetweenTests": true
+}

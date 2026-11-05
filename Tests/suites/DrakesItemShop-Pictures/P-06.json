@@ -1,0 +1,83 @@
+{
+  "name": "P-06 small armor rack",
+  "description": "Picture for the README.",
+  "steps": [
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "Alice"
+    },
+    {
+      "do": "spawn",
+      "prefab": "Drake_ArmorRackSmall",
+      "dz": 3,
+      "dx": 0,
+      "owner": "Alice",
+      "as": "shop"
+    },
+    {
+      "do": "wait",
+      "seconds": 0.5
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "HelmetBronze",
+        "count": 1,
+        "price": "c:30"
+      },
+      "label": "HelmetBronze at c:30",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.stock",
+      "args": {
+        "target": "shop",
+        "prefab": "ArmorBronzeChest",
+        "count": 1,
+        "price": "c:60"
+      },
+      "label": "ArmorBronzeChest at c:60",
+      "stop": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.open",
+      "args": {
+        "target": "shop",
+        "on": true
+      },
+      "stop": true
+    },
+    {
+      "do": "lookAt",
+      "target": "shop",
+      "distance": 2.5
+    },
+    {
+      "do": "screenshot",
+      "name": "shop-armor-rack-small",
+      "clean": true
+    },
+    {
+      "do": "hook",
+      "name": "itemshop.ui.closeAll"
+    },
+    {
+      "do": "playAs",
+      "who": "me"
+    }
+  ],
+  "asserts": [
+    {
+      "check": "noErrors",
+      "source": "DrakesItemShop"
+    }
+  ]
+}
