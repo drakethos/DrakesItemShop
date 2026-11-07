@@ -1,9 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.6.1
 
+Hexium only. Requires **DrakeModsLibs 1.0.5**.
+
+- **Faster start-up (about 0.65 s down to 0.2 s).** The settings are saved to the config file once instead of once each. No change to behaviour.
 - The README is the shop in use: cases, racks, the counter, mail, the apron and the three vending machines. The empty test-lab shots are gone.
-- **Icon.** The painted hanging sign on the brass knot and workshop brown, with a larger portrait on the right. DrakeMods on top, the sign says Shop. Version stays 0.6.0 until the next release.
+- **Icon.** The painted hanging sign on the brass knot and workshop brown, with a larger portrait on the right. DrakeMods on top, the sign says Shop. 
 
 ## 0.6.0
 

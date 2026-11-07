@@ -25,7 +25,12 @@ public partial class ItemShopPlugin : BaseUnityPlugin
     {
         Instance = this;
         LogSource = Logger;
-        ItemShopConfig.Bind(Config, Logger);
+        // BepInEx rewrites the whole .cfg on every Bind by default: batch them into one save.
+        var saveOnSet = Config.SaveOnConfigSet;
+        Config.SaveOnConfigSet = false;
+        try { ItemShopConfig.Bind(Config, Logger); }
+        finally { Config.SaveOnConfigSet = saveOnSet; }
+        Config.Save();
         ItemShopLocalization.Init();
         _harmony.PatchAll();
         PieceBuildGatePatch.TryApply(_harmony, Logger);
